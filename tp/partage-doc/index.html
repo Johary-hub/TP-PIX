@@ -1,0 +1,282 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulateur — Partager un dossier (Google Drive)</title>
+<style>
+:root{--blue:#0b57d0;--ink:#1f1f1f;--muted:#444746;--sub:#5e5e5e;--line:#dadce0;--hover:#f1f3f4;--ok:#188038;--bg:#fff}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#e9eef6;font-family:'Google Sans',Roboto,Arial,system-ui,sans-serif;color:var(--ink)}
+.wrap{max-width:1080px;margin:0 auto;padding:14px}
+.hint{font-size:13px;color:var(--sub);background:#fff;border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:8px;padding:12px 14px;margin-bottom:12px}
+.hint .t{font-weight:700;color:var(--ink);font-size:14px;margin-bottom:6px}
+.hint ol{margin:8px 0 0;padding-left:22px;line-height:1.7}
+/* Drive app */
+.app{background:#fff;border:1px solid #d9dce0;border-radius:12px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.12)}
+.top{display:flex;align-items:center;gap:12px;padding:8px 16px;border-bottom:1px solid #ececec}
+.logo{display:flex;align-items:center;gap:8px;width:200px;flex:none}
+.logo .tri{width:26px;height:24px}
+.logo span{font-size:20px;color:#5f6368}
+.search{flex:1;display:flex;align-items:center;gap:10px;background:#e9eef6;border-radius:24px;padding:9px 16px;color:#5f6368;font-size:14px}
+.search input{border:none;background:transparent;outline:none;flex:1;font-size:14px;color:#202124;font-family:inherit}
+.topic{display:flex;gap:6px;align-items:center}
+.cir{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#5f6368;cursor:pointer}
+.cir:hover{background:var(--hover)}.cir svg{width:20px;height:20px}
+.ava{width:32px;height:32px;border-radius:50%;background:#0b8043;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;cursor:pointer}
+.body{display:flex;min-height:520px}
+.side{width:240px;flex:none;padding:8px 10px;border-right:1px solid #ececec}
+.newb{display:inline-flex;align-items:center;gap:10px;border:1px solid #dadce0;border-radius:16px;padding:11px 22px;box-shadow:0 1px 2px rgba(0,0,0,.1);cursor:pointer;font-size:14px;color:#3c4043;margin:6px 4px 14px;font-weight:500}
+.newb:hover{background:#f8f9fa;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.nav{list-style:none;margin:0;padding:0}
+.nav li{display:flex;align-items:center;gap:14px;padding:8px 14px;border-radius:0 16px 16px 0;font-size:14px;color:#3c4043;cursor:pointer}
+.nav li:hover{background:#f1f3f4}
+.nav li.on{background:#e8f0fe;color:#0b57d0;font-weight:600}
+.nav li svg{width:20px;height:20px}
+.stor{margin:14px 8px;padding-top:14px;border-top:1px solid #ececec;font-size:13px;color:#5f6368}
+.bar{height:4px;background:#e0e0e0;border-radius:3px;margin:8px 0;overflow:hidden}
+.bar i{display:block;height:100%;width:53%;background:#1a73e8}
+.buy{color:#0b57d0;cursor:pointer}
+.main{flex:1;padding:12px 18px;overflow:auto}
+.mtitle{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.mtitle .mt{font-size:18px;color:#202124;display:flex;align-items:center;gap:6px;cursor:pointer}
+.mtools{display:flex;gap:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.fold{display:flex;align-items:center;gap:12px;background:#f8f9fc;border:1px solid #eceff3;border-radius:10px;padding:12px 14px;cursor:pointer;user-select:none;font-size:14px;color:#202124}
+.fold:hover{background:#eef3fb}
+.fold.sel{background:#d3e3fd;border-color:#aecbfa}
+.fold.target{outline:2px dashed #0b57d0;outline-offset:-2px}
+.fold svg{width:22px;height:22px;flex:none;color:#5f6368}
+.fold .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* context menu */
+.ctx{position:fixed;z-index:60;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.25);padding:8px 0;min-width:300px;display:none;font-size:14px}
+.ctx.show{display:block}
+.ctx .it{display:flex;align-items:center;gap:16px;padding:9px 22px;cursor:pointer;color:#3c4043}
+.ctx .it:hover{background:#f1f3f4}
+.ctx .it svg{width:18px;height:18px;color:#5f6368;flex:none}
+.ctx .it.hl{box-shadow:inset 0 0 0 2px #ea4335;border-radius:4px;margin:0 6px;padding:9px 16px}
+.ctx .sepm{height:1px;background:#ececec;margin:6px 0}
+.ctx .arr{margin-left:auto;color:#9aa0a6}
+/* share overlay (reuse) */
+.ov{position:fixed;inset:0;background:rgba(32,33,36,.5);display:none;align-items:center;justify-content:center;z-index:70;padding:16px}
+.ov.show{display:flex}
+.modal{background:#fff;border-radius:14px;box-shadow:0 24px 50px rgba(0,0,0,.35);width:100%;max-width:520px;max-height:92vh;overflow:auto}
+.mhead{display:flex;align-items:center;justify-content:space-between;padding:18px 24px 6px}
+.mhead h1{font-size:20px;font-weight:400;margin:0}
+.xbtn{border:none;background:transparent;cursor:pointer;width:36px;height:36px;border-radius:50%;color:#444746;display:flex;align-items:center;justify-content:center}
+.xbtn:hover{background:var(--hover)}.xbtn svg{width:20px;height:20px}
+.addrow{padding:6px 24px 4px}
+.addbox{display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;padding:2px 6px}
+.addbox:focus-within{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue)}
+.addbox input{flex:1;border:none;outline:none;font-size:14px;padding:11px 8px;font-family:inherit;background:transparent}
+.sectit{font-size:14px;font-weight:600;padding:14px 24px 4px}
+.people{padding:0 12px}
+.prow{display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:8px}
+.prow:hover{background:#f8f9fa}
+.av{width:36px;height:36px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;flex:none}
+.pinfo{flex:1;min-width:0}
+.pname{font-size:14px}.pname .you{color:var(--sub);font-size:13px}
+.pmail{font-size:12px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ptag{font-size:11px;color:#5e5e5e;background:#e8eaed;border-radius:10px;padding:1px 8px;margin-left:6px}
+.role select,.gsel{-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23444746' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 6px center;font-family:inherit;cursor:pointer}
+.role select{border:1px solid transparent;background-color:transparent;font-size:13px;color:#1f1f1f;border-radius:6px;padding:6px 26px 6px 10px}
+.role select:hover{background-color:var(--hover)}
+.role.owner span{font-size:13px;color:var(--sub);padding-right:6px}
+.gen{margin:10px 24px 4px;display:flex;gap:12px;align-items:flex-start}
+.gicon{width:36px;height:36px;border-radius:50%;background:#e6f4ea;color:#137333;display:flex;align-items:center;justify-content:center;flex:none}
+.gicon.world{background:#e8f0fe;color:#1a73e8}
+.gsel{border:none;background-color:transparent;font-size:14px;font-weight:600;color:#1f1f1f;border-radius:6px;padding:4px 26px 4px 8px;margin-left:-8px}
+.gsel:hover{background-color:var(--hover)}
+.gsub{font-size:12px;color:var(--sub);margin-top:2px}
+.lrole{margin-left:48px;margin-top:4px;display:none}.lrole.show{display:block}
+.lrole select{border:1px solid var(--line);border-radius:6px;font-size:13px;padding:5px 8px;font-family:inherit;cursor:pointer}
+.foot{display:flex;align-items:center;justify-content:space-between;padding:16px 24px 20px}
+.copy{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;color:var(--blue);border-radius:18px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.copy:hover{background:#f6faff}.copy svg{width:18px;height:18px}
+.done-btn{background:var(--blue);color:#fff;border:none;border-radius:18px;padding:9px 24px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.done-btn:hover{background:#0848b3}
+.fb{margin:0 24px 8px;border-radius:8px;padding:10px 12px;font-size:13px;display:none}
+.fb.no{display:block;background:#fce8e6;color:#c5221f;border:1px solid #f7c9c5}
+.prow.bad{background:#fef7f6;box-shadow:inset 3px 0 0 #d93025}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);background:#323232;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;opacity:0;transition:.35s;z-index:99}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.wdone{display:none;text-align:center;padding:46px 24px}
+.wdone.show{display:block}
+.wdone .big{font-size:1.5em;color:var(--ok);font-weight:700;margin:10px 0}
+.wdone .badge{display:inline-block;background:var(--ok);color:#fff;border-radius:20px;padding:6px 16px;font-size:14px;margin-top:6px}
+.reopen{margin-top:16px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:14px;cursor:pointer}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="hint">
+    <div class="t">🎯 Mission — Partager le dossier de l'atelier au bon niveau d'accès</div>
+    <b>1.</b> Fais un <b>clic droit</b> sur le dossier <b>« Atelier numérique »</b> → <b>Partager</b>. Puis, dans la fenêtre :
+    <ol>
+      <li>Les <b>4 collègues du projet</b> co-écrivent → <b>Éditeur</b>.</li>
+      <li>Ta <b>responsable</b> relit et annote sans modifier → <b>Commentateur</b>.</li>
+      <li>Le <b>partenaire externe</b> consulte seulement → <b>Lecteur</b>.</li>
+      <li><b>Accès général</b> : <b>Restreint</b> (pas ouvert à tous ceux qui ont le lien).</li>
+      <li>Clique <b>Terminé</b>.</li>
+    </ol>
+  </div>
+
+  <div class="app">
+    <div class="top">
+      <div class="logo">
+        <svg class="tri" viewBox="0 0 87 76"><path fill="#0066da" d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8H0c0 1.55.4 3.1 1.2 4.5z"/><path fill="#00ac47" d="M43.65 25L29.9 1.2c-1.35.8-2.5 1.9-3.3 3.3L1.2 48.5c-.8 1.4-1.2 2.95-1.2 4.5h27.5z"/><path fill="#ea4335" d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5H59.798l5.852 11.5z"/><path fill="#00832d" d="M43.65 25L57.4 1.2C56.05.4 54.5 0 52.9 0H34.4c-1.6 0-3.15.45-4.5 1.2z"/><path fill="#2684fc" d="M59.8 53H27.5L13.75 76.8c1.35.8 2.9 1.2 4.5 1.2h50.6c1.6 0 3.15-.45 4.5-1.2z"/><path fill="#ffba00" d="M73.4 26.5L60.75 4.5c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25 59.8 53h27.45c0-1.55-.4-3.1-1.2-4.5z"/></svg>
+        <span>Drive</span>
+      </div>
+      <div class="search"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#5f6368" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input placeholder="Rechercher dans Drive"></div>
+      <div class="topic">
+        <span class="cir" onclick="toast('Aide (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.9.4-1.5 1.1-1.5 2.2"/><line x1="12" y1="17" x2="12" y2="17"/></svg></span>
+        <span class="cir" onclick="toast('Paramètres (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.3 1a7 7 0 0 0-1.7-1l-.4-2.5H9.5L9.1 5a7 7 0 0 0-1.7 1l-2.3-1-2 3.4L5.1 11a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 1.7 1l.4 2.5h4.9l.4-2.5a7 7 0 0 0 1.7-1l2.3 1 2-3.4-2-1.5a7 7 0 0 0 .1-1z"/></svg></span>
+        <span class="cir" onclick="toast('Applications Google (démo)')"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg></span>
+        <span class="ava" title="Compte">T</span>
+      </div>
+    </div>
+    <div class="body">
+      <div class="side">
+        <div class="newb" onclick="toast('Nouveau (démo)')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouveau</div>
+        <ul class="nav">
+          <li class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Mon Drive</li>
+          <li onclick="toast('Ordinateurs (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="1"/><line x1="8" y1="20" x2="16" y2="20"/></svg>Ordinateurs</li>
+          <li onclick="toast('Partagés avec moi (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="18" cy="9" r="2.2"/></svg>Partagés avec moi</li>
+          <li onclick="toast('Récents (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/></svg>Récents</li>
+          <li onclick="toast('Suivis (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 3 15 9 21 9.5 16.5 14 18 20 12 16.8 6 20 7.5 14 3 9.5 9 9"/></svg>Suivis</li>
+          <li onclick="toast('Corbeille (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Corbeille</li>
+        </ul>
+        <div class="stor">
+          <div style="display:flex;align-items:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><path d="M4 15a4 4 0 0 1 1-7.5A5 5 0 0 1 19 9a3.5 3.5 0 0 1-.5 7z"/></svg>Espace de stockage</div>
+          <div class="bar"><i></i></div>
+          8,01 Go utilisés sur 15 Go
+          <div class="buy" onclick="toast('Acheter de l\'espace (démo)')">Acheter de l'espace de stockage</div>
+        </div>
+      </div>
+      <div class="main">
+        <div class="mtitle">
+          <div class="mt">Mon Drive <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="mtools">
+            <span class="cir" title="Partager le dossier sélectionné" onclick="shareSelected()"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><circle cx="8" cy="9" r="3"/><path d="M2 20a6 6 0 0 1 12 0"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg></span>
+            <span class="cir" onclick="toast('Affichage liste (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span>
+            <span class="cir" onclick="toast('Détails (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="8" x2="12" y2="8"/></svg></span>
+          </div>
+        </div>
+        <div class="grid" id="grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- context menu -->
+<div class="ctx" id="ctx">
+  <div class="it" data-a="ouvrir">📂&nbsp; Ouvrir avec <span class="arr">▸</span></div>
+  <div class="it hl" data-a="partager"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><circle cx="8" cy="9" r="3"/><path d="M2 20a6 6 0 0 1 12 0"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg> Partager</div>
+  <div class="it" data-a="lien"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.07 0l2-2A5 5 0 0 0 12 4l-1 1"/><path d="M14 11a5 5 0 0 0-7.07 0l-2 2A5 5 0 0 0 12 20l1-1"/></svg> Obtenir le lien</div>
+  <div class="it" data-a="empl"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Afficher l'emplacement</div>
+  <div class="it" data-a="dep"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><path d="M5 12h14"/><polyline points="13 6 19 12 13 18"/></svg> Déplacer vers</div>
+  <div class="it" data-a="fav"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><polygon points="12 3 15 9 21 9.5 16.5 14 18 20 12 16.8 6 20 7.5 14 3 9.5 9 9"/></svg> Ajouter aux favoris</div>
+  <div class="it" data-a="ren"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg> Renommer</div>
+  <div class="sepm"></div>
+  <div class="it" data-a="det"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="8" x2="12" y2="8"/></svg> Afficher les détails</div>
+  <div class="it" data-a="dl"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><line x1="5" y1="21" x2="19" y2="21"/></svg> Télécharger</div>
+  <div class="sepm"></div>
+  <div class="it" data-a="sup"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Supprimer</div>
+</div>
+
+<!-- share overlay -->
+<div class="ov" id="ov">
+  <div class="modal">
+   <div id="composer">
+    <div class="mhead"><h1 id="shTitle">Partager «&nbsp;Atelier numérique&nbsp;»</h1><button class="xbtn" onclick="closeShare()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>
+    <div class="addrow"><div class="addbox"><input id="addIn" placeholder="Ajouter des personnes, des groupes…" autocomplete="off"></div></div>
+    <div class="sectit">Personnes ayant accès</div>
+    <div class="people" id="people">
+      <div class="prow"><div class="av" style="background:#0b8043">T</div><div class="pinfo"><div class="pname">Vous <span class="you">(moi@formip.com)</span></div><div class="pmail">moi@formip.com</div></div><div class="role owner"><span>Propriétaire</span></div></div>
+    </div>
+    <div class="sectit">Accès général</div>
+    <div class="gen">
+      <div class="gicon" id="gicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+      <div class="gbody">
+        <select class="gsel" id="genSel" onchange="onGen()"><option value="restricted">Restreint</option><option value="anyone">Tous les utilisateurs disposant du lien</option></select>
+        <div class="gsub" id="genSub">Seules les personnes ajoutées peuvent ouvrir le dossier avec le lien.</div>
+        <div class="lrole" id="lrole"><select id="linkRole"><option value="viewer">Lecteur</option><option value="commenter">Commentateur</option><option value="editor">Éditeur</option></select></div>
+      </div>
+    </div>
+    <div class="fb no" id="fb"></div>
+    <div class="foot">
+      <button class="copy" onclick="toast('Lien copié')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.07 0l2-2A5 5 0 0 0 12 4l-1 1"/><path d="M14 11a5 5 0 0 0-7.07 0l-2 2A5 5 0 0 0 12 20l1-1"/></svg>Copier le lien</button>
+      <button class="done-btn" onclick="finish()">Terminé</button>
+    </div>
+   </div>
+   <div class="wdone" id="wdone">
+     <div style="font-size:42px">🔑</div>
+     <div class="big">Partage configuré !</div>
+     <p style="color:#5e5e5e">Chacun a l'accès minimal nécessaire et le dossier reste confidentiel (accès restreint).</p>
+     <div class="badge">✅ TP validé — CRCN Domaine 2 (Partager &amp; collaborer)</div><br>
+     <button class="reopen" onclick="location.reload()">Recommencer</button>
+   </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function $(id){return document.getElementById(id);}
+var tT;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tT);tT=setTimeout(function(){t.classList.remove('show');},2000);}
+
+var FOLDERS=['Atelier numérique','Supports de formation','Comptes rendus de réunion','Photos de l\'atelier','Modèles de documents','Ressources Pix','Plannings & inscriptions','Présentations','Évaluations stagiaires','Logos & visuels','Tutoriels vidéo','Factures & devis','Administratif','Projets en cours','Archives 2024','Partagés avec l\'équipe'];
+var selected=null;
+(function(){var g=$('grid');FOLDERS.forEach(function(name){
+  var d=document.createElement('div');d.className='fold'+(name==='Atelier numérique'?' target':'');d.dataset.name=name;
+  d.innerHTML='<svg viewBox="0 0 24 24" fill="#5f6368"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8z"/></svg><span class="nm">'+name+'</span>';
+  d.addEventListener('click',function(){document.querySelectorAll('.fold').forEach(function(f){f.classList.remove('sel');});d.classList.add('sel');selected=name;});
+  d.addEventListener('contextmenu',function(e){e.preventDefault();document.querySelectorAll('.fold').forEach(function(f){f.classList.remove('sel');});d.classList.add('sel');selected=name;openCtx(e.clientX,e.clientY);});
+  g.appendChild(d);
+});})();
+
+function openCtx(x,y){var c=$('ctx');c.classList.add('show');var w=320,h=c.offsetHeight||440;c.style.left=Math.min(x,window.innerWidth-w-8)+'px';c.style.top=Math.min(y,window.innerHeight-h-8)+'px';}
+function closeCtx(){$('ctx').classList.remove('show');}
+document.addEventListener('click',function(e){if(!e.target.closest('#ctx'))closeCtx();});
+document.addEventListener('scroll',closeCtx,true);
+$('ctx').querySelectorAll('.it').forEach(function(it){it.addEventListener('click',function(){var a=it.dataset.a;closeCtx();
+  if(a==='partager'){openShare();}else{toast(it.textContent.trim().replace(/\s*▸$/,'')+' (démo)');}});});
+
+function shareSelected(){if(!selected){toast('Sélectionne d\'abord un dossier');return;}openShare();}
+function openShare(){$('shTitle').innerHTML='Partager « '+(selected||'Atelier numérique')+' »';$('ov').classList.add('show');}
+function closeShare(){$('ov').classList.remove('show');}
+
+// share dialog logic
+var PEOPLE=[
+ {n:'Marie Dupont',m:'marie.dupont@formip.com',c:'#d93025',need:'editor',tag:'Projet'},
+ {n:'Karim Benali',m:'karim.benali@formip.com',c:'#188038',need:'editor',tag:'Projet'},
+ {n:'Léa Martin',m:'lea.martin@formip.com',c:'#e8710a',need:'editor',tag:'Projet'},
+ {n:'Tom Robert',m:'tom.robert@formip.com',c:'#9334e6',need:'editor',tag:'Projet'},
+ {n:'Sophie Garnier',m:'sophie.garnier@formip.com',c:'#1a73e8',need:'commenter',tag:'Responsable'},
+ {n:'Partenaire externe',m:'contact@partenaire-externe.com',c:'#5f6368',need:'viewer',tag:'Externe'}
+];
+var ROLES=[['viewer','Lecteur'],['commenter','Commentateur'],['editor','Éditeur']];
+function initials(n){var p=n.split(' ');return (((p[0]||'')[0]||'')+((p[1]||'')[0]||'')).toUpperCase();}
+(function(){var c=$('people');PEOPLE.forEach(function(p,i){
+  var opts=ROLES.map(function(r){return '<option value="'+r[0]+'">'+r[1]+'</option>';}).join('');
+  var row=document.createElement('div');row.className='prow';row.dataset.need=p.need;row.dataset.i=i;
+  row.innerHTML='<div class="av" style="background:'+p.c+'">'+initials(p.n)+'</div><div class="pinfo"><div class="pname">'+p.n+'<span class="ptag">'+p.tag+'</span></div><div class="pmail">'+p.m+'</div></div><div class="role"><select data-i="'+i+'">'+opts+'</select></div>';
+  c.appendChild(row);
+});})();
+function onGen(){var v=$('genSel').value,ic=$('gicon');
+  if(v==='anyone'){ic.classList.add('world');ic.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/></svg>';$('genSub').textContent='Tous les utilisateurs disposant du lien peuvent ouvrir le dossier.';$('lrole').classList.add('show');}
+  else{ic.classList.remove('world');ic.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';$('genSub').textContent='Seules les personnes ajoutées peuvent ouvrir le dossier avec le lien.';$('lrole').classList.remove('show');}
+}
+$('addIn').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();toast('Dans ce TP, les personnes sont déjà ajoutées : règle leur niveau d\'accès.');this.value='';}});
+
+function finish(){
+  document.querySelectorAll('.prow.bad').forEach(function(r){r.classList.remove('bad');});
+  var errs=[];
+  document.querySelectorAll('.prow[data-need]').forEach(function(r){var sel=r.querySelector('select');var p=PEOPLE[+r.dataset.i];
+    if(sel.value!==r.dataset.need){r.classList.add('bad');var lbl={editor:'Éditeur',commenter:'Commentateur',viewer:'Lecteur'}[r.dataset.need];errs.push('<b>'+p.n+'</b> doit être <b>'+lbl+'</b>');}});
+  if($('genSel').value!=='restricted')errs.push('mets l\'<b>accès général</b> sur <b>Restreint</b>');
+  var fb=$('fb');
+  if(errs.length){fb.className='fb no';fb.innerHTML='À corriger : '+errs.join(' ; ')+'.';try{fb.scrollIntoView({block:'center'});}catch(e){}return;}
+  fb.style.display='none';$('composer').style.display='none';$('wdone').classList.add('show');
+  toast('Partage enregistré');
+  try{window.postMessage('show_complete','*');window.parent.postMessage('show_complete','*');}catch(e){}
+}
+try{window.parent.postMessage('hide_complete','*');}catch(e){}
+</script>
+</body></html>
