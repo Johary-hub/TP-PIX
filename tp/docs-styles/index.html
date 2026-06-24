@@ -1,0 +1,479 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulateur — Structurer, partager et exporter un document (Google Docs)</title>
+<style>
+:root{--blue:#0b57d0;--ink:#202124;--muted:#444746;--sub:#5f6368;--line:#e0e0e0;--hover:#f1f3f4;--ok:#188038;--sel:#c8dafc}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#f8fafd;font-family:Roboto,Arial,system-ui,sans-serif;color:var(--ink)}
+.wrap{max-width:1280px;margin:0 auto;padding:12px}
+.hint{font-size:13px;color:var(--sub);background:#fff;border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:8px;padding:12px 14px;margin-bottom:12px;display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.hint .htxt .t{font-weight:700;color:var(--ink);font-size:14px;margin-bottom:4px}
+.hint ol{margin:6px 0 0;padding-left:20px;line-height:1.7}
+.hint .step{transition:.2s}
+.hint .step.done{color:#188038}
+.hint .step.done b{color:#188038}
+.hint .step.done:before{content:'✓ ';font-weight:700;color:#188038}
+.checkbtn{flex:none;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:11px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.checkbtn:hover{background:#0848b3}
+.fb{margin-top:10px;border-radius:8px;padding:9px 12px;font-size:13px;display:none;width:100%}
+.fb.no{display:block;background:#fce8e6;color:#c5221f}
+.fb.ok{display:block;background:#e6f4ea;color:#137333}
+/* app */
+.app{background:#fff;border:1px solid #d9dce0;border-radius:10px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.bar1{display:flex;align-items:center;gap:12px;padding:8px 14px 0}
+.dlogo{width:30px;height:38px}
+.titlewrap .dt{font-size:18px;color:#202124}
+.titlewrap .menu{display:flex;gap:16px;font-size:13px;color:#444746;margin-top:2px;position:relative}
+.titlewrap .menu span{cursor:pointer;padding:2px 4px;border-radius:4px}.titlewrap .menu span:hover{background:#eef3fe;color:#000}
+.bar1 .grow{flex:1}
+.presence{display:flex;align-items:center}
+.presence .pa{width:30px;height:30px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;border:2px solid #fff;margin-left:-8px;box-shadow:0 0 0 1px rgba(0,0,0,.08);position:relative}
+.presence .pa:first-child{margin-left:0}
+.presence .pa:after{content:'';position:absolute;right:-1px;bottom:-1px;width:9px;height:9px;border-radius:50%;background:#34a853;border:2px solid #fff}
+.share{background:#c2e7ff;color:#001d35;border:none;border-radius:18px;padding:9px 20px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;font-family:inherit}
+.share:hover{background:#b3e0ff}
+.ava{width:32px;height:32px;border-radius:50%;background:#7b1fa2;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600}
+.cir{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#444746;cursor:pointer}.cir:hover{background:var(--hover)}.cir svg{width:20px;height:20px}
+/* dropdown menus (File…) */
+.dd{position:fixed;z-index:60;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.25);padding:8px 0;min-width:240px;display:none;font-size:14px}
+.dd.show{display:block}
+.dd .it{display:flex;align-items:center;gap:14px;padding:9px 18px;cursor:pointer;color:#3c4043;position:relative}
+.dd .it:hover{background:#f1f3f4}
+.dd .it svg{width:18px;height:18px;color:#5f6368;flex:none}
+.dd .it .arr{margin-left:auto;color:#9aa0a6}
+.dd .sub{position:absolute;left:100%;top:-8px;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.25);padding:8px 0;min-width:230px;display:none}
+.dd .it:hover .sub{display:block}
+.dd .sub .it{padding:9px 18px}
+.dd .sepm{height:1px;background:#ececec;margin:6px 0}
+/* toolbar */
+.tbar{display:flex;align-items:center;gap:3px;margin:8px 14px;background:#edf2fa;border-radius:22px;padding:5px 10px;flex-wrap:wrap}
+.tb{border:none;background:transparent;width:30px;height:30px;border-radius:50%;cursor:pointer;color:#444746;display:inline-flex;align-items:center;justify-content:center;font-size:14px}
+.tb:hover{background:#dde3ea}
+.tb svg{width:17px;height:17px}
+.sep{width:1px;height:20px;background:#c7cdd6;margin:0 5px}
+.zoom{font-size:13px;color:#444746;border:none;background:transparent;border-radius:6px;padding:5px 8px;cursor:pointer}.zoom:hover{background:#dde3ea}
+.stylebtn{display:flex;align-items:center;gap:8px;border:none;background:transparent;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:14px;color:#202124;font-family:inherit;min-width:120px}
+.stylebtn:hover{background:#dde3ea}
+.stylebtn svg{width:16px;height:16px}
+.fontbtn{font-size:14px;color:#202124;border:none;background:transparent;border-radius:6px;padding:6px 10px;cursor:pointer;font-family:inherit}.fontbtn:hover{background:#dde3ea}
+.szwrap{display:flex;align-items:center;gap:4px}
+.szwrap .sz{width:42px;text-align:center;border:1px solid #c7cdd6;border-radius:4px;padding:4px;font-size:13px}
+/* layout */
+.editor{display:flex;gap:0}
+.outline{width:220px;flex:none;border-right:1px solid #eee;padding:18px 12px;min-height:560px}
+.outline h4{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#5f6368;margin:0 0 10px;font-weight:600}
+.outline .empty{font-size:13px;color:#9aa0a6;font-style:italic}
+.outline ul{list-style:none;margin:0;padding:0}
+.outline li{font-size:13px;color:#444746;padding:5px 6px;border-radius:6px;cursor:default;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.outline li:hover{background:#f1f3f4}
+.outline li.lv1{font-weight:600;color:#202124}
+.outline li.lv2{padding-left:18px}
+.outline li.lv3{padding-left:30px;color:#5f6368}
+.docscroll{flex:1;overflow:auto;background:#f8fafd;padding:26px 10px}
+.page{background:#fff;max-width:720px;margin:0 auto;border:1px solid #e6e6e6;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,.1);padding:60px 72px;min-height:760px;position:relative}
+.blk{padding:2px 4px;border-radius:3px;cursor:text;outline:none;position:relative}
+.blk:hover{background:#fafafa}
+.blk.cur{background:#eef3fe;box-shadow:inset 2px 0 0 #4285f4}
+.s-normal{font-size:11pt;font-weight:400;color:#202124;line-height:1.5;margin:0 0 2px}
+.s-normal.bold{font-weight:700}
+.s-title{font-size:26pt;font-weight:400;color:#202124;margin:4px 0}
+.s-subtitle{font-size:15pt;font-weight:400;color:#666;margin:0 0 6px}
+.s-h1{font-size:20pt;font-weight:400;color:#202124;margin:14px 0 4px}
+.s-h2{font-size:16pt;font-weight:400;color:#202124;margin:12px 0 4px}
+.s-h3{font-size:13pt;font-weight:700;color:#434343;margin:10px 0 4px}
+.li{font-size:11pt;color:#202124;line-height:1.6;margin-left:22px}
+/* remote collaborator caret */
+.rcaret{display:inline-block;width:2px;height:1.1em;vertical-align:text-bottom;background:var(--c,#e8710a);margin-left:1px;animation:blink 1.1s steps(1) infinite;position:relative}
+.rcaret i{position:absolute;left:-2px;top:-18px;background:var(--c,#e8710a);color:#fff;font-style:normal;font-size:10px;font-weight:600;padding:1px 6px;border-radius:4px 4px 4px 0;white-space:nowrap}
+@keyframes blink{50%{opacity:0}}
+/* style menu */
+.smenu{position:fixed;z-index:60;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.25);padding:8px 0;min-width:240px;display:none}
+.smenu.show{display:block}
+.smenu .opt{padding:8px 18px;cursor:pointer;color:#202124}
+.smenu .opt:hover{background:#e8f0fe}
+.smenu .opt.on{background:#e8f0fe}
+/* comments */
+.comments{width:300px;flex:none;border-left:1px solid #eee;padding:18px 14px;background:#fff}
+.cc{background:#f1f3f4;border-radius:10px;padding:12px;margin-bottom:14px;font-size:13px}
+.cc .h{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.cc .a{width:30px;height:30px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+.cc .n{font-weight:600;font-size:13px}.cc .d{font-size:11px;color:#5f6368}
+.cc .men{color:#1a73e8}
+/* share modal */
+.ov{position:fixed;inset:0;background:rgba(32,33,36,.5);display:none;align-items:center;justify-content:center;z-index:80;padding:16px}
+.ov.show{display:flex}
+.modal{background:#fff;border-radius:14px;box-shadow:0 24px 50px rgba(0,0,0,.35);width:100%;max-width:520px;max-height:92vh;overflow:auto}
+.mhead{display:flex;align-items:center;justify-content:space-between;padding:18px 24px 6px}
+.mhead h1{font-size:20px;font-weight:400;margin:0}
+.xbtn{border:none;background:transparent;cursor:pointer;width:36px;height:36px;border-radius:50%;color:#444746;display:flex;align-items:center;justify-content:center}.xbtn:hover{background:var(--hover)}.xbtn svg{width:20px;height:20px}
+.addrow{padding:6px 24px 4px;position:relative}
+.addbox{display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;padding:2px 6px}
+.addbox:focus-within{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue)}
+.addbox input{flex:1;border:none;outline:none;font-size:14px;padding:11px 8px;font-family:inherit;background:transparent}
+.ac{position:absolute;left:24px;right:24px;top:100%;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.2);overflow:hidden;display:none;z-index:5}
+.ac.show{display:block}
+.ac .it{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;font-size:13px}
+.ac .it:hover,.ac .it.hi{background:#eef3fe}
+.ac .it .av{width:28px;height:28px;font-size:12px}
+.ac .it .e{color:var(--sub);font-size:12px}
+.sectit{font-size:14px;font-weight:600;padding:14px 24px 4px}
+.people{padding:0 12px}
+.prow{display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:8px}
+.prow:hover{background:#f8f9fa}
+.av{width:36px;height:36px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;flex:none}
+.pinfo{flex:1;min-width:0}
+.pname{font-size:14px}.pname .you{color:var(--sub);font-size:13px}
+.pmail{font-size:12px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.role select{-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23444746' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 6px center;border:1px solid transparent;background-color:transparent;font-size:13px;color:#1f1f1f;border-radius:6px;padding:6px 26px 6px 10px;font-family:inherit;cursor:pointer}
+.role select:hover{background-color:var(--hover)}
+.role.owner span{font-size:13px;color:var(--sub);padding-right:6px}
+.rmx{border:none;background:transparent;cursor:pointer;color:#5f6368;font-size:16px;padding:4px 8px;border-radius:50%}.rmx:hover{background:var(--hover);color:#c5221f}
+.foot{display:flex;align-items:center;justify-content:space-between;padding:16px 24px 20px}
+.copy{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;color:var(--blue);border-radius:18px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.copy:hover{background:#f6faff}.copy svg{width:18px;height:18px}
+.done-btn{background:var(--blue);color:#fff;border:none;border-radius:18px;padding:9px 24px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.done-btn:hover{background:#0848b3}
+.mfb{margin:0 24px 8px;border-radius:8px;padding:9px 12px;font-size:13px;display:none;background:#fef7e0;color:#7a5b00}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);background:#323232;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;opacity:0;transition:.35s;z-index:99}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:1000px){.comments,.outline{display:none}}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="hint">
+    <div class="htxt">
+      <div class="t">🎯 Mission — Structurer, partager et exporter le document</div>
+      Pas de « gras manuel » : utilise les <b>styles</b> (menu « Texte normal ▾ »).
+      <ol>
+        <li class="step" id="st-title">Clique sur le titre <b>Team Meeting</b> → applique le style <b>Titre</b>.</li>
+        <li class="step" id="st-head">Clique sur <b>Overview</b>, puis sur <b>Goals</b> → applique un style de <b>titre</b> (Titre&nbsp;1 ou Titre&nbsp;2).</li>
+        <li class="step" id="st-share"><b>Partage</b> le document avec au moins <b>2 collègues</b> pour collaborer (bouton <b>Share</b>).</li>
+        <li class="step" id="st-pdf"><b>Télécharge</b> une copie en <b>PDF</b> (menu <b>File ▸ Télécharger ▸ PDF</b>).</li>
+        <li>Observe le <b>Plan</b> (à gauche) et les <b>collaborateurs</b>, puis clique <b>Vérifier</b>.</li>
+      </ol>
+      <div class="fb" id="fb"></div>
+    </div>
+    <button class="checkbtn" onclick="check()">✓ Vérifier le travail</button>
+  </div>
+
+  <div class="app">
+    <div class="bar1">
+      <svg class="dlogo" viewBox="0 0 48 64"><path fill="#4285f4" d="M29 2H8a4 4 0 0 0-4 4v52a4 4 0 0 0 4 4h32a4 4 0 0 0 4-4V17z"/><path fill="#a1c2fa" d="M29 2l15 15H29z"/><g fill="#fff"><rect x="13" y="28" width="22" height="2.6"/><rect x="13" y="34" width="22" height="2.6"/><rect x="13" y="40" width="22" height="2.6"/><rect x="13" y="46" width="14" height="2.6"/></g></svg>
+      <div class="titlewrap">
+        <div class="dt">Team Meeting</div>
+        <div class="menu">
+          <span id="fileMenuBtn" onclick="openFileMenu(this)">File</span>
+          <span onclick="toast('Edit (démo)')">Edit</span><span onclick="toast('View (démo)')">View</span><span onclick="toast('Insert (démo)')">Insert</span><span onclick="toast('Format (démo)')">Format</span><span onclick="toast('Tools (démo)')">Tools</span><span onclick="toast('Help (démo)')">Help</span>
+        </div>
+      </div>
+      <div class="grow"></div>
+      <div class="presence" id="presence"></div>
+      <span class="cir" onclick="toast('Historique des versions (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><polyline points="3 3 3 8 8 8"/><polyline points="12 7 12 12 16 14"/></svg></span>
+      <span class="cir" onclick="toast('Commentaires (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+      <button class="share" onclick="openShare()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="9" r="3"/><path d="M2 20a6 6 0 0 1 12 0"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>Share</button>
+      <span class="ava">T</span>
+    </div>
+
+    <div class="tbar">
+      <button class="tb" title="Annuler" onclick="toast('Annuler (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg></button>
+      <button class="tb" title="Rétablir" onclick="toast('Rétablir (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg></button>
+      <button class="tb" title="Imprimer" onclick="toast('Imprimer (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button>
+      <button class="tb" title="Télécharger en PDF" onclick="downloadPDF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><line x1="5" y1="21" x2="19" y2="21"/></svg></button>
+      <span class="sep"></span>
+      <button class="zoom" onclick="toast('Zoom (démo)')">100% ▾</button>
+      <span class="sep"></span>
+      <button class="stylebtn" id="styleBtn" onclick="openStyleMenu(this)"><span id="styleLbl">Texte normal</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <span class="sep"></span>
+      <button class="fontbtn" onclick="toast('Police (démo)')">Arial ▾</button>
+      <span class="sep"></span>
+      <div class="szwrap"><button class="tb" onclick="toast('-')">−</button><span class="sz">11</span><button class="tb" onclick="toast('+')">+</button></div>
+      <span class="sep"></span>
+      <button class="tb" title="Gras" onclick="toast('Gras : ici on structure avec les styles, pas le gras manuel 😉')"><b>B</b></button>
+      <button class="tb" title="Italique" onclick="toast('Italique (démo)')"><i>I</i></button>
+      <button class="tb" title="Souligné" onclick="toast('Souligné (démo)')"><u>U</u></button>
+      <button class="tb" title="Couleur" onclick="toast('Couleur (démo)')"><b style="border-bottom:3px solid #d93025">A</b></button>
+      <span class="sep"></span>
+      <button class="tb" title="Lien" onclick="toast('Lien (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l2-2A5 5 0 0 0 12 4l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2A5 5 0 0 0 12 20l1-1"/></svg></button>
+      <button class="tb" title="Image" onclick="toast('Image (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
+      <button class="tb" title="Liste à puces" onclick="toast('Liste (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="9" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1.4" fill="currentColor"/><circle cx="4" cy="12" r="1.4" fill="currentColor"/><circle cx="4" cy="18" r="1.4" fill="currentColor"/></svg></button>
+    </div>
+
+    <div class="editor">
+      <div class="outline">
+        <h4>📑 Plan du document</h4>
+        <div id="outBody"><div class="empty">Aucun titre pour l'instant. Applique des styles de titre pour construire le plan.</div></div>
+      </div>
+
+      <div class="docscroll">
+        <div class="page" id="page">
+          <div class="blk s-normal bold" data-style="normal" data-role="title">Team Meeting</div>
+          <div class="blk s-normal" data-style="normal" data-role="date" style="color:#888">September 04, 2022</div>
+          <div class="blk s-normal bold" data-style="normal" data-role="overview">Overview</div>
+          <div class="blk s-normal" data-style="normal" data-role="o">Project Beta is a project that aims to improve our overall performance as a company. It will be implemented in three phases:</div>
+          <div class="li">1. We will focus on increasing our market share in the current markets.</div>
+          <div class="li">2. We will expand into new markets.</div>
+          <div class="li">3. We will focus on developing new products and services.</div>
+          <div class="blk s-normal bold" data-style="normal" data-role="goals">Goals</div>
+          <div class="blk s-normal" data-style="normal" data-role="g">The plan for this quarter is to review the project's progress and identify any risks or issues. In the following weeks, we'll start by gathering feedback from stakeholders on the project's direction.</div>
+          <div class="blk s-normal" data-style="normal" data-role="g2">As the project progresses, we'll identify any changes or updates to the project's scope and develop a plan for how to communicate with stakeholders about the project.</div>
+        </div>
+      </div>
+
+      <div class="comments">
+        <div class="cc"><div class="h"><div class="a" style="background:#5b8def">AC</div><div><div class="n">Alan Cook</div><div class="d">2:30 PM May 21</div></div></div><span class="men">@Susan Johnson</span> Please check with Luke if we're still doing Project Beta support. Thank you!</div>
+        <div class="cc"><div class="h"><div class="a" style="background:#5b8def">AC</div><div><div class="n">Alan Cook</div><div class="d">2:30 PM May 21</div></div></div>Can we also add some of the points Raj made today in the meeting? I think we should capture it here.</div>
+        <div class="cc"><div class="h"><div class="a" style="background:#7b1fa2">SJ</div><div><div class="n">Susan Johnson</div><div class="d">3:40 PM May 21</div></div></div>Will do! Je peux ajouter après le team sync.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- File dropdown -->
+<div class="dd" id="fileMenu">
+  <div class="it" onclick="toast('Nouveau (démo)');closeDD()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouveau</div>
+  <div class="it" onclick="toast('Ouvrir (démo)');closeDD()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Ouvrir</div>
+  <div class="it" onclick="openShare();closeDD()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="9" r="3"/><path d="M2 20a6 6 0 0 1 12 0"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>Partager</div>
+  <div class="sepm"></div>
+  <div class="it"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><line x1="5" y1="21" x2="19" y2="21"/></svg>Télécharger<span class="arr">▸</span>
+    <div class="sub">
+      <div class="it" onclick="downloadPDF();closeDD()"><svg viewBox="0 0 24 24" fill="none" stroke="#ea4335" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Document PDF (.pdf)</div>
+      <div class="it" onclick="toast('Export Word (.docx) — démo');closeDD()"><svg viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Microsoft Word (.docx)</div>
+      <div class="it" onclick="toast('Export texte (.txt) — démo');closeDD()"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Texte brut (.txt)</div>
+    </div>
+  </div>
+  <div class="it" onclick="toast('Imprimer (démo)');closeDD()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimer</div>
+</div>
+
+<!-- Style menu -->
+<div class="smenu" id="smenu"></div>
+
+<!-- Share modal -->
+<div class="ov" id="ov">
+  <div class="modal">
+    <div class="mhead"><h1 id="shTitle">Partager « Team Meeting »</h1><button class="xbtn" onclick="closeShare()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>
+    <div class="addrow">
+      <div class="addbox"><input id="addIn" placeholder="Ajouter des personnes pour collaborer…" autocomplete="off"></div>
+      <div class="ac" id="ac"></div>
+    </div>
+    <div class="sectit">Personnes ayant accès</div>
+    <div class="people" id="people">
+      <div class="prow"><div class="av" style="background:#7b1fa2">T</div><div class="pinfo"><div class="pname">Vous <span class="you">(moi@formip.com)</span></div><div class="pmail">moi@formip.com</div></div><div class="role owner"><span>Propriétaire</span></div></div>
+    </div>
+    <div class="mfb" id="mfb"></div>
+    <div class="foot">
+      <button class="copy" onclick="toast('Lien du document copié')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l2-2A5 5 0 0 0 12 4l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2A5 5 0 0 0 12 20l1-1"/></svg>Copier le lien</button>
+      <button class="done-btn" onclick="confirmShare()">Envoyer</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function $(id){return document.getElementById(id);}
+var tT;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tT);tT=setTimeout(function(){t.classList.remove('show');},2600);}
+
+/* ---------- Styles ---------- */
+var STYLES=[['normal','Texte normal'],['title','Titre'],['subtitle','Sous-titre'],['h1','Titre 1'],['h2','Titre 2'],['h3','Titre 3']];
+var LBL={};STYLES.forEach(function(s){LBL[s[0]]=s[1];});
+var cur=null;
+function selectBlk(el){if(cur)cur.classList.remove('cur');cur=el;el.classList.add('cur');$('styleLbl').textContent=LBL[el.dataset.style]||'Texte normal';}
+document.querySelectorAll('.blk').forEach(function(b){b.addEventListener('click',function(){selectBlk(b);});});
+
+function openStyleMenu(btn){
+  var m=$('smenu');
+  if(m.classList.contains('show')){m.classList.remove('show');return;}
+  var curStyle=cur?cur.dataset.style:null;
+  m.innerHTML=STYLES.map(function(s){
+    var prev={normal:'font-size:13px',title:'font-size:20px',subtitle:'font-size:14px;color:#666',h1:'font-size:17px',h2:'font-size:15px',h3:'font-size:13px;font-weight:700'}[s[0]];
+    return '<div class="opt'+(s[0]===curStyle?' on':'')+'" data-v="'+s[0]+'"><span style="'+prev+'">'+s[1]+'</span></div>';
+  }).join('');
+  m.querySelectorAll('.opt').forEach(function(o){o.onclick=function(){applyStyle(o.dataset.v);m.classList.remove('show');};});
+  m.classList.add('show');
+  var r=btn.getBoundingClientRect();m.style.left=r.left+'px';m.style.top=(r.bottom+4)+'px';
+}
+document.addEventListener('click',function(e){if(!e.target.closest('#smenu')&&!e.target.closest('#styleBtn'))$('smenu').classList.remove('show');});
+
+function applyStyle(v){
+  if(!cur){toast('Clique d\'abord dans une ligne du document.');return;}
+  ['s-normal','s-title','s-subtitle','s-h1','s-h2','s-h3'].forEach(function(c){cur.classList.remove(c);});
+  cur.classList.remove('bold');
+  cur.classList.add('s-'+v);cur.dataset.style=v;
+  $('styleLbl').textContent=LBL[v];
+  buildOutline();refreshSteps();
+}
+function buildOutline(){
+  var body=$('outBody');var items=[];
+  document.querySelectorAll('.blk').forEach(function(b){
+    var s=b.dataset.style;
+    if(s==='title'||s==='h1'||s==='h2'||s==='h3'){
+      var lv=(s==='title'||s==='h1')?1:(s==='h2'?2:3);
+      items.push('<li class="lv'+lv+'">'+b.textContent.trim()+'</li>');
+    }
+  });
+  body.innerHTML=items.length?('<ul>'+items.join('')+'</ul>'):'<div class="empty">Aucun titre pour l\'instant. Applique des styles de titre pour construire le plan.</div>';
+}
+
+/* ---------- File menu ---------- */
+function openFileMenu(btn){var m=$('fileMenu');if(m.classList.contains('show')){m.classList.remove('show');return;}m.classList.add('show');var r=btn.getBoundingClientRect();m.style.left=r.left+'px';m.style.top=(r.bottom+6)+'px';}
+function closeDD(){$('fileMenu').classList.remove('show');}
+document.addEventListener('click',function(e){if(!e.target.closest('#fileMenu')&&!e.target.closest('#fileMenuBtn'))closeDD();});
+
+/* ---------- PDF download (génère un vrai PDF) ---------- */
+var pdfDone=false;
+function pdfEsc(s){return s.replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)').replace(/[^\x20-\x7e]/g,' ');}
+function buildPdf(){
+  // lignes (texte, taille, y depuis le bas d'une page A4 595x842)
+  var lines=[
+    ['Team Meeting',24,790],
+    ['September 04, 2022',10,766],
+    ['Overview',16,730],
+    ['Project Beta is a project that aims to improve our overall',11,706],
+    ['performance as a company. It will be implemented in three phases:',11,690],
+    ['  1. Increasing our market share in the current markets.',11,668],
+    ['  2. Expanding into new markets.',11,652],
+    ['  3. Developing new products and services.',11,636],
+    ['Goals',16,604],
+    ['Review the project progress and identify any risks or issues,',11,580],
+    ['gather feedback from stakeholders on the project direction.',11,564],
+    ['',11,548],
+    ['Document exporte depuis le simulateur Docs - Parcours Pix (Formip).',9,520]
+  ];
+  var content='';
+  lines.forEach(function(l){ if(l[0]==='')return; content+='BT /F1 '+l[1]+' Tf 72 '+l[2]+' Td ('+pdfEsc(l[0])+') Tj ET\n'; });
+  var objs=[];
+  objs.push('<</Type/Catalog/Pages 2 0 R>>');
+  objs.push('<</Type/Pages/Kids[3 0 R]/Count 1>>');
+  objs.push('<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Resources<</Font<</F1 5 0 R>>>>/Contents 4 0 R>>');
+  objs.push('<</Length '+content.length+'>>\nstream\n'+content+'endstream');
+  objs.push('<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>');
+  var pdf='%PDF-1.4\n',offs=[];
+  for(var i=0;i<objs.length;i++){offs.push(pdf.length);pdf+=(i+1)+' 0 obj\n'+objs[i]+'\nendobj\n';}
+  var xref=pdf.length;
+  pdf+='xref\n0 '+(objs.length+1)+'\n0000000000 65535 f \n';
+  for(var j=0;j<offs.length;j++){pdf+=('0000000000'+offs[j]).slice(-10)+' 00000 n \n';}
+  pdf+='trailer\n<</Size '+(objs.length+1)+'/Root 1 0 R>>\nstartxref\n'+xref+'\n%%EOF';
+  return pdf;
+}
+function downloadPDF(){
+  try{
+    var blob=new Blob([buildPdf()],{type:'application/pdf'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');a.href=url;a.download='Team Meeting.pdf';
+    document.body.appendChild(a);a.click();
+    setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},1500);
+  }catch(e){}
+  pdfDone=true;toast('📄 Téléchargement de « Team Meeting.pdf »');refreshSteps();
+}
+
+/* ---------- Collaboration / Share ---------- */
+var CONTACTS=[
+ {n:'Marie Dupont',m:'marie.dupont@formip.com',c:'#d93025'},
+ {n:'Karim Benali',m:'karim.benali@formip.com',c:'#188038'},
+ {n:'Léa Martin',m:'lea.martin@formip.com',c:'#e8710a'},
+ {n:'Tom Robert',m:'tom.robert@formip.com',c:'#9334e6'},
+ {n:'Sophie Garnier',m:'sophie.garnier@formip.com',c:'#1a73e8'}
+];
+var ROLES=[['editor','Éditeur'],['commenter','Commentateur'],['viewer','Lecteur']];
+var collaborators=[]; // {n,m,c,role}
+function initials(n){var p=n.split(' ');return (((p[0]||'')[0]||'')+((p[1]||'')[0]||'')).toUpperCase();}
+
+function openShare(){$('ov').classList.add('show');$('addIn').focus();}
+function closeShare(){$('ov').classList.remove('show');hideAc();}
+
+function renderPeople(){
+  var c=$('people');
+  c.innerHTML='<div class="prow"><div class="av" style="background:#7b1fa2">T</div><div class="pinfo"><div class="pname">Vous <span class="you">(moi@formip.com)</span></div><div class="pmail">moi@formip.com</div></div><div class="role owner"><span>Propriétaire</span></div></div>';
+  collaborators.forEach(function(p,i){
+    var opts=ROLES.map(function(r){return '<option value="'+r[0]+'"'+(r[0]===p.role?' selected':'')+'>'+r[1]+'</option>';}).join('');
+    var row=document.createElement('div');row.className='prow';
+    row.innerHTML='<div class="av" style="background:'+p.c+'">'+initials(p.n)+'</div><div class="pinfo"><div class="pname">'+p.n+'</div><div class="pmail">'+p.m+'</div></div><div class="role"><select>'+opts+'</select></div><button class="rmx" title="Retirer">✕</button>';
+    row.querySelector('select').onchange=function(){p.role=this.value;};
+    row.querySelector('.rmx').onclick=function(){collaborators.splice(i,1);renderPeople();};
+    c.appendChild(row);
+  });
+}
+function addCollab(ct){
+  if(collaborators.some(function(p){return p.m===ct.m;}))return;
+  collaborators.push({n:ct.n,m:ct.m,c:ct.c,role:'editor'});
+  $('addIn').value='';renderPeople();hideAc();
+}
+
+/* autocomplete in share box */
+var acIdx=-1;
+function showAc(){
+  var q=$('addIn').value.trim().toLowerCase(),ac=$('ac');
+  var res=CONTACTS.filter(function(ct){return !collaborators.some(function(p){return p.m===ct.m;}) && (!q||ct.n.toLowerCase().indexOf(q)>=0||ct.m.toLowerCase().indexOf(q)>=0);});
+  if(!res.length){hideAc();return;}
+  ac.innerHTML=res.map(function(ct,i){return '<div class="it'+(i===0?' hi':'')+'" data-m="'+ct.m+'"><span class="av" style="background:'+ct.c+'">'+initials(ct.n)+'</span><span><div>'+ct.n+'</div><div class="e">'+ct.m+'</div></span></div>';}).join('');
+  acIdx=0;
+  ac.querySelectorAll('.it').forEach(function(it){it.onmousedown=function(e){e.preventDefault();addCollab(CONTACTS.filter(function(c){return c.m===it.dataset.m;})[0]);};});
+  ac.classList.add('show');
+}
+function hideAc(){$('ac').classList.remove('show');acIdx=-1;}
+$('addIn').addEventListener('input',showAc);
+$('addIn').addEventListener('focus',showAc);
+$('addIn').addEventListener('keydown',function(e){
+  var its=$('ac').querySelectorAll('.it');
+  if(e.key==='ArrowDown'){e.preventDefault();if(its.length){its[acIdx]&&its[acIdx].classList.remove('hi');acIdx=(acIdx+1)%its.length;its[acIdx].classList.add('hi');}}
+  else if(e.key==='ArrowUp'){e.preventDefault();if(its.length){its[acIdx]&&its[acIdx].classList.remove('hi');acIdx=(acIdx-1+its.length)%its.length;its[acIdx].classList.add('hi');}}
+  else if(e.key==='Enter'){e.preventDefault();if(acIdx>=0&&its[acIdx]){addCollab(CONTACTS.filter(function(c){return c.m===its[acIdx].dataset.m;})[0]);}}
+  else if(e.key==='Escape'){hideAc();}
+});
+
+function confirmShare(){
+  if(!collaborators.length){var mfb=$('mfb');mfb.style.display='block';mfb.textContent='Ajoute au moins une personne pour collaborer sur ce document.';return;}
+  $('mfb').style.display='none';
+  closeShare();
+  renderPresence();showRemoteCaret();
+  toast('Document partagé avec '+collaborators.length+' personne'+(collaborators.length>1?'s':'')+' ✓');
+  refreshSteps();
+}
+
+/* presence avatars (haut) + curseur collaborateur en temps réel */
+function renderPresence(){
+  $('presence').innerHTML=collaborators.slice(0,4).map(function(p){return '<span class="pa" title="'+p.n+' (en ligne)" style="background:'+p.c+'">'+initials(p.n)+'</span>';}).join('');
+}
+function showRemoteCaret(){
+  var old=document.querySelector('.rcaret');if(old&&old.remove)old.remove();
+  if(!collaborators.length)return;
+  var p=collaborators[0];
+  var blk=document.querySelector('.blk[data-role="g"]');if(!blk)return;
+  // évite les doublons
+  if(blk.querySelector('.rcaret'))return;
+  var car=document.createElement('span');car.className='rcaret';car.style.setProperty('--c',p.c);
+  car.innerHTML='<i>'+p.n+'</i>';
+  blk.appendChild(car);
+}
+
+/* ---------- live steps ---------- */
+function styleOf(role){var el=document.querySelector('.blk[data-role="'+role+'"]');return el?el.dataset.style:null;}
+function isHeading(s){return s==='h1'||s==='h2'||s==='h3';}
+function refreshSteps(){
+  var titleOk=styleOf('title')==='title';
+  var headOk=isHeading(styleOf('overview'))&&isHeading(styleOf('goals'));
+  var shareOk=collaborators.length>=2;
+  $('st-title').classList.toggle('done',titleOk);
+  $('st-head').classList.toggle('done',headOk);
+  $('st-share').classList.toggle('done',shareOk);
+  $('st-pdf').classList.toggle('done',pdfDone);
+}
+
+/* ---------- Vérification finale ---------- */
+function check(){
+  var errs=[];
+  if(styleOf('title')!=='title')errs.push('applique le style <b>Titre</b> au titre « Team Meeting »');
+  if(!isHeading(styleOf('overview')))errs.push('applique un style de <b>titre</b> à <b>Overview</b>');
+  if(!isHeading(styleOf('goals')))errs.push('applique un style de <b>titre</b> à <b>Goals</b>');
+  if(collaborators.length<2)errs.push('<b>partage</b> le document avec au moins <b>2 collègues</b> (bouton Share)');
+  if(!pdfDone)errs.push('<b>télécharge</b> une copie en <b>PDF</b> (File ▸ Télécharger ▸ PDF)');
+  var fb=$('fb');
+  if(errs.length){fb.className='fb no';fb.innerHTML='À corriger : '+errs.join(' ; ')+'.';return;}
+  fb.className='fb ok';fb.innerHTML='✅ Document <b>structuré</b> (styles → sommaire/accessibilité), <b>partagé</b> pour la collaboration, et <b>exporté en PDF</b>. <b>TP validé — CRCN Domaine 3 (Créer du contenu) &amp; Domaine 2 (Collaborer).</b>';
+  toast('Travail validé 🎉');
+  try{window.postMessage('show_complete','*');window.parent.postMessage('show_complete','*');}catch(e){}
+}
+refreshSteps();
+try{window.parent.postMessage('hide_complete','*');}catch(e){}
+</script>
+</body></html>
