@@ -93,12 +93,49 @@ html,body{margin:0;padding:0;background:#f8fafd;font-family:Roboto,Arial,system-
 .smenu .opt:hover{background:#e8f0fe}
 .smenu .opt.on{background:#e8f0fe}
 /* comments */
-.comments{width:300px;flex:none;border-left:1px solid #eee;padding:18px 14px;background:#fff}
-.cc{background:#f1f3f4;border-radius:10px;padding:12px;margin-bottom:14px;font-size:13px}
-.cc .h{display:flex;gap:8px;align-items:center;margin-bottom:6px}
-.cc .a{width:30px;height:30px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
-.cc .n{font-weight:600;font-size:13px}.cc .d{font-size:11px;color:#5f6368}
-.cc .men{color:#1a73e8}
+.comments{width:320px;flex:none;border-left:1px solid #eee;padding:14px 12px;background:#fff;overflow:auto}
+.chead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.chead h4{font-size:14px;margin:0;color:#202124}
+.chead .cnt{font-size:12px;color:#5f6368;background:#f1f3f4;border-radius:10px;padding:2px 9px}
+.cbox{display:none;background:#fff;border:1px solid #c7cdd6;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.12);padding:10px;margin-bottom:14px;position:relative}
+.cbox .ctx{font-size:11px;color:#5f6368;margin-bottom:6px;font-style:italic}
+.cbox textarea{width:100%;border:none;outline:none;resize:vertical;min-height:54px;font-family:inherit;font-size:13px;color:#202124}
+.cbox .act{display:flex;justify-content:flex-end;gap:8px;margin-top:6px}
+.cbox .act button{border:none;border-radius:16px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.cbox .cancel{background:transparent;color:#5f6368}
+.cbox .cancel:hover{background:#f1f3f4}
+.cbox .add{background:var(--blue);color:#fff}.cbox .add:hover{background:#0848b3}
+.mention{position:absolute;left:10px;right:10px;background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.2);overflow:hidden;display:none;z-index:6}
+.mention.show{display:block}
+.mention .mi{display:flex;align-items:center;gap:8px;padding:7px 10px;cursor:pointer;font-size:13px}
+.mention .mi:hover,.mention .mi.hi{background:#eef3fe}
+.cthread{background:#f8f9fb;border:1px solid #eceff3;border-radius:10px;padding:12px;margin-bottom:14px;font-size:13px;cursor:pointer}
+.cthread:hover{box-shadow:0 1px 6px rgba(0,0,0,.1)}
+.cthread .top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.cthread .a{width:30px;height:30px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex:none}
+.cthread .n{font-weight:600;font-size:13px}.cthread .d{font-size:11px;color:#5f6368}
+.cthread .resolve{margin-left:auto;border:none;background:transparent;color:#5f6368;cursor:pointer;width:26px;height:26px;border-radius:50%;font-size:14px}
+.cthread .resolve:hover{background:#e6f4ea;color:#137333}
+.cthread .snip{font-size:11px;color:#7a5b00;background:#fef3c7;border-radius:4px;padding:2px 6px;display:inline-block;margin-bottom:6px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cthread .ct{color:#3c4043;line-height:1.5}
+.cthread .men{color:#1a73e8;font-weight:500}
+.cthread .repcount{font-size:11px;color:#5f6368;text-align:center;border-top:1px solid #e6e9ee;margin:10px 0 4px;padding-top:8px}
+.crep{margin-top:10px;padding-left:8px;border-left:2px solid #e0e4ea}
+.crep .top{margin-bottom:4px}
+.replybox{display:flex;gap:6px;margin-top:10px}
+.replybox input{flex:1;border:1px solid var(--line);border-radius:16px;padding:6px 12px;font-size:12px;outline:none;font-family:inherit}
+.replybox input:focus{border-color:var(--blue)}
+.replybox button{border:none;background:transparent;color:var(--blue);font-weight:600;font-size:12px;cursor:pointer;font-family:inherit;border-radius:14px;padding:0 8px}
+.replybox button:hover{background:#eef3fe}
+.blk.hl-comment{background:#fef3c7}
+.blk.hl-comment:hover{background:#fde9a8}
+.blk.hl-pending{background:#fff3bf;box-shadow:inset 2px 0 0 #f9ab00}
+.blk.flash{animation:flashbg 1.1s ease}
+@keyframes flashbg{0%,100%{background:#fef3c7}50%{background:#ffe27a}}
+.cmargin{position:absolute;right:-46px;width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid var(--line);box-shadow:0 1px 4px rgba(0,0,0,.18);display:none;align-items:center;justify-content:center;cursor:pointer;color:#5f6368;z-index:4}
+.cmargin.show{display:flex}
+.cmargin:hover{background:#f1f3f4;color:#1a73e8}
+.cmargin svg{width:18px;height:18px}
 /* share modal */
 .ov{position:fixed;inset:0;background:rgba(32,33,36,.5);display:none;align-items:center;justify-content:center;z-index:80;padding:16px}
 .ov.show{display:flex}
@@ -148,6 +185,7 @@ html,body{margin:0;padding:0;background:#f8fafd;font-family:Roboto,Arial,system-
         <li class="step" id="st-title">Clique sur le titre <b>Team Meeting</b> → applique le style <b>Titre</b>.</li>
         <li class="step" id="st-head">Clique sur <b>Overview</b>, puis sur <b>Goals</b> → applique un style de <b>titre</b> (Titre&nbsp;1 ou Titre&nbsp;2).</li>
         <li class="step" id="st-share"><b>Partage</b> le document avec au moins <b>2 collègues</b> pour collaborer (bouton <b>Share</b>).</li>
+        <li class="step" id="st-comment"><b>Commente</b> un passage pour collaborer : clique une ligne → 💬, écris (tu peux <b>@mentionner</b> un collègue).</li>
         <li class="step" id="st-pdf"><b>Télécharge</b> une copie en <b>PDF</b> (menu <b>File ▸ Télécharger ▸ PDF</b>).</li>
         <li>Observe le <b>Plan</b> (à gauche) et les <b>collaborateurs</b>, puis clique <b>Vérifier</b>.</li>
       </ol>
@@ -169,7 +207,7 @@ html,body{margin:0;padding:0;background:#f8fafd;font-family:Roboto,Arial,system-
       <div class="grow"></div>
       <div class="presence" id="presence"></div>
       <span class="cir" onclick="toast('Historique des versions (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><polyline points="3 3 3 8 8 8"/><polyline points="12 7 12 12 16 14"/></svg></span>
-      <span class="cir" onclick="toast('Commentaires (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+      <span class="cir" title="Ajouter un commentaire" onclick="startComment()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="12" y1="7" x2="12" y2="13"/></svg></span>
       <button class="share" onclick="openShare()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="9" r="3"/><path d="M2 20a6 6 0 0 1 12 0"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>Share</button>
       <span class="ava">T</span>
     </div>
@@ -216,13 +254,19 @@ html,body{margin:0;padding:0;background:#f8fafd;font-family:Roboto,Arial,system-
           <div class="blk s-normal bold" data-style="normal" data-role="goals">Goals</div>
           <div class="blk s-normal" data-style="normal" data-role="g">The plan for this quarter is to review the project's progress and identify any risks or issues. In the following weeks, we'll start by gathering feedback from stakeholders on the project's direction.</div>
           <div class="blk s-normal" data-style="normal" data-role="g2">As the project progresses, we'll identify any changes or updates to the project's scope and develop a plan for how to communicate with stakeholders about the project.</div>
+          <div class="cmargin" id="cmargin" title="Commenter ce passage" onclick="startComment()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="12" y1="7" x2="12" y2="13"/></svg></div>
         </div>
       </div>
 
       <div class="comments">
-        <div class="cc"><div class="h"><div class="a" style="background:#5b8def">AC</div><div><div class="n">Alan Cook</div><div class="d">2:30 PM May 21</div></div></div><span class="men">@Susan Johnson</span> Please check with Luke if we're still doing Project Beta support. Thank you!</div>
-        <div class="cc"><div class="h"><div class="a" style="background:#5b8def">AC</div><div><div class="n">Alan Cook</div><div class="d">2:30 PM May 21</div></div></div>Can we also add some of the points Raj made today in the meeting? I think we should capture it here.</div>
-        <div class="cc"><div class="h"><div class="a" style="background:#7b1fa2">SJ</div><div><div class="n">Susan Johnson</div><div class="d">3:40 PM May 21</div></div></div>Will do! Je peux ajouter après le team sync.</div>
+        <div class="chead"><h4>💬 Commentaires</h4><span class="cnt" id="cCount">0</span></div>
+        <div class="cbox" id="cbox">
+          <div class="ctx" id="cCtx"></div>
+          <textarea id="cText" placeholder="Ajouter un commentaire…  (tape @ pour mentionner)"></textarea>
+          <div class="mention" id="mention"></div>
+          <div class="act"><button class="cancel" onclick="cancelComment()">Annuler</button><button class="add" onclick="submitComment()">Commenter</button></div>
+        </div>
+        <div id="threads"></div>
       </div>
     </div>
   </div>
@@ -277,7 +321,8 @@ var tT;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show'
 var STYLES=[['normal','Texte normal'],['title','Titre'],['subtitle','Sous-titre'],['h1','Titre 1'],['h2','Titre 2'],['h3','Titre 3']];
 var LBL={};STYLES.forEach(function(s){LBL[s[0]]=s[1];});
 var cur=null;
-function selectBlk(el){if(cur)cur.classList.remove('cur');cur=el;el.classList.add('cur');$('styleLbl').textContent=LBL[el.dataset.style]||'Texte normal';}
+function selectBlk(el){if(cur)cur.classList.remove('cur');cur=el;el.classList.add('cur');$('styleLbl').textContent=LBL[el.dataset.style]||'Texte normal';positionMargin(el);}
+function positionMargin(el){var m=$('cmargin'),page=$('page');if(!m||!page)return;var top=el.offsetTop+(el.offsetHeight/2)-17;m.style.top=top+'px';m.classList.add('show');}
 document.querySelectorAll('.blk').forEach(function(b){b.addEventListener('click',function(){selectBlk(b);});});
 
 function openStyleMenu(btn){
@@ -446,6 +491,101 @@ function showRemoteCaret(){
   blk.appendChild(car);
 }
 
+/* ---------- Comments (collaboration) ---------- */
+var userContrib=0,cid=0,pendingBlk=null;
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function mentionPeople(){var base=[{n:'Susan Johnson'},{n:'Alan Cook'},{n:'Jason Coleman'}];collaborators.forEach(function(p){if(!base.some(function(b){return b.n===p.n;}))base.push({n:p.n});});return base;}
+function fmt(txt){var h=esc(txt);mentionPeople().forEach(function(p){h=h.split('@'+p.n).join('<span class="men">@'+p.n+'</span>');});return h;}
+function nowLabel(){var d=new Date();return d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})+' · '+d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'});}
+
+var THREADS=[
+ {author:'Alan Cook',color:'#5b8def',init:'AC',time:'2:30 PM May 21',target:'overview',
+  text:'<span class="men">@Susan Johnson</span> Please check with Luke if we\'re still doing Project Beta support. Thank you!',replies:[]},
+ {author:'Alan Cook',color:'#5b8def',init:'AC',time:'2:30 PM May 21',target:'goals',
+  text:'Can we also add some of the points Raj made today in the meeting? I think we should capture it here.',
+  replies:[
+    {author:'Susan Johnson',color:'#7b1fa2',init:'SJ',time:'3:40 PM May 21',text:'Will do! I can add after the team sync so we make the changes all at once.'},
+    {author:'Jason Coleman',color:'#e8710a',init:'JC',time:'1:30 PM May 22',text:'A few other bullets that came out of the customer meeting <span class="men">@Susan Johnson</span> let me know if you want me to add those here too.'}
+  ]}
+];
+
+function renderThreads(){
+  var c=$('threads');
+  c.innerHTML=THREADS.map(function(t,ti){
+    var rep=t.replies.map(function(r){
+      return '<div class="crep"><div class="top"><div class="a" style="background:'+r.color+'">'+r.init+'</div><div><div class="n">'+r.author+'</div><div class="d">'+r.time+'</div></div></div><div class="ct">'+r.text+'</div></div>';
+    }).join('');
+    var rc=t.replies.length?'<div class="repcount">'+t.replies.length+' réponse'+(t.replies.length>1?'s':'')+'</div>':'';
+    var snip=t.target?('<div class="snip">« '+blkText(t.target)+' »</div>'):'';
+    return '<div class="cthread" data-i="'+ti+'" onclick="flashTarget('+ti+')">'+
+      '<div class="top"><div class="a" style="background:'+t.color+'">'+t.init+'</div><div><div class="n">'+t.author+'</div><div class="d">'+t.time+'</div></div>'+
+      '<button class="resolve" title="Marquer comme résolu" onclick="event.stopPropagation();resolveThread('+ti+')">✓</button></div>'+
+      snip+'<div class="ct">'+t.text+'</div>'+rc+rep+
+      '<div class="replybox" onclick="event.stopPropagation()"><input placeholder="Répondre…" data-i="'+ti+'" onkeydown="if(event.key===\'Enter\')replyTo('+ti+',this)"><button onclick="replyTo('+ti+',this.previousElementSibling)">Répondre</button></div>'+
+      '</div>';
+  }).join('');
+  $('cCount').textContent=THREADS.length;
+}
+function blkText(role){var el=document.querySelector('.blk[data-role="'+role+'"]');var s=el?el.textContent.trim():role;return s.length>34?s.slice(0,34)+'…':s;}
+function flashTarget(ti){var t=THREADS[ti];if(!t.target)return;var el=document.querySelector('.blk[data-role="'+t.target+'"]');if(!el)return;el.scrollIntoView({block:'center'});el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');setTimeout(function(){el.classList.remove('flash');},1100);}
+
+function startComment(){
+  if(!cur){toast('Clique d\'abord dans une ligne du document, puis 💬.');return;}
+  pendingBlk=cur;
+  if(!pendingBlk.dataset.role)pendingBlk.dataset.role='c'+(++cid);
+  document.querySelectorAll('.blk.hl-pending').forEach(function(b){b.classList.remove('hl-pending');});
+  pendingBlk.classList.add('hl-pending');
+  $('cCtx').textContent='Sur : « '+pendingBlk.textContent.trim().slice(0,40)+(pendingBlk.textContent.trim().length>40?'…':'')+' »';
+  $('cText').value='';$('cbox').style.display='block';$('cText').focus();hideMention();
+  $('cbox').scrollIntoView({block:'nearest'});
+}
+function cancelComment(){if(pendingBlk)pendingBlk.classList.remove('hl-pending');pendingBlk=null;$('cbox').style.display='none';hideMention();}
+function submitComment(){
+  var txt=$('cText').value.trim();
+  if(!txt){toast('Écris ton commentaire.');return;}
+  pendingBlk.classList.remove('hl-pending');pendingBlk.classList.add('hl-comment');
+  THREADS.unshift({author:'Vous',color:'#0b8043',init:'M',time:nowLabel(),target:pendingBlk.dataset.role,text:fmt(txt),replies:[]});
+  pendingBlk=null;$('cbox').style.display='none';userContrib++;
+  renderThreads();refreshSteps();toast('Commentaire ajouté ✓');
+}
+function replyTo(ti,inp){
+  var txt=inp.value.trim();if(!txt)return;
+  THREADS[ti].replies.push({author:'Vous',color:'#0b8043',init:'M',time:nowLabel(),text:fmt(txt)});
+  userContrib++;renderThreads();refreshSteps();toast('Réponse envoyée ✓');
+}
+function resolveThread(ti){
+  var t=THREADS[ti];if(t.target){var el=document.querySelector('.blk[data-role="'+t.target+'"]');if(el)el.classList.remove('hl-comment');}
+  THREADS.splice(ti,1);renderThreads();toast('Fil de commentaires résolu');
+}
+
+/* @mention dropdown in the composer */
+var mIdx=-1;
+function showMention(){
+  var ta=$('cText'),val=ta.value.slice(0,ta.selectionStart),m=val.match(/@([\wÀ-ÿ ]*)$/);
+  if(!m){hideMention();return;}
+  var q=m[1].toLowerCase(),box=$('mention');
+  var res=mentionPeople().filter(function(p){return p.n.toLowerCase().indexOf(q)>=0;});
+  if(!res.length){hideMention();return;}
+  box.innerHTML=res.map(function(p,i){return '<div class="mi'+(i===0?' hi':'')+'" data-n="'+p.n+'">@'+p.n+'</div>';}).join('');
+  mIdx=0;
+  box.querySelectorAll('.mi').forEach(function(it){it.onmousedown=function(e){e.preventDefault();insertMention(it.dataset.n);};});
+  box.style.top='62px';box.classList.add('show');
+}
+function hideMention(){$('mention').classList.remove('show');mIdx=-1;}
+function insertMention(name){var ta=$('cText'),val=ta.value,pos=ta.selectionStart;var before=val.slice(0,pos).replace(/@([\wÀ-ÿ ]*)$/,'@'+name+' ');ta.value=before+val.slice(pos);ta.focus();hideMention();}
+$('cText').addEventListener('input',showMention);
+$('cText').addEventListener('keydown',function(e){
+  var its=$('mention').querySelectorAll('.mi');
+  if($('mention').classList.contains('show')&&its.length){
+    if(e.key==='ArrowDown'){e.preventDefault();its[mIdx].classList.remove('hi');mIdx=(mIdx+1)%its.length;its[mIdx].classList.add('hi');return;}
+    if(e.key==='ArrowUp'){e.preventDefault();its[mIdx].classList.remove('hi');mIdx=(mIdx-1+its.length)%its.length;its[mIdx].classList.add('hi');return;}
+    if(e.key==='Enter'){e.preventDefault();insertMention(its[mIdx].dataset.n);return;}
+    if(e.key==='Escape'){hideMention();return;}
+  }
+  if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();submitComment();}
+});
+renderThreads();
+
 /* ---------- live steps ---------- */
 function styleOf(role){var el=document.querySelector('.blk[data-role="'+role+'"]');return el?el.dataset.style:null;}
 function isHeading(s){return s==='h1'||s==='h2'||s==='h3';}
@@ -456,6 +596,7 @@ function refreshSteps(){
   $('st-title').classList.toggle('done',titleOk);
   $('st-head').classList.toggle('done',headOk);
   $('st-share').classList.toggle('done',shareOk);
+  $('st-comment').classList.toggle('done',userContrib>=1);
   $('st-pdf').classList.toggle('done',pdfDone);
 }
 
@@ -466,10 +607,11 @@ function check(){
   if(!isHeading(styleOf('overview')))errs.push('applique un style de <b>titre</b> à <b>Overview</b>');
   if(!isHeading(styleOf('goals')))errs.push('applique un style de <b>titre</b> à <b>Goals</b>');
   if(collaborators.length<2)errs.push('<b>partage</b> le document avec au moins <b>2 collègues</b> (bouton Share)');
+  if(userContrib<1)errs.push('ajoute au moins un <b>commentaire</b> ou une <b>réponse</b> (clique une ligne → 💬)');
   if(!pdfDone)errs.push('<b>télécharge</b> une copie en <b>PDF</b> (File ▸ Télécharger ▸ PDF)');
   var fb=$('fb');
   if(errs.length){fb.className='fb no';fb.innerHTML='À corriger : '+errs.join(' ; ')+'.';return;}
-  fb.className='fb ok';fb.innerHTML='✅ Document <b>structuré</b> (styles → sommaire/accessibilité), <b>partagé</b> pour la collaboration, et <b>exporté en PDF</b>. <b>TP validé — CRCN Domaine 3 (Créer du contenu) &amp; Domaine 2 (Collaborer).</b>';
+  fb.className='fb ok';fb.innerHTML='✅ Document <b>structuré</b> (styles → sommaire/accessibilité), <b>partagé</b>, <b>commenté</b> pour collaborer, et <b>exporté en PDF</b>. <b>TP validé — CRCN Domaine 3 (Créer du contenu) &amp; Domaine 2 (Collaborer).</b>';
   toast('Travail validé 🎉');
   try{window.postMessage('show_complete','*');window.parent.postMessage('show_complete','*');}catch(e){}
 }
