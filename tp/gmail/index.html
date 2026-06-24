@@ -1,39 +1,146 @@
 <!doctype html><html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Simulateur — Nouveau message</title>
+<title>Simulateur de messagerie — TP Pix</title>
 <style>
-:root{--blue:#0b57d0;--ink:#202124;--muted:#5f6368;--line:#e0e0e0;--hover:#f1f3f4;--teal:#1a73e8;--ok:#188038;--bg:#fff}
+:root{
+  --blue:#0b57d0;--ink:#202124;--muted:#5f6368;--line:#e3e3e3;--hover:#f1f3f4;
+  --teal:#1a73e8;--ok:#188038;--bg:#fff;--rail:#f6f8fc;--accent:#c2410c;--red:#d93025;
+  --shadow:0 1px 3px rgba(60,64,67,.15),0 4px 12px rgba(60,64,67,.1);
+}
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:#f6f8fc;font-family:'Google Sans',Roboto,Arial,system-ui,sans-serif;color:var(--ink)}
-.wrap{max-width:1100px;margin:0 auto;padding:14px}
-.hint{font-size:13px;color:var(--muted);background:#fff;border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:8px;padding:10px 14px;margin-bottom:12px}
-.hint b{color:var(--ink)}
-.win{background:var(--bg);border:1px solid #d9dce0;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.18);overflow:hidden;display:flex;flex-direction:column;min-height:560px}
-.win.min{min-height:0}
-.win.min .body,.win.min .rows,.win.min .fmtbar,.win.min .bottom{display:none}
-.titlebar{background:#f2f6fc;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;font-size:14px;font-weight:600;color:#3c4043}
-.titlebar .wbtns{display:flex;gap:6px}
+html,body{margin:0;padding:0;height:100%;background:#e9eef6;font-family:'Google Sans',Roboto,Arial,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.shell{max-width:1200px;margin:0 auto;padding:10px;display:flex;flex-direction:column;gap:10px;min-height:100%}
+
+/* ---------- Mission + live checklist ---------- */
+.mission{background:#fff;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow)}
+.mission h2{margin:0 0 4px;font-size:15px;display:flex;align-items:center;gap:8px}
+.mission p{margin:0;font-size:13px;color:var(--muted)}
+.mgrid{display:grid;grid-template-columns:1fr 320px;gap:16px;margin-top:10px}
+.steps{margin:0;padding-left:20px;font-size:13px;line-height:1.7;color:#3c4043}
+.steps b{color:var(--ink)}
+.goals{background:var(--rail);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.goals .gh{font-size:12px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.goals .bar{height:6px;border-radius:6px;background:#e0e4ea;overflow:hidden;margin-bottom:10px}
+.goals .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#34a853,#188038);transition:width .4s}
+.gli{display:flex;align-items:center;gap:9px;font-size:13px;padding:3px 0;color:#5f6368;transition:.2s}
+.gli .tick{width:18px;height:18px;border-radius:50%;border:2px solid #c0c5cc;flex:none;display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:#fff;transition:.25s}
+.gli.ok{color:#188038;font-weight:500}
+.gli.ok .tick{background:#188038;border-color:#188038}
+.gli.ok .tick:after{content:'✓'}
+
+/* ---------- App window ---------- */
+.app{background:#fff;border:1px solid #d9dce0;border-radius:14px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.14);display:flex;flex-direction:column;flex:1;min-height:560px}
+.topbar{display:flex;align-items:center;gap:14px;padding:8px 14px;border-bottom:1px solid var(--line);background:#fff}
+.brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:500;color:#5f6368;min-width:150px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#ea4335,#fbbc05,#34a853,#4285f4);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px}
+.search{flex:1;max-width:640px;display:flex;align-items:center;gap:10px;background:#eaf1fb;border-radius:24px;padding:9px 16px;color:#5f6368;font-size:14px}
+.search svg{width:18px;height:18px;flex:none}
+.search input{border:none;background:transparent;outline:none;flex:1;font-size:14px;font-family:inherit;color:var(--ink)}
+.topbar .spacer{flex:1}
+.clock{font-size:13px;color:var(--muted)}
+.avatar{width:32px;height:32px;border-radius:50%;background:#7e57c2;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
+
+.main{display:flex;flex:1;min-height:0}
+
+/* ---------- Sidebar ---------- */
+.side{width:240px;flex:none;padding:14px 10px;border-right:1px solid var(--line);overflow:auto}
+.compose-btn{display:flex;align-items:center;gap:12px;background:#c2e7ff;color:#001d35;border:none;border-radius:16px;padding:14px 22px 14px 16px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15);margin-bottom:14px;font-family:inherit}
+.compose-btn:hover{box-shadow:0 2px 8px rgba(0,0,0,.22);background:#b3e0ff}
+.compose-btn svg{width:20px;height:20px}
+.fold{display:flex;align-items:center;gap:16px;padding:8px 14px 8px 18px;border-radius:0 18px 18px 0;font-size:14px;cursor:pointer;color:#202124;margin-right:6px}
+.fold:hover{background:var(--hover)}
+.fold.on{background:#d3e3fd;font-weight:700;color:#0842a0}
+.fold svg{width:18px;height:18px;flex:none}
+.fold .nm{flex:1}
+.fold .ct{font-size:12px;color:var(--muted)}
+.fold.on .ct{color:#0842a0}
+.side .lblh{font-size:12px;font-weight:700;color:var(--muted);padding:14px 18px 6px;text-transform:uppercase;letter-spacing:.4px}
+.dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+
+/* ---------- List ---------- */
+.content{flex:1;min-width:0;display:flex;flex-direction:column;background:#fff}
+.listbar{display:flex;align-items:center;gap:6px;padding:6px 12px;border-bottom:1px solid var(--line)}
+.listbar .ib{border:none;background:transparent;width:34px;height:34px;border-radius:50%;cursor:pointer;color:#5f6368;display:inline-flex;align-items:center;justify-content:center}
+.listbar .ib:hover{background:var(--hover)}
+.listbar .ib svg{width:18px;height:18px}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--line)}
+.tab{padding:12px 22px;font-size:14px;color:#5f6368;cursor:pointer;border-bottom:3px solid transparent;display:flex;align-items:center;gap:8px}
+.tab.on{color:#0842a0;border-bottom-color:#0842a0;font-weight:600}
+.tab svg{width:18px;height:18px}
+.list{overflow:auto;flex:1}
+.mail{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid #f1f1f1;cursor:pointer;font-size:14px}
+.mail:hover{box-shadow:inset 0 0 0 9999px rgba(0,0,0,.012);box-shadow:0 1px 4px rgba(0,0,0,.12);position:relative;z-index:1}
+.mail.unread{background:#fff;font-weight:600}
+.mail.read{background:#f7f9fc;color:#3c4043}
+.mail .star{color:#dadce0;font-size:18px;flex:none}
+.mail.unread .star{color:#dadce0}
+.mail .ava{width:34px;height:34px;border-radius:50%;flex:none;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:14px}
+.mail .who{width:160px;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mail .txt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:400;color:#5f6368}
+.mail .txt b{color:var(--ink)}
+.mail.unread .txt b{font-weight:700}
+.mail .tm{flex:none;font-size:12px;color:#5f6368;width:64px;text-align:right}
+.mail .pin{font-size:13px;color:var(--accent)}
+.empty{padding:60px 20px;text-align:center;color:#9aa0a6;font-size:14px}
+
+/* ---------- Reading pane ---------- */
+.read{display:none;flex-direction:column;flex:1;overflow:auto}
+.read.show{display:flex}
+.read .rh{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.read .rh .ib{border:none;background:transparent;width:36px;height:36px;border-radius:50%;cursor:pointer;color:#5f6368;display:inline-flex;align-items:center;justify-content:center}
+.read .rh .ib:hover{background:var(--hover)}
+.read .rh .ib svg{width:18px;height:18px}
+.read .rbody{padding:18px 28px;max-width:820px}
+.read h1{font-size:22px;font-weight:400;margin:0 0 16px}
+.read .rfrom{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.read .rfrom .ava{width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:600}
+.read .rfrom .meta{font-size:13px}
+.read .rfrom .meta b{font-size:14px}
+.read .rfrom .meta div{color:var(--muted)}
+.read .rtext{font-size:14px;line-height:1.7;color:#202124}
+.read .ract{margin-top:24px;display:flex;gap:10px}
+.read .ract button{border:1px solid #d9dce0;background:#fff;border-radius:18px;padding:8px 18px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;font-family:inherit;color:#3c4043}
+.read .ract button:hover{background:var(--hover)}
+
+/* ---------- Compose window (floating) ---------- */
+.win{position:absolute;right:18px;bottom:0;width:560px;max-width:calc(100% - 24px);background:var(--bg);border-radius:12px 12px 0 0;box-shadow:0 -2px 12px rgba(0,0,0,.12),0 12px 40px rgba(0,0,0,.3);display:none;flex-direction:column;max-height:calc(100% - 16px);z-index:40}
+.win.show{display:flex}
+.win.min{max-height:48px}
+.win.min .composer,.win.min .done{display:none}
+.win.max{right:0;left:0;width:auto;margin:0 auto;max-width:760px;max-height:calc(100% - 8px)}
+.titlebar{background:#f2f6fc;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;font-size:14px;font-weight:600;color:#3c4043;border-radius:12px 12px 0 0;cursor:pointer}
+.titlebar .wbtns{display:flex;gap:4px}
 .wbtn{width:26px;height:26px;border:none;background:transparent;border-radius:50%;cursor:pointer;color:#5f6368;display:inline-flex;align-items:center;justify-content:center}
 .wbtn:hover{background:#e3e8ef}
-.wbtn svg{width:16px;height:16px}
+.wbtn svg{width:15px;height:15px}
+.composer{display:flex;flex-direction:column;min-height:0;overflow:auto}
 .rows{padding:0 16px}
-.row{display:flex;align-items:center;border-bottom:1px solid var(--line);min-height:40px}
-.row .lab{color:var(--muted);font-size:14px;width:34px;flex:none}
+.row{display:flex;align-items:flex-start;border-bottom:1px solid var(--line);min-height:40px;position:relative}
+.row .lab{color:var(--muted);font-size:13px;width:34px;flex:none;padding-top:11px}
 .row.cc .lab,.row.cci .lab{color:var(--teal)}
-.row input{flex:1;border:none;outline:none;font-size:14px;padding:9px 4px;background:transparent;color:var(--ink);font-family:inherit}
+.row .field{flex:1;display:flex;flex-wrap:wrap;gap:5px;align-items:center;padding:5px 0}
+.row input{flex:1;min-width:120px;border:none;outline:none;font-size:14px;padding:5px 4px;background:transparent;color:var(--ink);font-family:inherit}
 .row input::placeholder{color:#9aa0a6}
-.chips{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
-.chip{background:#e8f0fe;color:#174ea6;border-radius:12px;padding:3px 8px 3px 10px;font-size:13px;display:inline-flex;align-items:center;gap:5px}
-.chip b{font-weight:500}
+.row .tgl{color:var(--teal);font-size:13px;cursor:pointer;padding:11px 6px;flex:none}
+.row .tgl:hover{text-decoration:underline}
+.chip{background:#e8f0fe;color:#174ea6;border-radius:13px;padding:3px 6px 3px 4px;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+.chip .ci{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600}
 .chip .x{cursor:pointer;border:none;background:transparent;color:#174ea6;font-size:13px;line-height:1;padding:0 2px}
-.body{flex:1;padding:14px 18px;font-size:14px;line-height:1.5;outline:none;overflow:auto;min-height:200px}
-.body:empty:before{content:attr(data-ph);color:#9aa0a6}
-.attzone{padding:6px 18px;display:flex;flex-wrap:wrap;gap:8px}
-.att{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px;background:#fafafa}
-.att .ic{width:22px;height:22px;border-radius:4px;background:#ea4335;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
-.att .x{cursor:pointer;border:none;background:transparent;color:#5f6368;font-size:14px}
-.banner{margin:0 18px 8px;border-radius:8px;padding:8px 12px;font-size:13px;display:none;align-items:center;gap:8px}
+.chip .x:hover{color:#c5221f}
+.ac{position:absolute;z-index:60;left:34px;top:100%;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.2);min-width:280px;max-width:380px;overflow:hidden;display:none}
+.ac.show{display:block}
+.ac .it{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;font-size:13px}
+.ac .it:hover,.ac .it.hi{background:#eef3fe}
+.ac .it .ava{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600;flex:none}
+.ac .it .e{color:var(--muted);font-size:12px}
+.banner{margin:8px 16px 0;border-radius:8px;padding:8px 12px;font-size:13px;display:none;align-items:center;gap:8px}
 .banner.conf{display:flex;background:#e6f4ea;color:#137333;border:1px solid #ceead6}
+.attzone{padding:8px 16px 0;display:flex;flex-wrap:wrap;gap:8px}
+.att{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px;background:#fafafa}
+.att .ic{width:24px;height:24px;border-radius:4px;background:#ea4335;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.att .x{cursor:pointer;border:none;background:transparent;color:#5f6368;font-size:14px}
+.body{flex:1;padding:14px 18px;font-size:14px;line-height:1.55;outline:none;overflow:auto;min-height:180px}
+.body:empty:before{content:attr(data-ph);color:#9aa0a6}
 .fmtbar{display:flex;align-items:center;gap:2px;flex-wrap:wrap;background:#f1f3f4;border-radius:22px;margin:8px 14px;padding:5px 8px}
 .fmtbar.hide{display:none}
 .tb{border:none;background:transparent;cursor:pointer;width:30px;height:30px;border-radius:50%;color:#444746;display:inline-flex;align-items:center;justify-content:center;font-size:14px}
@@ -43,7 +150,7 @@ html,body{margin:0;padding:0;background:#f6f8fc;font-family:'Google Sans',Roboto
 .sep{width:1px;height:20px;background:#c7cace;margin:0 4px}
 .selfont{border:none;background:transparent;font-size:13px;color:#444746;cursor:pointer;border-radius:6px;padding:4px 6px;font-family:inherit}
 .selfont:hover{background:#e2e5e9}
-.bottom{display:flex;align-items:center;gap:8px;padding:10px 16px;flex-wrap:wrap}
+.bottom{display:flex;align-items:center;gap:6px;padding:8px 16px 12px;flex-wrap:wrap}
 .send{display:flex;align-items:stretch;border-radius:20px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.15)}
 .send .s1{background:var(--blue);color:#fff;border:none;cursor:pointer;font-size:14px;font-weight:600;padding:9px 22px;font-family:inherit}
 .send .s1:hover{background:#0848b3}
@@ -53,118 +160,201 @@ html,body{margin:0;padding:0;background:#f6f8fc;font-family:'Google Sans',Roboto
 .ibtn{border:none;background:transparent;cursor:pointer;width:34px;height:34px;border-radius:50%;color:#444746;display:inline-flex;align-items:center;justify-content:center}
 .ibtn:hover{background:var(--hover)}
 .ibtn svg{width:18px;height:18px}
-.ibtn.aa{font-weight:600;color:#444746}
-.spacer{flex:1}
+.ibtn.on{background:#d3e3fd;color:#0b57d0}
+.ibtn.aa{font-weight:600}
 .trash{margin-left:auto}
-.pop{position:fixed;z-index:50;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.2);padding:8px;display:none}
+.pop{position:fixed;z-index:80;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.2);padding:8px;display:none}
 .pop.show{display:block}
 .emoji b{cursor:pointer;font-size:20px;padding:4px;border-radius:6px;display:inline-block}
 .emoji b:hover{background:var(--hover)}
 .menu div{padding:8px 14px;font-size:13px;cursor:pointer;border-radius:6px;white-space:nowrap}
 .menu div:hover{background:var(--hover)}
 .swatches b{display:inline-block;width:22px;height:22px;border-radius:50%;margin:3px;cursor:pointer;border:1px solid rgba(0,0,0,.1)}
+.fb{margin:8px 16px 0;border-radius:8px;padding:9px 12px;font-size:13px;display:none}
+.fb.no{display:block;background:#fce8e6;color:#c5221f;border:1px solid #f7c9c5}
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);background:#323232;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;opacity:0;transition:.35s;z-index:99;box-shadow:0 6px 20px rgba(0,0,0,.3)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.done{display:none;text-align:center;padding:50px 20px}
-.done.show{display:block}
-.done .big{font-size:1.5em;color:var(--ok);font-weight:700;margin:10px 0}
-.done .badge{display:inline-block;background:var(--ok);color:#fff;border-radius:20px;padding:6px 16px;font-size:14px;margin-top:6px}
-.reopen{margin-top:16px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:14px;cursor:pointer}
-.fb{margin:0 16px 8px;border-radius:8px;padding:9px 12px;font-size:13px;display:none}
-.fb.no{display:block;background:#fce8e6;color:#c5221f;border:1px solid #f7c9c5}
+.done{padding:40px 24px;text-align:center}
+.done .big{font-size:1.4em;color:var(--ok);font-weight:700;margin:10px 0}
+.done .badge{display:inline-block;background:var(--ok);color:#fff;border-radius:20px;padding:6px 16px;font-size:13px;margin-top:6px}
+.reopen{margin-top:16px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:14px;cursor:pointer;font-family:inherit}
 input[type=file]{display:none}
+
+@media(max-width:880px){
+  .mgrid{grid-template-columns:1fr}
+  .side{display:none}
+  .mail .who{width:110px}
+  .clock,.brand .nm{display:none}
+}
+@media(max-width:560px){.win{right:0;left:0;width:auto;max-width:100%}.mail .txt{display:none}}
 </style></head>
 <body>
-<div class="wrap">
-  <div class="hint">
-    <div style="font-weight:700;color:#202124;font-size:14px;margin-bottom:6px">🎯 Mission — Inviter 4 collègues à un atelier numérique</div>
-    Rédige et envoie l'e-mail d'invitation en respectant les règles de communication professionnelle :
-    <ol style="margin:8px 0 0;padding-left:22px;line-height:1.75">
-      <li>Place les <b>4 collègues en Cci</b> — laisse <b>À</b> et <b>Cc</b> vides (personne ne doit voir les adresses des autres).</li>
-      <li>Saisis un <b>objet clair et explicite</b>.</li>
-      <li><b>Joins le document de travail</b> (bouton 📎).</li>
-      <li>Rédige le message : <b>formule d'ouverture</b>, <b>date/heure proposée</b>, puis une <b>signature</b> (bouton ✏️).</li>
-      <li>Clique <b>Envoyer</b> pour valider.</li>
-    </ol>
+<div class="shell">
+
+  <!-- ===== Mission + live checklist ===== -->
+  <div class="mission">
+    <h2>🎯 Mission — Inviter 4 collègues à un atelier numérique</h2>
+    <p>Rédige et envoie l'e-mail d'invitation en respectant les règles de communication professionnelle. La checklist se coche automatiquement.</p>
+    <div class="mgrid">
+      <ol class="steps">
+        <li>Clique <b>Nouveau message</b> puis place les <b>4 collègues en Cci</b> — laisse <b>À</b> et <b>Cc</b> vides (utilise l'auto-complétion).</li>
+        <li>Saisis un <b>objet clair et explicite</b>.</li>
+        <li><b>Joins le document de travail</b> (bouton 📎 ou « Drive »).</li>
+        <li>Rédige : <b>formule d'ouverture</b>, <b>date/heure</b> proposée, puis une <b>signature</b> (bouton ✏️).</li>
+        <li>Clique <b>Envoyer</b> pour valider.</li>
+      </ol>
+      <div class="goals">
+        <div class="gh"><span>Objectifs</span><span id="gcount">0 / 6</span></div>
+        <div class="bar"><i id="gbar"></i></div>
+        <div class="gli" id="g-cci"><span class="tick"></span>Destinataires placés en <b style="margin-left:3px">Cci</b></div>
+        <div class="gli" id="g-tocc"><span class="tick"></span>« À » et « Cc » laissés vides</div>
+        <div class="gli" id="g-obj"><span class="tick"></span>Objet clair et explicite</div>
+        <div class="gli" id="g-pj"><span class="tick"></span>Document de travail joint</div>
+        <div class="gli" id="g-greet"><span class="tick"></span>Formule d'ouverture + message</div>
+        <div class="gli" id="g-sign"><span class="tick"></span>Signature présente</div>
+      </div>
+    </div>
   </div>
 
-  <div class="win" id="win">
-    <div class="titlebar">
-      <span id="wtitle">Nouveau message</span>
-      <span class="wbtns">
-        <button class="wbtn" title="Réduire" onclick="toggleMin()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="18" x2="18" y2="18"/></svg></button>
-        <button class="wbtn" title="Plein écran" onclick="toggleMax()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 14 3 14 3 21"/><polyline points="17 10 21 10 21 3"/></svg></button>
-        <button class="wbtn" title="Fermer" onclick="closeWin()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
-      </span>
-    </div>
-
-    <div id="composer">
-    <div class="rows">
-      <div class="row to"><span class="lab">À</span><div class="chips" id="chipsTo"></div><input id="inTo" placeholder="Destinataires" autocomplete="off"></div>
-      <div class="row cc"><span class="lab">Cc</span><div class="chips" id="chipsCc"></div><input id="inCc" autocomplete="off"></div>
-      <div class="row cci"><span class="lab">Cci</span><div class="chips" id="chipsCci"></div><input id="inCci" autocomplete="off"></div>
-      <div class="row obj"><input id="inObj" placeholder="Objet" autocomplete="off" style="font-weight:600"></div>
-    </div>
-
-    <div class="banner conf" id="confBanner">🔒 Mode confidentiel activé — le destinataire ne pourra pas transférer ce message.</div>
-    <div class="attzone" id="attzone"></div>
-
-    <div class="body" id="body" contenteditable="true" data-ph="Rédige ton message…"></div>
-
-    <div class="fb no" id="fb"></div>
-
-    <div class="fmtbar" id="fmtbar">
-      <button class="tb" title="Annuler" onmousedown="ev(event)" onclick="cmd('undo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg></button>
-      <button class="tb" title="Rétablir" onmousedown="ev(event)" onclick="cmd('redo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg></button>
-      <span class="sep"></span>
-      <select class="selfont" id="fontSel" onchange="setFont(this.value)" onmousedown="ev(event)">
-        <option value="sans-serif">Sans Serif</option><option value="serif">Serif</option>
-        <option value="monospace">Fixe</option><option value="'Comic Sans MS',cursive">Manuscrit</option>
-      </select>
-      <select class="selfont" id="sizeSel" onchange="cmd('fontSize',this.value)" onmousedown="ev(event)" title="Taille">
-        <option value="2">Petit</option><option value="3" selected>Normal</option><option value="5">Grand</option><option value="6">Énorme</option>
-      </select>
-      <span class="sep"></span>
-      <button class="tb" id="b-bold" title="Gras" onmousedown="ev(event)" onclick="cmd('bold');sync()"><b>B</b></button>
-      <button class="tb" id="b-italic" title="Italique" onmousedown="ev(event)" onclick="cmd('italic');sync()"><i>I</i></button>
-      <button class="tb" id="b-underline" title="Souligné" onmousedown="ev(event)" onclick="cmd('underline');sync()"><u>U</u></button>
-      <button class="tb" title="Couleur du texte" onmousedown="ev(event)" onclick="openPop('colorPop',this)"><b style="border-bottom:3px solid #d93025">A</b></button>
-      <span class="sep"></span>
-      <button class="tb" title="Aligner" onmousedown="ev(event)" onclick="openPop('alignPop',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="18" y2="18"/></svg></button>
-      <button class="tb" title="Liste numérotée" onmousedown="ev(event)" onclick="cmd('insertOrderedList')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><text x="2" y="8" font-size="7" fill="currentColor" stroke="none">1</text><text x="2" y="14" font-size="7" fill="currentColor" stroke="none">2</text><text x="2" y="20" font-size="7" fill="currentColor" stroke="none">3</text></svg></button>
-      <button class="tb" title="Liste à puces" onmousedown="ev(event)" onclick="cmd('insertUnorderedList')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="9" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1.4" fill="currentColor"/><circle cx="4" cy="12" r="1.4" fill="currentColor"/><circle cx="4" cy="18" r="1.4" fill="currentColor"/></svg></button>
-      <button class="tb" title="Diminuer le retrait" onmousedown="ev(event)" onclick="cmd('outdent')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="18" x2="3" y2="18"/><line x1="21" y1="12" x2="11" y2="12"/><polyline points="7 9 4 12 7 15"/></svg></button>
-      <button class="tb" title="Augmenter le retrait" onmousedown="ev(event)" onclick="cmd('indent')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/><line x1="11" y1="12" x2="21" y2="12"/><polyline points="4 9 7 12 4 15"/></svg></button>
-      <button class="tb" title="Citation" onmousedown="ev(event)" onclick="cmd('formatBlock','blockquote')"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M7 7H4a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2v2H4v2h3a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zm11 0h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2v2h-2v2h3a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg></button>
-      <button class="tb" id="b-strike" title="Barré" onmousedown="ev(event)" onclick="cmd('strikeThrough');sync()"><s>S</s></button>
-      <button class="tb" title="Supprimer la mise en forme" onmousedown="ev(event)" onclick="cmd('removeFormat');sync()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h10l-1 3"/><path d="M9 20h4"/><line x1="11" y1="7" x2="9" y2="20"/><line x1="4" y1="4" x2="20" y2="20"/></svg></button>
-    </div>
-
-    <div class="bottom">
-      <div class="send">
-        <button class="s1" onclick="send()">Envoyer</button>
-        <button class="s2" title="Options d'envoi" onclick="openPop('sendPop',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <!-- ===== App ===== -->
+  <div class="app">
+    <div class="topbar">
+      <div class="brand"><span class="logo">M</span><span class="nm">Messagerie</span></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input placeholder="Rechercher dans les messages" onfocus="this.blur && this.setAttribute('readonly','');" readonly>
       </div>
-      <button class="ibtn aa" title="Options de mise en forme" onclick="toggleFmt()">A<span style="font-size:11px">a</span></button>
-      <button class="ibtn" title="Joindre un fichier" onclick="document.getElementById('file').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a5 5 0 0 1-7.07-7.07l9.19-9.19a3.5 3.5 0 0 1 4.95 4.95l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button>
-      <input type="file" id="file" multiple onchange="addFiles(this.files)">
-      <button class="ibtn" title="Insérer un lien" onclick="insLink()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-      <button class="ibtn" title="Insérer un emoji" onclick="openPop('emojiPop',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="9" y1="10" x2="9.01" y2="10"/><line x1="15" y1="10" x2="15.01" y2="10"/><path d="M8 15a4 4 0 0 0 8 0"/></svg></button>
-      <button class="ibtn" title="Insérer depuis Drive" onclick="insDrive()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.7 3l-5.2 9 2.6 4.5L10.3 7.5z"/><path d="M16.3 3H7.7l5.2 9h8.6z"/><path d="M21.5 12h-8.6l-2.6 4.5 4.3 4.5z"/></svg></button>
-      <button class="ibtn" title="Insérer une image" onclick="insImg()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
-      <button class="ibtn" id="confBtn" title="Mode confidentiel" onclick="toggleConf()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
-      <button class="ibtn" title="Insérer une signature" onclick="insSign()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18"/><line x1="2" y1="2" x2="11" y2="11"/></svg></button>
-      <button class="ibtn" title="Plus d'options" onclick="openPop('morePop',this)"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
-      <button class="ibtn trash" title="Supprimer le brouillon" onclick="trashIt()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+      <div class="spacer"></div>
+      <span class="clock" id="clock"></span>
+      <span class="avatar" title="Stagiaire Pix">SP</span>
     </div>
-    </div><!--/composer-->
 
-    <div class="done" id="done">
-      <div style="font-size:42px">📨</div>
-      <div class="big">Message envoyé !</div>
-      <p style="color:#5f6368">Tu as respecté les règles : destinataires en <b>Cci</b>, objet clair, pièce jointe, formule et signature.</p>
-      <div class="badge">✅ TP validé — CRCN Domaine 2 (Communiquer)</div><br>
-      <button class="reopen" onclick="reopen()">Rédiger un nouveau message</button>
+    <div class="main" style="position:relative">
+      <!-- Sidebar -->
+      <div class="side">
+        <button class="compose-btn" onclick="openCompose()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18"/><line x1="2" y1="2" x2="11" y2="11"/></svg>
+          Nouveau message
+        </button>
+        <div class="fold on" data-f="inbox" onclick="selFold(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg><span class="nm">Boîte de réception</span><span class="ct" id="ct-inbox">6</span></div>
+        <div class="fold" data-f="star" onclick="selFold(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span class="nm">Messages suivis</span></div>
+        <div class="fold" data-f="sent" onclick="selFold(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg><span class="nm">Messages envoyés</span><span class="ct" id="ct-sent"></span></div>
+        <div class="fold" data-f="draft" onclick="selFold(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span class="nm">Brouillons</span><span class="ct" id="ct-draft"></span></div>
+        <div class="fold" data-f="trash" onclick="selFold(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg><span class="nm">Corbeille</span></div>
+        <div class="lblh">Libellés</div>
+        <div class="fold" onclick="toast('Libellé (démo)')"><span class="dot" style="background:#34a853"></span><span class="nm">Formation</span></div>
+        <div class="fold" onclick="toast('Libellé (démo)')"><span class="dot" style="background:#fbbc05"></span><span class="nm">Pix</span></div>
+        <div class="fold" onclick="toast('Libellé (démo)')"><span class="dot" style="background:#4285f4"></span><span class="nm">Équipe</span></div>
+      </div>
+
+      <!-- Content : list + reading -->
+      <div class="content">
+        <div class="listbar">
+          <button class="ib" title="Actualiser" onclick="toast('Boîte de réception à jour')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
+          <button class="ib" title="Plus" onclick="toast('Plus d\'options (démo)')"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
+          <span style="flex:1"></span>
+          <span style="font-size:12px;color:#5f6368" id="rangeLbl">1–6 sur 6</span>
+        </div>
+        <div class="tabs" id="tabs">
+          <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/></svg>Principale</div>
+          <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a8.38 8.38 0 0 1 13 0"/></svg>Réseaux sociaux</div>
+          <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>Promotions</div>
+        </div>
+        <div class="list" id="list"></div>
+
+        <!-- Reading pane -->
+        <div class="read" id="read">
+          <div class="rh">
+            <button class="ib" title="Retour" onclick="closeRead()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></button>
+            <button class="ib" title="Archiver" onclick="toast('Archivé (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></button>
+            <button class="ib" title="Supprimer" onclick="closeRead();toast('Déplacé dans la corbeille (démo)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+          </div>
+          <div class="rbody" id="rbody"></div>
+        </div>
+      </div>
+
+      <!-- ===== Compose window ===== -->
+      <div class="win" id="win">
+        <div class="titlebar" onclick="if(win.classList.contains('min'))toggleMin()">
+          <span id="wtitle">Nouveau message</span>
+          <span class="wbtns">
+            <button class="wbtn" title="Réduire" onclick="event.stopPropagation();toggleMin()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="18" x2="18" y2="18"/></svg></button>
+            <button class="wbtn" title="Plein écran" onclick="event.stopPropagation();toggleMax()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 14 3 14 3 21"/><polyline points="17 10 21 10 21 3"/></svg></button>
+            <button class="wbtn" title="Fermer" onclick="event.stopPropagation();closeWin()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+          </span>
+        </div>
+
+        <div class="composer" id="composer">
+          <div class="rows">
+            <div class="row to">
+              <span class="lab">À</span>
+              <div class="field" id="fTo" onclick="$('inTo').focus()"><input id="inTo" placeholder="Destinataires" autocomplete="off"></div>
+              <span class="tgl" onclick="toggleCc()">Cc/Cci</span>
+            </div>
+            <div class="row cc" id="rowCc" style="display:none"><span class="lab">Cc</span><div class="field" id="fCc" onclick="$('inCc').focus()"><input id="inCc" autocomplete="off"></div></div>
+            <div class="row cci" id="rowCci" style="display:none"><span class="lab">Cci</span><div class="field" id="fCci" onclick="$('inCci').focus()"><input id="inCci" autocomplete="off"></div></div>
+            <div class="row obj"><div class="field"><input id="inObj" placeholder="Objet" autocomplete="off" style="font-weight:600"></div></div>
+          </div>
+
+          <div class="banner conf" id="confBanner">🔒 Mode confidentiel activé — le destinataire ne pourra pas transférer ce message.</div>
+          <div class="attzone" id="attzone"></div>
+          <div class="fb no" id="fb"></div>
+
+          <div class="body" id="body" contenteditable="true" data-ph="Rédige ton message…"></div>
+
+          <div class="fmtbar hide" id="fmtbar">
+            <button class="tb" title="Annuler" onmousedown="ev(event)" onclick="cmd('undo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg></button>
+            <button class="tb" title="Rétablir" onmousedown="ev(event)" onclick="cmd('redo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg></button>
+            <span class="sep"></span>
+            <select class="selfont" id="fontSel" onchange="setFont(this.value)" onmousedown="ev(event)">
+              <option value="sans-serif">Sans Serif</option><option value="serif">Serif</option>
+              <option value="monospace">Fixe</option><option value="'Comic Sans MS',cursive">Manuscrit</option>
+            </select>
+            <select class="selfont" id="sizeSel" onchange="cmd('fontSize',this.value)" onmousedown="ev(event)" title="Taille">
+              <option value="2">Petit</option><option value="3" selected>Normal</option><option value="5">Grand</option><option value="6">Énorme</option>
+            </select>
+            <span class="sep"></span>
+            <button class="tb" id="b-bold" title="Gras" onmousedown="ev(event)" onclick="cmd('bold');sync()"><b>B</b></button>
+            <button class="tb" id="b-italic" title="Italique" onmousedown="ev(event)" onclick="cmd('italic');sync()"><i>I</i></button>
+            <button class="tb" id="b-underline" title="Souligné" onmousedown="ev(event)" onclick="cmd('underline');sync()"><u>U</u></button>
+            <button class="tb" title="Couleur du texte" onmousedown="ev(event)" onclick="openPop('colorPop',this)"><b style="border-bottom:3px solid #d93025">A</b></button>
+            <span class="sep"></span>
+            <button class="tb" title="Aligner" onmousedown="ev(event)" onclick="openPop('alignPop',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="18" y2="18"/></svg></button>
+            <button class="tb" title="Liste numérotée" onmousedown="ev(event)" onclick="cmd('insertOrderedList')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><text x="2" y="8" font-size="7" fill="currentColor" stroke="none">1</text><text x="2" y="14" font-size="7" fill="currentColor" stroke="none">2</text></svg></button>
+            <button class="tb" title="Liste à puces" onmousedown="ev(event)" onclick="cmd('insertUnorderedList')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="9" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1.4" fill="currentColor"/><circle cx="4" cy="12" r="1.4" fill="currentColor"/><circle cx="4" cy="18" r="1.4" fill="currentColor"/></svg></button>
+            <button class="tb" title="Citation" onmousedown="ev(event)" onclick="cmd('formatBlock','blockquote')"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M7 7H4a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2v2H4v2h3a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zm11 0h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2v2h-2v2h3a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg></button>
+            <button class="tb" id="b-strike" title="Barré" onmousedown="ev(event)" onclick="cmd('strikeThrough');sync()"><s>S</s></button>
+            <button class="tb" title="Supprimer la mise en forme" onmousedown="ev(event)" onclick="cmd('removeFormat');sync()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h10l-1 3"/><path d="M9 20h4"/><line x1="11" y1="7" x2="9" y2="20"/><line x1="4" y1="4" x2="20" y2="20"/></svg></button>
+          </div>
+
+          <div class="bottom">
+            <div class="send">
+              <button class="s1" onclick="send()">Envoyer</button>
+              <button class="s2" title="Options d'envoi" onclick="openPop('sendPop',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+            </div>
+            <button class="ibtn aa" title="Mise en forme" onclick="toggleFmt(this)">A<span style="font-size:11px">a</span></button>
+            <button class="ibtn" title="Joindre un fichier" onclick="$('file').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a5 5 0 0 1-7.07-7.07l9.19-9.19a3.5 3.5 0 0 1 4.95 4.95l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button>
+            <input type="file" id="file" multiple onchange="addFiles(this.files)">
+            <button class="ibtn" title="Insérer un lien" onclick="insLink()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+            <button class="ibtn" title="Emoji" onclick="openPop('emojiPop',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="9" y1="10" x2="9.01" y2="10"/><line x1="15" y1="10" x2="15.01" y2="10"/><path d="M8 15a4 4 0 0 0 8 0"/></svg></button>
+            <button class="ibtn" title="Insérer depuis Drive" onclick="insDrive()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.7 3l-5.2 9 2.6 4.5L10.3 7.5z"/><path d="M16.3 3H7.7l5.2 9h8.6z"/><path d="M21.5 12h-8.6l-2.6 4.5 4.3 4.5z"/></svg></button>
+            <button class="ibtn" id="confBtn" title="Mode confidentiel" onclick="toggleConf()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
+            <button class="ibtn" title="Insérer une signature" onclick="insSign()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18"/><line x1="2" y1="2" x2="11" y2="11"/></svg></button>
+            <button class="ibtn trash" title="Supprimer le brouillon" onclick="trashIt()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+          </div>
+        </div><!--/composer-->
+
+        <div class="done" id="done" style="display:none">
+          <div style="font-size:42px">📨</div>
+          <div class="big">Message envoyé !</div>
+          <p style="color:#5f6368;font-size:14px">Tu as respecté les règles : destinataires en <b>Cci</b>, objet clair, pièce jointe, formule et signature.</p>
+          <div class="badge">✅ TP validé — CRCN Domaine 2 (Communiquer)</div><br>
+          <button class="reopen" onclick="reopen()">Rédiger un nouveau message</button>
+        </div>
+      </div><!--/win-->
+
+      <!-- autocomplete (positioned via JS, lives outside row to avoid clipping) -->
+      <div class="ac" id="ac"></div>
     </div>
   </div>
 </div>
@@ -174,105 +364,258 @@ input[type=file]{display:none}
 <div class="pop menu" id="alignPop"></div>
 <div class="pop emoji" id="emojiPop"></div>
 <div class="pop menu" id="sendPop"><div onclick="send()">Envoyer</div><div onclick="toast('Envoi programmé (démo)');closePops()">Programmer l'envoi</div></div>
-<div class="pop menu" id="morePop"><div onclick="toast('Brouillon enregistré');closePops()">Enregistrer le brouillon</div><div onclick="toast('Vérification orthographique (démo)');closePops()">Vérifier l\'orthographe</div><div onclick="toast('Libellé ajouté (démo)');closePops()">Ajouter un libellé</div></div>
 
 <div class="toast" id="toast"></div>
 
 <script>
 function $(id){return document.getElementById(id);}
-var body=$('body');
+var body=$('body'),win=$('win');
 
-// keep selection when clicking toolbar
+/* ---------- Contacts directory (autocomplete) ---------- */
+var COLORS=['#1a73e8','#d93025','#188038','#e8710a','#9334e6','#0097a7','#c2410c','#7e57c2'];
+function colorFor(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%COLORS.length;return COLORS[h];}
+function initials(n){var p=n.replace(/<.*/,'').trim().split(/\s+/);return ((p[0]||'')[0]||'?').toUpperCase()+((p[1]||'')[0]||'').toUpperCase();}
+var CONTACTS=[
+ {n:'Awa Diop',e:'awa.diop@formip.fr'},
+ {n:'Karim Benali',e:'karim.benali@formip.fr'},
+ {n:'Léa Martin',e:'lea.martin@formip.fr'},
+ {n:'Hugo Petit',e:'hugo.petit@formip.fr'},
+ {n:'Sofia Lopez',e:'sofia.lopez@formip.fr'},
+ {n:'Thomas Roy',e:'thomas.roy@formip.fr'},
+ {n:'Service Formation',e:'formation@formip.fr'}
+];
+
+/* ---------- Inbox data ---------- */
+var INBOX=[
+ {id:1,from:'Service Formation',email:'formation@formip.fr',subj:'Rappel : atelier numérique prévu cette semaine',snip:'Bonjour, pensez à confirmer votre présence et à préparer vos identifiants Pix…',time:'9:12',pin:true,unread:true,
+  text:'Bonjour,\n\nPetit rappel : l\'atelier numérique se tiendra cette semaine en salle B204.\nMerci de confirmer votre présence auprès des participants et de préparer vos identifiants Pix.\n\nBien cordialement,\nLe Service Formation'},
+ {id:2,from:'Awa Diop',email:'awa.diop@formip.fr',subj:'Re: Disponibilités semaine prochaine',snip:'Parfait pour moi jeudi après-midi, je suis disponible à partir de 14h…',time:'8:40',unread:true,
+  text:'Coucou,\n\nParfait pour moi jeudi après-midi, je suis dispo à partir de 14h.\nTu nous envoies l\'invitation officielle avec le programme ?\n\nMerci,\nAwa'},
+ {id:3,from:'Certification Pix',email:'no-reply@pix.fr',subj:'Votre positionnement est disponible',snip:'Vos résultats de positionnement sont prêts. Connectez-vous pour les consulter…',time:'7:55',unread:true,
+  text:'Bonjour,\n\nVos résultats de positionnement Pix sont disponibles.\nConnectez-vous à votre compte pour consulter votre profil de compétences.\n\nL\'équipe Pix'},
+ {id:4,from:'Karim Benali',email:'karim.benali@formip.fr',subj:'Documents pour la session',snip:'Je t\'ai préparé le support, je te le partage dès que possible…',time:'Hier',
+  text:'Salut,\n\nJe t\'ai préparé le support de la session. Je te le partage dès que possible.\nDis-moi s\'il manque quelque chose.\n\nKarim'},
+ {id:5,from:'Léa Martin',email:'lea.martin@formip.fr',subj:'Question sur l\'inscription',snip:'Bonjour, faut-il s\'inscrire à l\'avance pour l\'atelier ou…',time:'Hier',
+  text:'Bonjour,\n\nFaut-il s\'inscrire à l\'avance pour l\'atelier, ou est-ce ouvert à tous ?\nMerci d\'avance pour ta réponse.\n\nLéa'},
+ {id:6,from:'Lettre Numérique',email:'news@lettre-num.fr',subj:'5 astuces pour des e-mails professionnels',snip:'Cci, objet clair, signature : nos conseils pour communiquer efficacement…',time:'Lun.',
+  text:'Cette semaine : 5 astuces pour des e-mails professionnels — bien utiliser le Cci, soigner l\'objet, ajouter une signature claire.\n\nBonne lecture !'}
+];
+var SENT=[],DRAFTS=[],curFold='inbox';
+
+/* ---------- Render list ---------- */
+function foldData(f){return f==='inbox'?INBOX:f==='sent'?SENT:f==='draft'?DRAFTS:f==='star'?INBOX.filter(function(m){return m.star;}):[];}
+function renderList(){
+  closeRead();
+  var f=curFold,data=foldData(f),L=$('list'),h='';
+  if(!data.length){
+    var msg=f==='sent'?'Aucun message envoyé pour l\'instant.':f==='draft'?'Aucun brouillon.':f==='star'?'Aucun message suivi.':f==='trash'?'La corbeille est vide.':'Aucun message.';
+    L.innerHTML='<div class="empty">'+msg+'</div>';$('rangeLbl').textContent='';return;
+  }
+  data.forEach(function(m){
+    var who=f==='sent'?('À : '+ (m.to||'')) :m.from;
+    h+='<div class="mail '+(m.unread?'unread':'read')+'" onclick="openMail(\''+f+'\','+m.id+')">'+
+       '<span class="star">'+(m.star?'★':'☆')+'</span>'+
+       '<span class="ava" style="background:'+colorFor(who)+'">'+initials(who)+'</span>'+
+       '<span class="who">'+(m.pin?'<span class="pin">📌 </span>':'')+who+'</span>'+
+       '<span class="txt"><b>'+m.subj+'</b> — '+m.snip+'</span>'+
+       '<span class="tm">'+m.time+'</span></div>';
+  });
+  L.innerHTML=h;
+  $('rangeLbl').textContent='1–'+data.length+' sur '+data.length;
+}
+function selFold(el){
+  document.querySelectorAll('.fold[data-f]').forEach(function(f){f.classList.remove('on');});
+  el.classList.add('on');curFold=el.dataset.f;renderList();
+}
+function openMail(f,id){
+  var m=foldData(f).filter(function(x){return x.id===id;})[0];if(!m)return;
+  if(m.unread){m.unread=false;recount();}
+  var who=f==='sent'?('À : '+(m.to||'')):m.from;
+  $('rbody').innerHTML='<h1>'+m.subj+'</h1><div class="rfrom"><span class="ava" style="background:'+colorFor(who)+'">'+initials(who)+'</span>'+
+    '<div class="meta"><b>'+(m.from||'Moi')+'</b> &lt;'+(m.email||'moi@formip.fr')+'&gt;<div>'+(f==='sent'?who:'à moi')+' · '+m.time+'</div></div></div>'+
+    '<div class="rtext">'+(m.text||m.snip).replace(/\n/g,'<br>')+'</div>'+
+    '<div class="ract"><button onclick="openCompose()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>Répondre</button>'+
+    '<button onclick="openCompose()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 17 20 12 15 7"/><path d="M4 18v-2a4 4 0 0 1 4-4h12"/></svg>Transférer</button></div>';
+  $('list').style.display='none';$('tabs').style.display='none';$('read').classList.add('show');
+}
+function closeRead(){$('read').classList.remove('show');$('list').style.display='';$('tabs').style.display=curFold==='inbox'?'':'none';}
+function recount(){
+  var u=INBOX.filter(function(m){return m.unread;}).length;
+  $('ct-inbox').textContent=u||'';
+  $('ct-sent').textContent=SENT.length||'';
+  $('ct-draft').textContent=DRAFTS.length||'';
+}
+
+/* ---------- Compose open/close ---------- */
+function openCompose(){
+  win.classList.add('show');win.classList.remove('min');
+  $('composer').style.display='';$('done').style.display='none';$('wtitle').textContent='Nouveau message';
+  setTimeout(function(){$('inTo').focus();},50);
+}
+function toggleMin(){win.classList.toggle('min');}
+function toggleMax(){win.classList.toggle('max');}
+function closeWin(){
+  // saving as draft if anything typed
+  var has=$('inObj').value.trim()||body.innerText.trim()||allChips().length;
+  if(has && $('composer').style.display!=='none'){DRAFTS.unshift(draftSnapshot());recount();toast('Brouillon enregistré');}
+  win.classList.remove('show');resetComposer();if(curFold==='draft')renderList();
+}
+function reopen(){resetComposer();openCompose();}
+
+/* ---------- Recipients : chips + autocomplete ---------- */
+var fieldMap={inTo:'fTo',inCc:'fCc',inCci:'fCci'};
+function addChip(inId,name,email){
+  var f=$(fieldMap[inId]),inp=$(inId);
+  var label=email?name:name; var key=(email||name).toLowerCase();
+  // de-dup
+  if([].some.call(f.querySelectorAll('.chip'),function(c){return c.dataset.k===key;})){inp.value='';return;}
+  var c=document.createElement('span');c.className='chip';c.dataset.k=key;c.dataset.v=email||name;
+  c.innerHTML='<span class="ci" style="background:'+colorFor(name)+'">'+initials(name)+'</span><b></b><button class="x" title="Retirer">✕</button>';
+  c.querySelector('b').textContent=label;
+  c.querySelector('.x').onclick=function(){c.remove();refresh();};
+  f.insertBefore(c,inp);inp.value='';refresh();
+}
+function addRaw(inId){
+  var v=$(inId).value.trim().replace(/[,;]$/,'').trim();if(!v)return;
+  var m=CONTACTS.filter(function(c){return c.e===v||c.n===v;})[0];
+  addChip(inId, m?m.n:v, m?m.e:(/@/.test(v)?v:''));
+}
+function allChips(){return [].concat([].slice.call($('fTo').querySelectorAll('.chip')),[].slice.call($('fCc').querySelectorAll('.chip')),[].slice.call($('fCci').querySelectorAll('.chip')));}
+function count(fid){return $(fid).querySelectorAll('.chip').length;}
+
+var acTarget=null,acIdx=-1;
+function showAc(inId){
+  var inp=$(inId),q=inp.value.trim().toLowerCase();acTarget=inId;
+  var existing=[].map.call($(fieldMap[inId]).querySelectorAll('.chip'),function(c){return c.dataset.k;});
+  var res=CONTACTS.filter(function(c){return existing.indexOf(c.e.toLowerCase())<0 && (!q || c.n.toLowerCase().indexOf(q)>=0 || c.e.toLowerCase().indexOf(q)>=0);});
+  var ac=$('ac');
+  if(!res.length){ac.classList.remove('show');return;}
+  ac.innerHTML=res.map(function(c,i){return '<div class="it'+(i===0?' hi':'')+'" data-n="'+c.n+'" data-e="'+c.e+'"><span class="ava" style="background:'+colorFor(c.n)+'">'+initials(c.n)+'</span><span><div>'+c.n+'</div><div class="e">'+c.e+'</div></span></div>';}).join('');
+  acIdx=0;
+  [].forEach.call(ac.querySelectorAll('.it'),function(it){
+    it.onmousedown=function(e){e.preventDefault();addChip(inId,it.dataset.n,it.dataset.e);hideAc();inp.focus();};
+  });
+  var r=inp.getBoundingClientRect();
+  ac.style.left=Math.min(r.left,window.innerWidth-360)+'px';ac.style.top=(r.bottom+4)+'px';ac.style.position='fixed';
+  ac.classList.add('show');
+}
+function hideAc(){$('ac').classList.remove('show');acIdx=-1;}
+function acMove(d){var its=$('ac').querySelectorAll('.it');if(!its.length)return;its[acIdx]&&its[acIdx].classList.remove('hi');acIdx=(acIdx+d+its.length)%its.length;its[acIdx].classList.add('hi');}
+function acPick(inId){var its=$('ac').querySelectorAll('.it');if(acIdx>=0&&its[acIdx]){var it=its[acIdx];addChip(inId,it.dataset.n,it.dataset.e);hideAc();return true;}return false;}
+
+['inTo','inCc','inCci'].forEach(function(inId){
+  var inp=$(inId);
+  inp.addEventListener('input',function(){showAc(inId);});
+  inp.addEventListener('focus',function(){showAc(inId);});
+  inp.addEventListener('keydown',function(e){
+    if(e.key==='ArrowDown'){e.preventDefault();acMove(1);}
+    else if(e.key==='ArrowUp'){e.preventDefault();acMove(-1);}
+    else if(e.key==='Enter'||e.key===','||e.key===';'){e.preventDefault();if(!acPick(inId))addRaw(inId);hideAc();}
+    else if(e.key==='Escape'){hideAc();}
+    else if(e.key==='Backspace'&&!inp.value){var ch=$(fieldMap[inId]).querySelectorAll('.chip');if(ch.length){ch[ch.length-1].remove();refresh();}}
+  });
+  inp.addEventListener('blur',function(){setTimeout(function(){addRaw(inId);hideAc();},120);});
+});
+function toggleCc(){$('rowCc').style.display=$('rowCc').style.display==='none'?'flex':'none';$('rowCci').style.display=$('rowCci').style.display==='none'?'flex':'none';if($('rowCci').style.display!=='none')$('inCci').focus();}
+
+/* ---------- Toolbar formatting ---------- */
 function ev(e){e.preventDefault();}
-function cmd(c,v){body.focus();document.execCommand(c,false,v||null);}
+function cmd(c,v){body.focus();document.execCommand(c,false,v||null);refresh();}
 function setFont(f){body.focus();document.execCommand('fontName',false,f);}
 function sync(){['bold','italic','underline'].forEach(function(c){var el=$('b-'+c);if(el)el.classList.toggle('on',document.queryCommandState(c));});var s=$('b-strike');if(s)s.classList.toggle('on',document.queryCommandState('strikeThrough'));}
 document.addEventListener('selectionchange',sync);
+body.addEventListener('input',refresh);
+$('inObj').addEventListener('input',refresh);
 
-// chips for recipients
-function setupChip(inId,chId){
-  var inp=$(inId),ch=$(chId);
-  function add(){var v=inp.value.trim().replace(/[,;]$/,'').trim();if(!v)return;
-    var c=document.createElement('span');c.className='chip';c.dataset.v=v;
-    c.innerHTML='<b></b><button class="x" title="Retirer">✕</button>';
-    c.querySelector('b').textContent=v;
-    c.querySelector('.x').onclick=function(){c.remove();};
-    ch.appendChild(c);inp.value='';}
-  inp.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===','||e.key===';'){e.preventDefault();add();}});
-  inp.addEventListener('blur',add);
-}
-setupChip('inTo','chipsTo');setupChip('inCc','chipsCc');setupChip('inCci','chipsCci');
-function count(chId){return $(chId).querySelectorAll('.chip').length;}
-
-// attachments
+/* ---------- Attachments ---------- */
 function addFiles(files){var z=$('attzone');for(var i=0;i<files.length;i++){(function(f){
   var ext=(f.name.split('.').pop()||'').slice(0,3).toUpperCase();
   var a=document.createElement('span');a.className='att';
   a.innerHTML='<span class="ic"></span><span></span><button class="x" title="Retirer">✕</button>';
   a.querySelector('.ic').textContent=ext;a.querySelectorAll('span')[1].textContent=f.name;
-  a.querySelector('.x').onclick=function(){a.remove();};
+  a.querySelector('.x').onclick=function(){a.remove();refresh();};
   z.appendChild(a);})(files[i]);}
-  $('file').value='';toast('Pièce jointe ajoutée');
+  $('file').value='';toast('Pièce jointe ajoutée');refresh();
 }
-function insDrive(){var z=$('attzone');var a=document.createElement('span');a.className='att';a.innerHTML='<span class="ic" style="background:#1a73e8">▲</span><span>Document partagé (Drive)</span><button class="x">✕</button>';a.querySelector('.x').onclick=function(){a.remove();};z.appendChild(a);toast('Fichier Drive inséré (démo)');}
+function insDrive(){var z=$('attzone');var a=document.createElement('span');a.className='att';a.innerHTML='<span class="ic" style="background:#1a73e8">▲</span><span>Atelier-numerique_Programme.pdf</span><button class="x">✕</button>';a.querySelector('.x').onclick=function(){a.remove();refresh();};z.appendChild(a);toast('Document de travail joint (Drive)');refresh();}
 function insImg(){var u=prompt('URL de l\'image à insérer :','https://');if(u){cmd('insertImage',u);}}
 function insLink(){var u=prompt('Adresse du lien :','https://');if(u){cmd('createLink',u);}}
-function insSign(){body.focus();document.execCommand('insertHTML',false,'<br><br>—<br>Prénom Nom<br><span style="color:#5f6368">Fonction · Organisation</span><br>');toast('Signature insérée');}
+function insSign(){body.focus();document.execCommand('insertHTML',false,'<br>—<br>Prénom Nom<br><span style="color:#5f6368">Fonction · Organisation</span><br>');toast('Signature insérée');refresh();}
 
-// popovers
+/* ---------- Popovers ---------- */
 function place(p,btn){var r=btn.getBoundingClientRect();p.style.left=Math.min(r.left,window.innerWidth-230)+'px';var top=r.top-p.offsetHeight-8;if(top<8)top=r.bottom+8;p.style.top=top+'px';}
 function closePops(){document.querySelectorAll('.pop').forEach(function(p){p.classList.remove('show');});}
 function openPop(id,btn){var p=$(id);var wasOpen=p.classList.contains('show');closePops();if(wasOpen)return;p.classList.add('show');place(p,btn);}
 document.addEventListener('click',function(e){if(!e.target.closest('.pop')&&!e.target.closest('[onclick^="openPop"]'))closePops();},true);
-
-// color palette
 (function(){var cols=['#202124','#d93025','#e8710a','#188038','#1a73e8','#9334e6','#e52592','#795548','#5f6368','#c5221f'];var h='';cols.forEach(function(c){h+='<b style="background:'+c+'" data-c="'+c+'"></b>';});$('colorPop').innerHTML=h;$('colorPop').querySelectorAll('b').forEach(function(b){b.onclick=function(){cmd('foreColor',b.dataset.c);closePops();};});})();
-// align menu
 $('alignPop').innerHTML='<div data-a="justifyLeft">Aligner à gauche</div><div data-a="justifyCenter">Centrer</div><div data-a="justifyRight">Aligner à droite</div><div data-a="justifyFull">Justifier</div>';
 $('alignPop').querySelectorAll('div').forEach(function(d){d.onclick=function(){cmd(d.dataset.a);closePops();};});
-// emoji
-(function(){var em=['🙂','😀','😉','😍','👍','🙏','🎉','✅','📎','📅','💡','⚠️','📨','🚀','👏','🤝'];var h='';em.forEach(function(e){h+='<b>'+e+'</b>';});$('emojiPop').innerHTML=h;$('emojiPop').querySelectorAll('b').forEach(function(b){b.onclick=function(){body.focus();document.execCommand('insertText',false,b.textContent);closePops();};});})();
+(function(){var em=['🙂','😀','😉','😍','👍','🙏','🎉','✅','📎','📅','💡','⚠️','📨','🚀','👏','🤝'];var h='';em.forEach(function(e){h+='<b>'+e+'</b>';});$('emojiPop').innerHTML=h;$('emojiPop').querySelectorAll('b').forEach(function(b){b.onclick=function(){body.focus();document.execCommand('insertText',false,b.textContent);closePops();refresh();};});})();
 
-// toolbar / window controls
-function toggleFmt(){$('fmtbar').classList.toggle('hide');}
-function toggleMin(){$('win').classList.toggle('min');}
-var maxed=false;function toggleMax(){maxed=!maxed;$('win').style.minHeight=maxed?'82vh':'560px';}
-function closeWin(){$('composer').style.display='none';$('done').classList.remove('show');$('win').classList.add('min');$('wtitle').textContent='Brouillon fermé';
-  var d=$('done');d.classList.add('show');d.querySelector('.big').textContent='Brouillon fermé';d.querySelector('.badge').style.display='none';d.querySelector('p').textContent='Tu peux rouvrir la fenêtre de rédaction.';$('win').classList.remove('min');}
-function reopen(){location.reload();}
+/* ---------- Window misc ---------- */
+function toggleFmt(btn){$('fmtbar').classList.toggle('hide');if(btn)btn.classList.toggle('on',!$('fmtbar').classList.contains('hide'));}
 function toggleConf(){var on=$('confBanner').style.display==='flex';$('confBanner').style.display=on?'none':'flex';$('confBtn').classList.toggle('on',!on);}
-function trashIt(){if(confirm('Supprimer ce brouillon ?')){body.innerHTML='';$('inObj').value='';['chipsTo','chipsCc','chipsCci'].forEach(function(c){$(c).innerHTML='';});$('attzone').innerHTML='';['inTo','inCc','inCci'].forEach(function(i){$(i).value='';});toast('Brouillon supprimé');}}
+function resetComposer(){body.innerHTML='';$('inObj').value='';['fTo','fCc','fCci'].forEach(function(f){[].forEach.call($(f).querySelectorAll('.chip'),function(c){c.remove();});});['inTo','inCc','inCci'].forEach(function(i){$(i).value='';});$('attzone').innerHTML='';$('confBanner').style.display='none';$('confBtn').classList.remove('on');$('fb').style.display='none';$('rowCc').style.display='none';$('rowCci').style.display='none';refresh();}
+function trashIt(){if(confirm('Supprimer ce brouillon ?')){resetComposer();win.classList.remove('show');toast('Brouillon supprimé');}}
 
-// toast
+/* ---------- Toast ---------- */
 var tT;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tT);tT=setTimeout(function(){t.classList.remove('show');},2200);}
 
-// send + validation + completion
-function send(){
-  ['inTo','inCc','inCci'].forEach(function(i){var v=$(i).value.trim();if(v){$(i).value=v;$(i).dispatchEvent(new KeyboardEvent('keydown',{key:'Enter'}));}});
-  var to=count('chipsTo'),cc=count('chipsCc'),cci=count('chipsCci');
+/* ---------- Clock ---------- */
+function tick(){var d=new Date();$('clock').textContent=d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'})+' · '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}
+tick();setInterval(tick,30000);
+
+/* ---------- Validation (shared by live checklist + send) ---------- */
+function state(){
+  var to=count('fTo'),cc=count('fCc'),cci=count('fCci');
   var obj=$('inObj').value.trim();
   var corps=body.innerText.trim();
   var nbPj=$('attzone').querySelectorAll('.att').length;
   var vague=['','coucou','salut','bonjour','objet','test','atelier','réunion','invitation','sans objet'];
-  var objOk=obj.length>=10 && vague.indexOf(obj.toLowerCase())<0;
-  var greet=/(bonjour|bonsoir|madame|monsieur|cher|chère|chers)/i.test(corps);
-  var sign=/(cordialement|salutations|bien à vous|—)/i.test(corps) || body.innerHTML.indexOf('—')>=0;
+  return {
+    to:to,cc:cc,cci:cci,obj:obj,corps:corps,nbPj:nbPj,
+    cciOk: cci>=2,
+    toccOk: to===0 && cc===0,
+    objOk: obj.length>=10 && vague.indexOf(obj.toLowerCase())<0,
+    pjOk: nbPj>=1,
+    greetOk: /(bonjour|bonsoir|madame|monsieur|cher|chère|chers)/i.test(corps) && corps.length>=40,
+    signOk: /(cordialement|salutations|bien à vous|—)/i.test(corps) || body.innerHTML.indexOf('—')>=0
+  };
+}
+function refresh(){
+  var s=state(),n=0;
+  function set(id,ok){var el=$(id);el.classList.toggle('ok',ok);if(ok)n++;}
+  set('g-cci',s.cciOk);set('g-tocc',s.toccOk);set('g-obj',s.objOk);set('g-pj',s.pjOk);set('g-greet',s.greetOk);set('g-sign',s.signOk);
+  $('gcount').textContent=n+' / 6';
+  $('gbar').style.width=Math.round(n/6*100)+'%';
+}
+
+function draftSnapshot(){var s=state();return {id:Date.now(),from:'Moi',email:'moi@formip.fr',to:allChips().map(function(c){return c.dataset.v;}).join(', '),subj:s.obj||'(Sans objet)',snip:(s.corps||'(message vide)').slice(0,90),time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),text:s.corps,unread:false};}
+
+/* ---------- Send ---------- */
+function send(){
+  ['inTo','inCc','inCci'].forEach(function(i){addRaw(i);});hideAc();
+  var s=state();
   var errs=[];
-  if(cci<2)errs.push('place les destinataires en <b>Cci</b> (au moins 2)');
-  if(to>0||cc>0)errs.push('laisse <b>À</b> et <b>Cc</b> vides : tout le monde doit être en <b>Cci</b>');
-  if(!objOk)errs.push('rédige un <b>objet clair et explicite</b> (pas un mot vague)');
-  if(nbPj<1)errs.push('<b>joins le document de travail</b> (bouton 📎)');
-  if(!greet)errs.push('ajoute une <b>formule d\'ouverture</b> (ex. «\u00a0Bonjour à toutes et à tous,\u00a0»)');
-  if(!sign)errs.push('termine par une <b>signature</b> (bouton ✏️ ou «\u00a0Cordialement,\u00a0»)');
-  if(corps.length<40)errs.push('développe ton <b>message</b>');
+  if(!s.cciOk)errs.push('place les destinataires en <b>Cci</b> (au moins 2)');
+  if(!s.toccOk)errs.push('laisse <b>À</b> et <b>Cc</b> vides : tout le monde doit être en <b>Cci</b>');
+  if(!s.objOk)errs.push('rédige un <b>objet clair et explicite</b> (pas un mot vague)');
+  if(!s.pjOk)errs.push('<b>joins le document de travail</b> (bouton 📎 ou « Drive »)');
+  if(!s.greetOk)errs.push('ajoute une <b>formule d\'ouverture</b> et développe le <b>message</b>');
+  if(!s.signOk)errs.push('termine par une <b>signature</b> (bouton ✏️ ou « Cordialement, »)');
   var fb=$('fb');
   if(errs.length){fb.className='fb no';fb.innerHTML='Pour valider le TP : '+errs.join(' ; ')+'.';try{fb.scrollIntoView({block:'center'});}catch(e){}return;}
   fb.style.display='none';
-  $('composer').style.display='none';
-  $('done').classList.add('show');
+  // move to Sent
+  SENT.unshift({id:Date.now(),from:'Moi',email:'moi@formip.fr',to:allChips().map(function(c){return c.dataset.v;}).join(', '),subj:s.obj,snip:s.corps.slice(0,90),time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),text:s.corps,unread:false});
+  recount();if(curFold==='sent')renderList();
+  $('composer').style.display='none';$('done').style.display='block';$('wtitle').textContent='Message envoyé';
   toast('Message envoyé');
   try{window.postMessage('show_complete','*');window.parent.postMessage('show_complete','*');}catch(e){}
 }
+
+/* ---------- Init ---------- */
+renderList();recount();refresh();openCompose();
 try{window.parent.postMessage('hide_complete','*');}catch(e){}
 </script>
 </body></html>
