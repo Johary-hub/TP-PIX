@@ -17,3 +17,4 @@ Le simulateur signale la réussite au lecteur via `postMessage('show_complete','
 - `tp/gmail/` — Simulateur de messagerie complet (boîte de réception + rédaction d'un e-mail pro, destinataires en Cci, validation à l'envoi).
 - `tp/partage-doc/` — Simulateur Google Drive (partager un dossier au bon niveau d'accès : Éditeur / Commentateur / Lecteur + accès général restreint).
 - `tp/docs-styles/` — Simulateur Google Docs (structurer avec les styles de titre, collaborer à plusieurs, exporter en PDF).
+- `tp/depannage-m5/` — Centre de dépannage (Module 5) : 5 ateliers interactifs sur maquettes Windows 11 (Wi-Fi, Gestionnaire des tâches, sortie audio, recherche d'aide fiable, veille RSS), un par leçon du module.
