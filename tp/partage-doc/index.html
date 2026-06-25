@@ -102,6 +102,12 @@ html,body{margin:0;padding:0;background:#e9eef6;font-family:'Google Sans',Roboto
 .wdone .big{font-size:1.5em;color:var(--ok);font-weight:700;margin:10px 0}
 .wdone .badge{display:inline-block;background:var(--ok);color:#fff;border-radius:20px;padding:6px 16px;font-size:14px;margin-top:6px}
 .reopen{margin-top:16px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:14px;cursor:pointer}
+.ind{margin:6px 0 0;border:1px solid #E0D8C8;border-radius:8px;background:#fbfaf7;font-size:.85em;overflow:hidden}
+.ind summary{cursor:pointer;padding:7px 12px;font-weight:600;color:#6F685C;list-style:none}
+.ind summary::-webkit-details-marker{display:none}
+.ind summary::before{content:"\25B8  ";color:#E07A3F}
+.ind[open] summary::before{content:"\25BE  "}
+.ind>div{padding:0 12px 10px;color:#4a5568}
 </style></head>
 <body>
 <div class="wrap">
@@ -116,6 +122,8 @@ html,body{margin:0;padding:0;background:#e9eef6;font-family:'Google Sans',Roboto
       <li>Clique <b>Terminé</b>.</li>
     </ol>
   </div>
+  <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>Le principe à appliquer est le « moindre privilège » : chaque personne reçoit seulement ce que son rôle exige (co-écrire, annoter, ou juste consulter), et le dossier ne doit pas être ouvert au-delà des personnes nommées.</div></details>
+  <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Pour chaque ligne de « Personnes ayant accès », ouvre le menu déroulant de droite et choisis le niveau qui correspond à l'usage décrit : co-écrire = Éditeur, relire/annoter sans modifier = Commentateur, consulter seulement = Lecteur. Puis, dans « Accès général », laisse (ou remets) le menu sur Restreint avant de cliquer Terminé.</div></details>
 
   <div class="app">
     <div class="top">

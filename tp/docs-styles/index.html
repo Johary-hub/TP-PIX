@@ -174,6 +174,12 @@ html,body{margin:0;padding:0;background:#f8fafd;font-family:Roboto,Arial,system-
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);background:#323232;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;opacity:0;transition:.35s;z-index:99}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(max-width:1000px){.comments,.outline{display:none}}
+.ind{margin:6px 0 0;border:1px solid #E0D8C8;border-radius:8px;background:#fbfaf7;font-size:.85em;overflow:hidden}
+.ind summary{cursor:pointer;padding:7px 12px;font-weight:600;color:#6F685C;list-style:none}
+.ind summary::-webkit-details-marker{display:none}
+.ind summary::before{content:"\25B8  ";color:#E07A3F}
+.ind[open] summary::before{content:"\25BE  "}
+.ind>div{padding:0 12px 10px;color:#4a5568}
 </style></head>
 <body>
 <div class="wrap">
@@ -190,6 +196,16 @@ html,body{margin:0;padding:0;background:#f8fafd;font-family:Roboto,Arial,system-
         <li>Observe le <b>Plan</b> (à gauche) et les <b>collaborateurs</b>, puis clique <b>Vérifier</b>.</li>
       </ol>
       <div class="fb" id="fb"></div>
+      <details class="ind"><summary>💡 Indice 1 — Titre du document (doux)</summary><div>Le « gras » que tu vois sur « Team Meeting » n'est qu'une mise en forme visuelle : pour qu'une ligne devienne un vrai titre, il faut lui attribuer un style, pas un effet manuel.</div></details>
+      <details class="ind"><summary>💡 Indice 2 — Titre du document (guidé)</summary><div>Clique d'abord sur la ligne « Team Meeting » dans la page, puis ouvre le sélecteur de styles « Texte normal ▾ » dans la barre d'outils ; cherches-y l'entrée qui correspond au niveau le plus haut (Titre) et applique-la.</div></details>
+      <details class="ind"><summary>💡 Indice 1 — Overview &amp; Goals (doux)</summary><div>Pour qu'« Overview » et « Goals » apparaissent dans le Plan à gauche, ce sont des sections : pense au même outil de styles, mais à un niveau hiérarchique en dessous du Titre.</div></details>
+      <details class="ind"><summary>💡 Indice 2 — Overview &amp; Goals (guidé)</summary><div>Traite chaque mot l'un après l'autre : sélectionne la ligne « Overview », applique-lui via le sélecteur de styles un style de titre de section (Titre 1 ou Titre 2), puis recommence exactement de la même façon pour « Goals ».</div></details>
+      <details class="ind"><summary>💡 Indice 1 — Partage (doux)</summary><div>Collaborer suppose de donner accès au document à d'autres personnes : repère l'action qui ouvre la fenêtre de partage, et vise plus d'un seul collègue.</div></details>
+      <details class="ind"><summary>💡 Indice 2 — Partage (guidé)</summary><div>Ouvre la fenêtre via le bouton « Share » (ou File ▸ Partager), tape un prénom dans le champ « Ajouter des personnes », choisis un contact dans la liste, recommence pour atteindre au moins deux personnes, puis valide l'envoi.</div></details>
+      <details class="ind"><summary>💡 Indice 1 — Commentaire (doux)</summary><div>Commenter, ce n'est pas modifier le texte : c'est attacher une remarque à un passage précis pour échanger avec l'équipe.</div></details>
+      <details class="ind"><summary>💡 Indice 2 — Commentaire (guidé)</summary><div>Clique sur la ligne que tu veux annoter pour la sélectionner, déclenche l'ajout de commentaire (icône 💬), rédige ta remarque dans la zone de saisie — tu peux taper « @ » pour mentionner un collègue — puis envoie-la.</div></details>
+      <details class="ind"><summary>💡 Indice 1 — Export PDF (doux)</summary><div>Exporter en PDF, c'est produire une copie figée du document : cherche cette option du côté des menus de fichier, pas dans la mise en forme.</div></details>
+      <details class="ind"><summary>💡 Indice 2 — Export PDF (guidé)</summary><div>Ouvre le menu « File », place-toi sur l'entrée « Télécharger » pour dérouler les formats, et choisis celui qui correspond au PDF (.pdf) pour lancer le téléchargement.</div></details>
     </div>
     <button class="checkbtn" onclick="check()">✓ Vérifier le travail</button>
   </div>

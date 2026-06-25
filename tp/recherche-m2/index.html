@@ -41,6 +41,12 @@ svg .clk:hover{filter:brightness(.97)}
 .badge{display:inline-block;background:var(--green);color:#fff;font-weight:700;padding:6px 16px;border-radius:20px;margin-top:6px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:#323232;color:#fff;padding:11px 18px;border-radius:8px;font-size:.9em;opacity:0;transition:.35s;z-index:99}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.ind{margin:6px 0 0;border:1px solid #E0D8C8;border-radius:8px;background:#fbfaf7;font-size:.85em;overflow:hidden}
+.ind summary{cursor:pointer;padding:7px 12px;font-weight:600;color:#6F685C;list-style:none}
+.ind summary::-webkit-details-marker{display:none}
+.ind summary::before{content:"\25B8  ";color:#E07A3F}
+.ind[open] summary::before{content:"\25BE  "}
+.ind>div{padding:0 12px 10px;color:#4a5568}
 </style></head>
 <body>
 <div class="wrap">
@@ -83,6 +89,8 @@ svg .clk:hover{filter:brightness(.97)}
       <div class="opt" data-g="0" onclick="pickQ(this)">horaire ouverture mairie lyon truc machin pas cher avis 2026<span class="why">❌ Mots parasites ajoutés au hasard : ils brouillent la recherche au lieu de la préciser.</span></div>
     </div>
     <div class="hint">💡 Une bonne requête = des mots-clés ciblés, pas une phrase en langage naturel. Les opérateurs ("…", site:) affinent encore le résultat.</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>Demande-toi ce qui rendrait un résultat à la fois exact et officiel : une expression figée à chercher telle quelle, et un moyen de rester sur le site de la ville.</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Garde seulement les mots-clés utiles en jetant la politesse et les mots parasites. Pour viser juste, deux réflexes se combinent : mettre une expression entre guillemets quand on veut la retrouver telle quelle, et restreindre la recherche au site officiel de la ville. À toi de repérer la proposition qui applique réellement ces deux réflexes.</div></details>
     <div class="vbar"><button class="btn" onclick="validate(1)">Valider l'étape</button><div class="fb" id="fb1"></div><button class="btn green next" id="nx1" onclick="go(2)">Étape validée → Suivant</button></div>
   </section>
 
@@ -147,6 +155,8 @@ svg .clk:hover{filter:brightness(.97)}
       </svg>
     </div>
     <div class="hint">💡 Fiable = qui ? (auteur/organisme identifié) · quand ? (date récente) · où ? (site officiel reconnu : .gouv.fr, organisme connu). Méfie-toi du « sponsorisé », du sensationnalisme et des domaines inconnus.</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>Avant de juger un résultat sur le fond, scrute ses signaux d'alerte : une étiquette « Sponsorisé », un titre tout en majuscules avec des points d'exclamation, un pseudo en guise d'auteur ou une extension de domaine inhabituelle sont autant de drapeaux rouges qui disqualifient une source.</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Concentre-toi sur les résultats portés par un organisme clairement identifié, dont la mise à jour est récente et l'adresse rattachée à une institution reconnue. Mets de côté tout ce qui sent la promotion, le sensationnalisme ou l'avis personnel non sourcé. À toi de décider quelles lignes franchissent vraiment ces trois critères.</div></details>
     <div class="vbar"><button class="btn" onclick="validate(2)">Valider l'étape</button><div class="fb" id="fb2"></div><button class="btn green next" id="nx2" onclick="go(3)">Étape validée → Suivant</button></div>
   </section>
 
@@ -200,6 +210,8 @@ svg .clk:hover{filter:brightness(.97)}
       </svg>
     </div>
     <div class="hint">💡 Une seule source ne suffit pas. Deux sources qui se copient (même origine) non plus. Il faut deux sources d'origines différentes qui aboutissent à la même information.</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>Avant de cocher, demande-toi pour chaque source d'où elle tient l'info : un vrai recoupement réunit deux origines distinctes qui donnent la même date, pas une source et son copier-coller.</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Pour chaque source, pose-toi deux questions : annonce-t-elle bien la même date que l'affirmation, et tient-elle son information d'un travail qui lui est propre ? Méfie-toi d'une source qui recopie mot pour mot une autre (elle n'ajoute aucune confirmation indépendante) et d'une source anonyme qui contredit la date. À toi d'identifier le couple qui concorde tout en ayant des origines distinctes.</div></details>
     <div class="vbar"><button class="btn" onclick="validate(3)">Valider l'étape</button><div class="fb" id="fb3"></div><button class="btn green next" id="nx3" onclick="finish()">Terminer le module</button></div>
   </section>
 

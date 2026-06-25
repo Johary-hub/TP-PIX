@@ -104,6 +104,12 @@ svg .clk:hover{filter:brightness(.97)}
 .badge{display:inline-block;background:var(--green);color:#fff;font-weight:700;padding:6px 16px;border-radius:20px;margin-top:6px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:#323232;color:#fff;padding:11px 18px;border-radius:8px;font-size:.9em;opacity:0;transition:.35s;z-index:99}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.ind{margin:6px 0 0;border:1px solid #E0D8C8;border-radius:8px;background:#fbfaf7;font-size:.85em;overflow:hidden}
+.ind summary{cursor:pointer;padding:7px 12px;font-weight:600;color:#6F685C;list-style:none}
+.ind summary::-webkit-details-marker{display:none}
+.ind summary::before{content:"\25B8  ";color:#E07A3F}
+.ind[open] summary::before{content:"\25BE  "}
+.ind>div{padding:0 12px 10px;color:#4a5568}
 </style></head>
 <body>
 <div class="wrap">
@@ -149,6 +155,8 @@ svg .clk:hover{filter:brightness(.97)}
       </div>
     </div>
     <div class="hint">💡 Vise « Fort » (barre verte). La validation refuse les mots de passe trop courts ou trop courants.</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>Surveille les trois cases à cocher sous la jauge : tant qu'une seule reste grise, l'atelier ne passera pas. La longueur compte autant que la variété.</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Assemble plusieurs mots qui n'ont aucun rapport entre eux pour dépasser 12 caractères, puis combine au moins deux familles de caractères parmi minuscules, MAJUSCULES, chiffres et symboles (un tiret ou un chiffre suffit déjà, la MAJUSCULE n'est pas obligatoire). Bannis tout ce qui évoque « Léa » ou un classique du genre « azerty123 ».</div></details>
     <div class="vbar"><button class="btn" onclick="validate(1)">Valider l'atelier</button><div class="fb" id="fb1"></div><button class="btn green next" id="nx1" onclick="go(2)">Atelier validé → Suivant</button></div>
   </section>
 
@@ -174,6 +182,8 @@ svg .clk:hover{filter:brightness(.97)}
       </div>
     </div>
     <div class="hint">💡 Active d'abord l'interrupteur, puis sélectionne une méthode. L'application est conseillée.</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>Le bloc des méthodes reste grisé et inactif tant qu'un préalable n'est pas fait : c'est lui qui « déverrouille » le choix.</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Bascule d'abord l'interrupteur 2FA, puis compare les deux méthodes : l'une génère ses codes hors-ligne sur le téléphone, l'autre dépend du réseau et peut être interceptée. Retiens laquelle porte le badge « recommandée ».</div></details>
     <div class="vbar"><button class="btn" onclick="validate(2)">Valider l'atelier</button><div class="fb" id="fb2"></div><button class="btn green next" id="nx2" onclick="go(3)">Atelier validé → Suivant</button></div>
   </section>
 
@@ -197,6 +207,8 @@ svg .clk:hover{filter:brightness(.97)}
       </div>
     </div>
     <div class="hint">💡 Le faux mail « banque » doit être <b>Signalé</b> ou <b>Supprimé</b> avec au moins 2 signaux cochés ; le mail de ta collègue doit être classé <b>Légitime</b>.</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>Le seul mail piégé est celui qui agite l'urgence et réclame tes identifiants : c'est là que se cachent les signaux à cocher. Ouvre-le, repère deux indices suspects bien réels, puis choisis une action pour ce message.</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Dans le faux mail de la banque, passe la souris sur le lien pour comparer l'adresse affichée à l'adresse réelle, puis coche au moins deux indices parmi expéditeur trompeur, urgence, lien qui ne correspond pas et demande d'identifiants, avant de le signaler. Pense ensuite à classer « Légitime » le message de ta collègue en formip.com.</div></details>
     <div class="vbar"><button class="btn" onclick="validate(3)">Valider l'atelier</button><div class="fb" id="fb3"></div><button class="btn green next" id="nx3" onclick="go(4)">Atelier validé → Suivant</button></div>
   </section>
 
@@ -207,6 +219,8 @@ svg .clk:hover{filter:brightness(.97)}
     <div class="scn"><b>Situation :</b> tu es au café sur le Wi-Fi gratuit « Café-Gratuit ». Pour chaque réflexe, indique s'il est <b>BON</b> ou <b>MAUVAIS</b>.</div>
     <div class="mock"><div class="mockbody" id="reflexes"><!-- rempli par JS --></div></div>
     <div class="hint">💡 Sur un Wi-Fi ouvert : cadenas HTTPS, VPN actif, pas d'opérations sensibles. On ne baisse jamais sa protection.</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>Il faut trancher pour les six réflexes : un seul oubli ou un seul mauvais classement bloque l'atelier. Demande-toi à chaque ligne si l'action renforce ou affaiblit ta protection.</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Range en « BON » tout ce qui ajoute du chiffrement ou de la prudence (cadenas HTTPS, VPN, éviter les opérations sensibles) et en « MAUVAIS » tout ce qui désactive une sécurité ou ignore un avertissement (pare-feu coupé, banque sans VPN, certificat invalide ignoré).</div></details>
     <div class="vbar"><button class="btn" onclick="validate(4)">Valider l'atelier</button><div class="fb" id="fb4"></div><button class="btn green next" id="nx4" onclick="go(5)">Atelier validé → Suivant</button></div>
   </section>
 
@@ -233,6 +247,8 @@ svg .clk:hover{filter:brightness(.97)}
       </div>
     </div>
     <div class="hint">💡 Coupe toutes les permissions sensibles (micro, localisation, contacts, caméra) : aucune n'est justifiée pour une lampe. Ne laisse pas le profil en « Public ».</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>Applique la minimisation des données : une lampe n'a besoin d'aucun de ces accès, donc chaque interrupteur encore vert est un accès de trop.</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Éteins les quatre interrupteurs (micro, localisation, contacts, caméra) jusqu'à ce qu'ils repassent au gris, puis choisis pour le profil une visibilité plus fermée que « Public » (« Amis » ou « Privé »).</div></details>
     <div class="vbar"><button class="btn" onclick="validate(5)">Valider l'atelier</button><div class="fb" id="fb5"></div><button class="btn green next" id="nx5" onclick="go(6)">Atelier validé → Suivant</button></div>
   </section>
 
@@ -245,6 +261,8 @@ svg .clk:hover{filter:brightness(.97)}
       <div class="gestes" id="gestes"><!-- rempli par JS --></div>
     </div></div>
     <div class="hint">💡 Au moins un bon geste coché valide l'atelier (et le module).</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>La validation ne tolère aucun intrus : un seul geste « contre-productif » coché annule tes bons choix, même s'il y en a plusieurs.</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Coche uniquement les gestes qui réduisent le stockage ou la consommation (se désabonner, faire le ménage des fichiers, baisser la qualité vidéo inutile, éteindre les appareils) et laisse de côté tout ce qui revient à « tout garder » ou « tout laisser allumé ».</div></details>
     <div class="vbar"><button class="btn" onclick="validate(6)">Valider l'atelier</button><div class="fb" id="fb6"></div><button class="btn green next" id="nx6" onclick="finish()">Terminer le module</button></div>
   </section>
 

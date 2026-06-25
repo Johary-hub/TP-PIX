@@ -39,6 +39,12 @@ svg .clk:hover{filter:brightness(.97)}
 .badge{display:inline-block;background:var(--green);color:#fff;font-weight:700;padding:6px 16px;border-radius:20px;margin-top:6px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:#323232;color:#fff;padding:11px 18px;border-radius:8px;font-size:.9em;opacity:0;transition:.35s;z-index:99}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.ind{margin:6px 0 0;border:1px solid #E0D8C8;border-radius:8px;background:#fbfaf7;font-size:.85em;overflow:hidden}
+.ind summary{cursor:pointer;padding:7px 12px;font-weight:600;color:#6F685C;list-style:none}
+.ind summary::-webkit-details-marker{display:none}
+.ind summary::before{content:"\25B8  ";color:#E07A3F}
+.ind[open] summary::before{content:"\25BE  "}
+.ind>div{padding:0 12px 10px;color:#4a5568}
 </style></head>
 <body>
 <div class="wrap">
@@ -100,6 +106,8 @@ svg .clk:hover{filter:brightness(.97)}
       </svg>
     </div>
     <div class="hint">💡 Clique le bouton bleu « Se connecter » de la carte <b>Formip-Pro</b>.</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>La validation attend deux choses : le bon réflexe de diagnostic ET une reconnexion réussie — commence par te demander si la panne vient du PC ou de tout le réseau.</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Dans le premier réflexe, retiens l'option qui isole la cause au lieu d'agir au hasard, puis dans le volet réseau repère la carte « Formip-Pro » (sécurisé) et déclenche sa connexion. L'étiquette doit passer à « Connecté ».</div></details>
     <div class="vbar"><button class="btn" onclick="validate(1)">Valider l'atelier</button><div class="fb" id="fb1"></div><button class="btn green next" id="nx1" onclick="go(2)">Atelier validé → Suivant</button></div>
   </section>
 
@@ -184,6 +192,8 @@ svg .clk:hover{filter:brightness(.97)}
       </svg>
     </div>
     <div class="hint">💡 Clique la ligne pour la sélectionner, puis « Fin de tâche ».</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>Une seule application est réellement bloquée : laisse-toi guider par la colonne « État » plutôt que par la consommation mémoire.</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Repère la ligne dont l'état affiche « Ne répond pas », sélectionne-la pour faire apparaître la surbrillance, puis termine-la — sans jamais cliquer un « Service système Windows », qui ne doit pas être fermé.</div></details>
     <div class="vbar"><button class="btn" onclick="validate(2)">Valider l'atelier</button><div class="fb" id="fb2"></div><button class="btn green next" id="nx2" onclick="go(3)">Atelier validé → Suivant</button></div>
   </section>
 
@@ -240,6 +250,8 @@ svg .clk:hover{filter:brightness(.97)}
       </svg>
     </div>
     <div class="hint">💡 Sélectionne une sortie (le rond se remplit), puis « Tester le son ».</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>Le son doit sortir là où c'est branché : compare les étiquettes d'état des sorties (« aucun son », « connecté ») pour trouver le bon périphérique.</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Choisis la sortie marquée « connecté » qui correspond au matériel réellement branché (le casque), vérifie que son rond se remplit, puis lance « Tester le son » pour confirmer.</div></details>
     <div class="vbar"><button class="btn" onclick="validate(3)">Valider l'atelier</button><div class="fb" id="fb3"></div><button class="btn green next" id="nx3" onclick="go(4)">Atelier validé → Suivant</button></div>
   </section>
 
@@ -294,6 +306,8 @@ svg .clk:hover{filter:brightness(.97)}
       </svg>
     </div>
     <div class="hint">💡 Une source fiable : éditeur officiel, forum vérifié, tutoriel sérieux. Jamais un .exe d'origine inconnue.</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>Avant de cliquer, lis l'adresse du site et le bandeau du résultat : la fiabilité se juge à la source, pas à la promesse « répare tout en 1 clic ».</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Écarte d'emblée le résultat qui propose de télécharger un .exe depuis un domaine inconnu, puis clique sur un résultat dont la source est crédible (documentation officielle ou forum vérifié) qui décrit la procédure plutôt qu'un logiciel miracle.</div></details>
     <div class="vbar"><button class="btn" onclick="validate(4)">Valider l'atelier</button><div class="fb" id="fb4"></div><button class="btn green next" id="nx4" onclick="go(5)">Atelier validé → Suivant</button></div>
   </section>
 
@@ -350,6 +364,8 @@ svg .clk:hover{filter:brightness(.97)}
       </svg>
     </div>
     <div class="hint">💡 Abonne-toi aux 2 sources officielles ; n'abonne pas les sources « non vérifié ».</div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>La qualité d'une veille tient à ses sources : repère le badge « flux RSS officiel » qui distingue le fiable du « non vérifié ».</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Abonne-toi aux sources estampillées officielles (blog de l'éditeur, CERT-FR / ANSSI) et laisse de côté celles marquées « non vérifié » ; si tu en as abonné une par erreur, reclique dessus pour te désabonner avant de valider.</div></details>
     <div class="vbar"><button class="btn" onclick="validate(5)">Valider l'atelier</button><div class="fb" id="fb5"></div><button class="btn green next" id="nx5" onclick="finish()">Terminer le dépannage</button></div>
   </section>
 

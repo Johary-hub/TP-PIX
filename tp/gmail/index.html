@@ -187,6 +187,12 @@ input[type=file]{display:none}
   .clock,.brand .nm{display:none}
 }
 @media(max-width:560px){.win{right:0;left:0;width:auto;max-width:100%}.mail .txt{display:none}}
+.ind{margin:6px 0 0;border:1px solid #E0D8C8;border-radius:8px;background:#fbfaf7;font-size:.85em;overflow:hidden}
+.ind summary{cursor:pointer;padding:7px 12px;font-weight:600;color:#6F685C;list-style:none}
+.ind summary::-webkit-details-marker{display:none}
+.ind summary::before{content:"\25B8  ";color:#E07A3F}
+.ind[open] summary::before{content:"\25BE  "}
+.ind>div{padding:0 12px 10px;color:#4a5568}
 </style></head>
 <body>
 <div class="shell">
@@ -214,6 +220,8 @@ input[type=file]{display:none}
         <div class="gli" id="g-sign"><span class="tick"></span>Signature présente</div>
       </div>
     </div>
+    <details class="ind"><summary>💡 Indice 1 — coup de pouce</summary><div>Quand un même message part à plusieurs personnes qui ne se connaissent pas forcément, demande-toi quel champ protège leurs adresses des regards des autres : c'est lui qu'il faut privilégier ici, en laissant les champs visibles de côté.</div></details>
+    <details class="ind"><summary>💡 Indice 2 — guidé</summary><div>Ouvre « Cc/Cci » pour afficher la ligne Cci, puis ajoute-y les 4 collègues via l'auto-complétion (au moins 2 sont attendus) en gardant « À » et « Cc » totalement vides. Côté contenu, vise un objet d'au moins une dizaine de caractères vraiment descriptif (pas juste « atelier » ou « invitation »), un corps qui commence par une vraie formule d'ouverture (« Bonjour à tous, ») suivie de quelques phrases de contenu, le document joint via 📎 ou « Drive », et une signature ajoutée via le bouton ✏️ ou une formule de politesse type « Cordialement, ».</div></details>
   </div>
 
   <!-- ===== App ===== -->
