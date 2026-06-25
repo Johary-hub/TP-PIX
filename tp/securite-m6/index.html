@@ -119,21 +119,21 @@ svg .clk:hover{filter:brightness(.97)}
   <div class="mission">
     <h3>🎯 Ta mission</h3>
     <ol>
-      <li><b>Atelier 1 — Mot de passe robuste (6.1)</b> : crée un mot de passe / une phrase de passe solide (≥ 12 caractères, varié, non interdit).</li>
-      <li><b>Atelier 2 — Double authentification (6.2)</b> : active la 2FA et choisis la méthode la plus sûre.</li>
-      <li><b>Atelier 3 — Repérer un phishing (6.3)</b> : ouvre les mails, repère les signaux suspects et traite chaque message.</li>
-      <li><b>Atelier 4 — Wi-Fi public, HTTPS & VPN (6.4)</b> : trie les bons et les mauvais réflexes dans un café.</li>
-      <li><b>Atelier 5 — Vie privée & RGPD (6.6)</b> : règle les permissions au minimum nécessaire.</li>
-      <li><b>Atelier 6 (bonus) — Sobriété numérique (6.7)</b> : choisis un geste utile.</li>
+      <li><b>Atelier 1 — Mot de passe robuste</b> : crée un mot de passe / une phrase de passe solide (≥ 12 caractères, varié, non interdit).</li>
+      <li><b>Atelier 2 — Double authentification</b> : active la 2FA et choisis la méthode la plus sûre.</li>
+      <li><b>Atelier 3 — Repérer un phishing</b> : ouvre les mails, repère les signaux suspects et traite chaque message.</li>
+      <li><b>Atelier 4 — Wi-Fi public, HTTPS & VPN</b> : trie les bons et les mauvais réflexes dans un café.</li>
+      <li><b>Atelier 5 — Vie privée & RGPD</b> : règle les permissions au minimum nécessaire.</li>
+      <li><b>Atelier 6 (bonus) — Sobriété numérique</b> : choisis un geste utile.</li>
     </ol>
   </div>
 
   <div class="meta"><span id="lab">Atelier 1 / 6 — Mot de passe</span><span id="sc">Réussis : 0 / 6</span></div>
   <div class="bar"><div class="seg cur" id="s1"></div><div class="seg" id="s2"></div><div class="seg" id="s3"></div><div class="seg" id="s4"></div><div class="seg" id="s5"></div><div class="seg" id="s6"></div></div>
 
-  <!-- ===== ATELIER 1 : MOT DE PASSE (6.1) ===== -->
+  <!-- ===== ATELIER 1 : MOT DE PASSE ===== -->
   <section class="card at" data-n="1">
-    <h2>🔑 Atelier 1 — Mot de passe robuste (6.1)</h2>
+    <h2>🔑 Atelier 1 — Mot de passe robuste</h2>
     <div class="obj">🎯 Objectif : composer un mot de passe (ou une phrase de passe) long, varié et unique.</div>
     <div class="scn"><b>Situation :</b> tu crées un nouveau compte pour <b>Léa</b>. Saisis un mot de passe : la jauge de force réagit en direct. Évite les mots de passe courants et le prénom.</div>
     <div class="mock">
@@ -160,9 +160,9 @@ svg .clk:hover{filter:brightness(.97)}
     <div class="vbar"><button class="btn" onclick="validate(1)">Valider l'atelier</button><div class="fb" id="fb1"></div><button class="btn green next" id="nx1" onclick="go(2)">Atelier validé → Suivant</button></div>
   </section>
 
-  <!-- ===== ATELIER 2 : 2FA (6.2) ===== -->
+  <!-- ===== ATELIER 2 : 2FA ===== -->
   <section class="card at" data-n="2" style="display:none">
-    <h2>📲 Atelier 2 — Double authentification 2FA (6.2)</h2>
+    <h2>📲 Atelier 2 — Double authentification 2FA</h2>
     <div class="obj">🎯 Objectif : ajouter un second facteur et choisir la méthode la plus sûre.</div>
     <div class="scn"><b>Situation :</b> dans « Sécurité du compte », active la double authentification puis choisis la méthode. L'<b>application d'authentification</b> est plus sûre que le SMS.</div>
     <div class="mock">
@@ -187,9 +187,9 @@ svg .clk:hover{filter:brightness(.97)}
     <div class="vbar"><button class="btn" onclick="validate(2)">Valider l'atelier</button><div class="fb" id="fb2"></div><button class="btn green next" id="nx2" onclick="go(3)">Atelier validé → Suivant</button></div>
   </section>
 
-  <!-- ===== ATELIER 3 : PHISHING (6.3) ===== -->
+  <!-- ===== ATELIER 3 : PHISHING ===== -->
   <section class="card at" data-n="3" style="display:none">
-    <h2>🎣 Atelier 3 — Repérer un phishing (6.3)</h2>
+    <h2>🎣 Atelier 3 — Repérer un phishing</h2>
     <div class="obj">🎯 Objectif : ouvrir chaque mail, démasquer le faux message et le traiter correctement.</div>
     <div class="scn"><b>Situation :</b> 3 messages dans ta boîte. Ouvre-les, <b>survole les liens</b> pour voir la vraie adresse, coche les signaux suspects, puis choisis une action pour chacun.</div>
     <div class="mock">
@@ -212,9 +212,9 @@ svg .clk:hover{filter:brightness(.97)}
     <div class="vbar"><button class="btn" onclick="validate(3)">Valider l'atelier</button><div class="fb" id="fb3"></div><button class="btn green next" id="nx3" onclick="go(4)">Atelier validé → Suivant</button></div>
   </section>
 
-  <!-- ===== ATELIER 4 : WIFI PUBLIC / HTTPS / VPN (6.4) ===== -->
+  <!-- ===== ATELIER 4 : WIFI PUBLIC / HTTPS / VPN ===== -->
   <section class="card at" data-n="4" style="display:none">
-    <h2>☕ Atelier 4 — Wi-Fi public, HTTPS & VPN (6.4)</h2>
+    <h2>☕ Atelier 4 — Wi-Fi public, HTTPS & VPN</h2>
     <div class="obj">🎯 Objectif : adopter les bons réflexes sur un réseau Wi-Fi public ouvert.</div>
     <div class="scn"><b>Situation :</b> tu es au café sur le Wi-Fi gratuit « Café-Gratuit ». Pour chaque réflexe, indique s'il est <b>BON</b> ou <b>MAUVAIS</b>.</div>
     <div class="mock"><div class="mockbody" id="reflexes"><!-- rempli par JS --></div></div>
@@ -224,9 +224,9 @@ svg .clk:hover{filter:brightness(.97)}
     <div class="vbar"><button class="btn" onclick="validate(4)">Valider l'atelier</button><div class="fb" id="fb4"></div><button class="btn green next" id="nx4" onclick="go(5)">Atelier validé → Suivant</button></div>
   </section>
 
-  <!-- ===== ATELIER 5 : VIE PRIVÉE / RGPD (6.6) ===== -->
+  <!-- ===== ATELIER 5 : VIE PRIVÉE / RGPD ===== -->
   <section class="card at" data-n="5" style="display:none">
-    <h2>🔒 Atelier 5 — Vie privée & RGPD (6.6)</h2>
+    <h2>🔒 Atelier 5 — Vie privée & RGPD</h2>
     <div class="obj">🎯 Objectif : limiter les permissions au strict nécessaire (minimisation des données).</div>
     <div class="scn"><b>Situation :</b> l'appli « Lampe-Torche » réclame des accès. Pour une simple lampe, <b>aucune permission sensible</b> n'est justifiée. Désactive l'inutile et règle la visibilité du profil.</div>
     <div class="mock">
@@ -252,9 +252,9 @@ svg .clk:hover{filter:brightness(.97)}
     <div class="vbar"><button class="btn" onclick="validate(5)">Valider l'atelier</button><div class="fb" id="fb5"></div><button class="btn green next" id="nx5" onclick="go(6)">Atelier validé → Suivant</button></div>
   </section>
 
-  <!-- ===== ATELIER 6 (BONUS) : SOBRIÉTÉ (6.7) ===== -->
+  <!-- ===== ATELIER 6 (BONUS) : SOBRIÉTÉ ===== -->
   <section class="card at" data-n="6" style="display:none">
-    <h2>🌱 Atelier 6 (bonus) — Sobriété numérique (6.7)</h2>
+    <h2>🌱 Atelier 6 (bonus) — Sobriété numérique</h2>
     <div class="obj">🎯 Objectif : adopter au moins un geste qui réduit ton empreinte numérique.</div>
     <div class="scn"><b>Situation :</b> tu veux réduire ton impact. Coche le ou les gestes utiles parmi les propositions.</div>
     <div class="mock"><div class="mockbody">
