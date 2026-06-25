@@ -1,0 +1,283 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulateur — Rechercher & évaluer l'information (Module 2)</title>
+<style>
+:root{--ink:#1B2A4A;--amber:#E07A3F;--green:#3F9C5A;--red:#D9534F;--paper:#FAF6EE;--line:#E0D8C8;--blue:#005fb8}
+*{box-sizing:border-box}body{margin:0;font-family:'Spline Sans','Segoe UI',system-ui,sans-serif;color:var(--ink);background:#eef1f6;line-height:1.5}
+.wrap{max-width:880px;margin:0 auto;padding:16px}
+.hero{background:linear-gradient(135deg,#1B2A4A,#2c4470);color:var(--paper);border-radius:14px;padding:18px 22px;margin-bottom:12px}
+.hero h1{margin:0 0 4px;font-size:1.45em}.hero p{margin:0;opacity:.92;font-size:.92em}
+.pill{display:inline-block;background:var(--amber);color:#fff;font-size:.7em;font-weight:700;padding:3px 10px;border-radius:12px;margin-bottom:8px;letter-spacing:.04em}
+.brief{background:#fff;border:2px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:12px}
+.brief h3{margin:0 0 6px;font-size:1em}
+.brief ol{margin:6px 0 0;padding-left:20px;font-size:.9em}.brief li{margin:2px 0}
+.meta{display:flex;justify-content:space-between;font-size:.85em;color:#6F685C;margin:6px 0}
+.bar{display:flex;gap:6px;margin-bottom:12px}.bar .seg{flex:1;height:8px;border-radius:5px;background:var(--line)}
+.bar .seg.cur{background:var(--amber)}.bar .seg.done{background:var(--green)}
+.card{background:#fff;border:2px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:12px}
+.card h2{margin:0 0 4px;font-size:1.15em;border-left:5px solid var(--amber);padding-left:10px}
+.obj{font-size:.82em;color:#6F685C;margin:2px 0 8px;padding-left:15px}
+.scn{background:#FFF4E8;border-left:4px solid var(--amber);border-radius:8px;padding:9px 12px;margin:10px 0;font-size:.92em}
+.svgwrap{background:#dfe3ea;border-radius:10px;padding:10px;margin:10px 0}
+.svgwrap svg{display:block;width:100%;height:auto;max-width:100%;border-radius:6px}
+.hint{font-size:.8em;color:#6F685C;margin:4px 2px 0}
+.try{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.opt{background:#fff;border:2px solid var(--line);border-radius:9px;padding:10px 13px;cursor:pointer;font-size:.92em;user-select:none}
+.opt:hover{border-color:var(--ink)}.opt.good{background:#EAF6EE;border-color:var(--green)}.opt.bad{background:#FDECEC;border-color:var(--red)}
+.opt code{background:#f1f3f7;padding:1px 5px;border-radius:4px;font-size:.92em}
+.opt .why{display:none;margin-top:6px;font-size:.88em;padding-top:6px;border-top:1px dashed var(--line)}
+.opt.good .why,.opt.bad .why{display:block}
+.clk{cursor:pointer}
+svg .clk:hover{filter:brightness(.97)}
+.btn{background:var(--amber);color:#fff;border:none;border-radius:9px;padding:10px 18px;font-size:.93em;font-weight:600;cursor:pointer;font-family:inherit}
+.btn.green{background:var(--green)}
+.vbar{margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fb{font-size:.92em;padding:8px 12px;border-radius:7px;display:none;flex:1 1 100%}
+.fb.no{display:block;background:#FDECEC;border-left:4px solid var(--red)}
+.fb.ok{display:block;background:#EAF6EE;border-left:4px solid var(--green)}
+.next{display:none}
+.win-done{display:none;text-align:center;padding:40px 20px;background:linear-gradient(135deg,#1B2A4A,#2c4470);color:var(--paper);border-radius:14px}
+.win-done.show{display:block}.win-done .big{font-size:1.5em;margin:8px 0}
+.badge{display:inline-block;background:var(--green);color:#fff;font-weight:700;padding:6px 16px;border-radius:20px;margin-top:6px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:#323232;color:#fff;padding:11px 18px;border-radius:8px;font-size:.9em;opacity:0;transition:.35s;z-index:99}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="hero"><span class="pill">PARCOURS PIX · MODULE 2</span><h1>🔍 Rechercher & évaluer l'information</h1>
+    <p>CRCN Domaine 1 — Information et données. Construis une bonne requête, évalue tes sources et recoupe l'information sur des interfaces réalistes.</p></div>
+
+  <div class="brief">
+    <h3>🎯 Ta mission</h3>
+    <p style="margin:0;font-size:.9em">Mener une recherche d'information rigoureuse, en 3 étapes : poser la bonne requête, trier les sources, puis vérifier en recoupant. Valide chaque étape pour débloquer la suivante.</p>
+    <ol>
+      <li><b>Étape 1 — Construire une bonne requête :</b> compose une requête efficace avec mots-clés précis et opérateurs.</li>
+      <li><b>Étape 2 — Évaluer les sources :</b> coche les résultats fiables, écarte les sources douteuses.</li>
+      <li><b>Étape 3 — Recouper l'information :</b> confirme une affirmation à l'aide de deux sources indépendantes qui concordent.</li>
+    </ol>
+  </div>
+
+  <div class="meta"><span id="lab">Étape 1 / 3 — Construire une requête</span><span id="sc">Réussies : 0 / 3</span></div>
+  <div class="bar"><div class="seg cur" id="s1"></div><div class="seg" id="s2"></div><div class="seg" id="s3"></div></div>
+
+  <!-- ===== ÉTAPE 1 : CONSTRUIRE UNE REQUÊTE (1.1) ===== -->
+  <section class="card at" data-n="1">
+    <h2>🔤 Étape 1 — Construire une bonne requête (1.1)</h2>
+    <div class="obj">🎯 Objectif : formuler une requête efficace avec des mots-clés précis et des opérateurs de recherche.</div>
+    <div class="scn"><b>Recherche demandée :</b> trouver les <b>horaires officiels de la mairie de Lyon</b>. Quelle requête saisir dans le moteur de recherche pour un résultat fiable et rapide ?</div>
+    <div class="svgwrap">
+      <svg viewBox="0 0 960 150" role="img" aria-label="Barre de recherche d'un moteur de recherche" font-family="Arial,Helvetica,system-ui,sans-serif">
+        <rect x="0" y="0" width="960" height="150" fill="#ffffff"/>
+        <text x="40" y="50" font-size="22" fill="#4a4a4a">Recherche</text>
+        <rect x="180" y="28" width="700" height="46" rx="23" fill="#fff" stroke="#dfe1e5"/>
+        <text id="qbar" x="206" y="57" font-size="15" fill="#9aa0a6">Saisis ou choisis ta requête ci-dessous…</text>
+        <circle cx="852" cy="51" r="9" fill="none" stroke="#4285f4" stroke-width="2"/><line x1="859" y1="58" x2="866" y2="65" stroke="#4285f4" stroke-width="2"/>
+        <text x="40" y="112" font-size="13" fill="#70757a">💡 Astuce : les "guillemets" cherchent une expression exacte, et site:lyon.fr limite au site officiel de la ville.</text>
+      </svg>
+    </div>
+    <div style="font-weight:700;margin:10px 0 4px">Choisis la requête la plus efficace :</div>
+    <div class="try" id="a1q">
+      <div class="opt" data-g="0" onclick="pickQ(this)">Bonjour, est-ce que vous pourriez me dire à quelle heure la mairie de Lyon est ouverte s'il vous plaît ?<span class="why">❌ Question vague en langage naturel : phrase polie, mots inutiles, pas d'opérateur. Le moteur n'a pas besoin de politesse, il lui faut des mots-clés.</span></div>
+      <div class="opt" data-g="0" onclick="pickQ(this)">mairie lyon<span class="why">❌ Trop large : on tombera sur tout et n'importe quoi (actualités, plan, contact…), pas forcément les horaires ni le site officiel.</span></div>
+      <div class="opt" data-g="1" onclick="pickQ(this)"><code>"horaires d'ouverture" mairie Lyon site:lyon.fr</code><span class="why">✅ Mots-clés précis + opérateurs : "guillemets" pour l'expression exacte et site:lyon.fr pour restreindre au site officiel de la ville. Résultat fiable et rapide.</span></div>
+      <div class="opt" data-g="0" onclick="pickQ(this)">horaire ouverture mairie lyon truc machin pas cher avis 2026<span class="why">❌ Mots parasites ajoutés au hasard : ils brouillent la recherche au lieu de la préciser.</span></div>
+    </div>
+    <div class="hint">💡 Une bonne requête = des mots-clés ciblés, pas une phrase en langage naturel. Les opérateurs ("…", site:) affinent encore le résultat.</div>
+    <div class="vbar"><button class="btn" onclick="validate(1)">Valider l'étape</button><div class="fb" id="fb1"></div><button class="btn green next" id="nx1" onclick="go(2)">Étape validée → Suivant</button></div>
+  </section>
+
+  <!-- ===== ÉTAPE 2 : ÉVALUER LES SOURCES (1.1) ===== -->
+  <section class="card at" data-n="2" style="display:none">
+    <h2>🧭 Étape 2 — Évaluer les sources (1.1)</h2>
+    <div class="obj">🎯 Objectif : distinguer les sources fiables des sources douteuses avant de cliquer.</div>
+    <div class="scn"><b>Situation :</b> tu cherches « <b>vaccination : recommandations officielles</b> ». Voici la page de résultats. <b>Coche les sources FIABLES</b> (auteur identifié, date récente, site officiel reconnu) et <b>laisse décochées</b> les sources douteuses.</div>
+    <div class="svgwrap">
+      <svg viewBox="0 0 960 560" role="img" aria-label="Page de résultats avec cases à cocher" font-family="Arial,Helvetica,system-ui,sans-serif">
+        <rect x="0" y="0" width="960" height="560" fill="#ffffff"/>
+        <text x="40" y="44" font-size="18" fill="#4a4a4a">Résultats — coche les sources fiables</text>
+        <line x1="0" y1="64" x2="960" y2="64" stroke="#ebebeb"/>
+        <!-- résultat 1 : fiable (.gouv.fr, auteur, date récente) -->
+        <g class="clk src" data-r="1" onclick="toggleSrc(this)">
+          <rect class="sbg" x="24" y="78" width="912" height="92" rx="8" fill="#fbfbfb" stroke="#e6e6e6"/>
+          <rect class="box" x="44" y="112" width="22" height="22" rx="4" fill="#fff" stroke="#9aa0a6" stroke-width="2"/>
+          <path class="tick" d="M48 123l5 5 9-11" fill="none" stroke="#1f8b4c" stroke-width="3" visibility="hidden"/>
+          <text x="86" y="104" font-size="12.5" fill="#137333">sante.gouv.fr</text>
+          <rect x="220" y="93" width="118" height="16" rx="8" fill="#e6f4ea"/><text x="228" y="105" font-size="11" fill="#137333">Site officiel · .gouv.fr</text>
+          <text x="86" y="130" font-size="17" fill="#1a0dab">Calendrier des vaccinations 2026 — Ministère de la Santé</text>
+          <text x="86" y="152" font-size="12.5" fill="#4d5156">Par la Direction générale de la santé · mis à jour le 12 mars 2026 · auteur et date identifiés.</text>
+        </g>
+        <!-- résultat 2 : fiable (.org reconnu, auteur) -->
+        <g class="clk src" data-r="1" onclick="toggleSrc(this)">
+          <rect class="sbg" x="24" y="178" width="912" height="92" rx="8" fill="#fbfbfb" stroke="#e6e6e6"/>
+          <rect class="box" x="44" y="212" width="22" height="22" rx="4" fill="#fff" stroke="#9aa0a6" stroke-width="2"/>
+          <path class="tick" d="M48 223l5 5 9-11" fill="none" stroke="#1f8b4c" stroke-width="3" visibility="hidden"/>
+          <text x="86" y="204" font-size="12.5" fill="#1a4fa0">who.int (OMS)</text>
+          <rect x="240" y="193" width="150" height="16" rx="8" fill="#eaf0fb"/><text x="248" y="205" font-size="11" fill="#1a4fa0">Organisation reconnue</text>
+          <text x="86" y="230" font-size="17" fill="#1a0dab">Recommandations vaccinales — Organisation mondiale de la santé</text>
+          <text x="86" y="252" font-size="12.5" fill="#4d5156">Publié par l'OMS · révisé en janvier 2026 · références et sources citées.</text>
+        </g>
+        <!-- résultat 3 : douteux (sponsorisé / pub déguisée) -->
+        <g class="clk src" data-r="0" onclick="toggleSrc(this)">
+          <rect class="sbg" x="24" y="278" width="912" height="84" rx="8" fill="#fbfbfb" stroke="#e6e6e6"/>
+          <rect class="box" x="44" y="308" width="22" height="22" rx="4" fill="#fff" stroke="#9aa0a6" stroke-width="2"/>
+          <path class="tick" d="M48 319l5 5 9-11" fill="none" stroke="#1f8b4c" stroke-width="3" visibility="hidden"/>
+          <rect x="86" y="290" width="62" height="16" rx="3" fill="#fff4d6"/><text x="93" y="302" font-size="11" fill="#8a6d00">Sponsorisé</text>
+          <text x="158" y="302" font-size="12.5" fill="#5f6368">boutique-bienetre-naturel.com</text>
+          <text x="86" y="330" font-size="17" fill="#1a0dab">Boostez votre immunité SANS vaccin — notre cure miracle à -50% !</text>
+          <text x="86" y="352" font-size="12.5" fill="#4d5156">Publicité déguisée : but commercial, aucun auteur ni source scientifique.</text>
+        </g>
+        <!-- résultat 4 : douteux (sensationnaliste, pas d'auteur/date, .xyz) -->
+        <g class="clk src" data-r="0" onclick="toggleSrc(this)">
+          <rect class="sbg" x="24" y="370" width="912" height="84" rx="8" fill="#fbfbfb" stroke="#e6e6e6"/>
+          <rect class="box" x="44" y="400" width="22" height="22" rx="4" fill="#fff" stroke="#9aa0a6" stroke-width="2"/>
+          <path class="tick" d="M48 411l5 5 9-11" fill="none" stroke="#1f8b4c" stroke-width="3" visibility="hidden"/>
+          <text x="86" y="394" font-size="12.5" fill="#5f6368">la-verite-cachee-actu.xyz</text>
+          <text x="86" y="422" font-size="17" fill="#1a0dab">SCANDALE : ce que les médecins ne veulent PAS que vous sachiez !!!</text>
+          <text x="86" y="444" font-size="12.5" fill="#4d5156">Titre sensationnaliste · aucun auteur, aucune date · domaine .xyz inconnu.</text>
+        </g>
+        <!-- résultat 5 : douteux (blog anonyme, opinion) -->
+        <g class="clk src" data-r="0" onclick="toggleSrc(this)">
+          <rect class="sbg" x="24" y="462" width="912" height="84" rx="8" fill="#fbfbfb" stroke="#e6e6e6"/>
+          <rect class="box" x="44" y="492" width="22" height="22" rx="4" fill="#fff" stroke="#9aa0a6" stroke-width="2"/>
+          <path class="tick" d="M48 503l5 5 9-11" fill="none" stroke="#1f8b4c" stroke-width="3" visibility="hidden"/>
+          <text x="86" y="486" font-size="12.5" fill="#5f6368">mon-blog-perso.over-blog.net</text>
+          <text x="86" y="514" font-size="17" fill="#1a0dab">Mon avis perso sur les vaccins (par « Kévin76 »)</text>
+          <text x="86" y="536" font-size="12.5" fill="#4d5156">Opinion personnelle d'un anonyme · pas d'expertise, pas de source citée.</text>
+        </g>
+      </svg>
+    </div>
+    <div class="hint">💡 Fiable = qui ? (auteur/organisme identifié) · quand ? (date récente) · où ? (site officiel reconnu : .gouv.fr, organisme connu). Méfie-toi du « sponsorisé », du sensationnalisme et des domaines inconnus.</div>
+    <div class="vbar"><button class="btn" onclick="validate(2)">Valider l'étape</button><div class="fb" id="fb2"></div><button class="btn green next" id="nx2" onclick="go(3)">Étape validée → Suivant</button></div>
+  </section>
+
+  <!-- ===== ÉTAPE 3 : RECOUPER L'INFORMATION (1.1) ===== -->
+  <section class="card at" data-n="3" style="display:none">
+    <h2>🔗 Étape 3 — Recouper l'information (1.1)</h2>
+    <div class="obj">🎯 Objectif : confirmer une information en croisant deux sources indépendantes qui concordent.</div>
+    <div class="scn"><b>Affirmation à vérifier :</b> « La nouvelle ligne de tramway T10 de la métropole ouvre le <b>3 septembre 2026</b>. » Coche <b>deux sources INDÉPENDANTES</b> qui confirment cette date pour valider l'information.</div>
+    <div class="svgwrap">
+      <svg viewBox="0 0 960 470" role="img" aria-label="Liste de sources à recouper" font-family="Arial,Helvetica,system-ui,sans-serif">
+        <rect x="0" y="0" width="960" height="470" fill="#ffffff"/>
+        <text x="40" y="40" font-size="18" fill="#4a4a4a">Sources trouvées — recoupe l'information</text>
+        <line x1="0" y1="56" x2="960" y2="56" stroke="#ebebeb"/>
+        <!-- source A : officielle, indépendante, concorde -->
+        <g class="clk xref" data-ok="1" data-fam="A" onclick="toggleRef(this)">
+          <rect class="rbg" x="24" y="70" width="912" height="78" rx="8" fill="#fbfbfb" stroke="#e6e6e6"/>
+          <rect class="box" x="44" y="98" width="22" height="22" rx="4" fill="#fff" stroke="#9aa0a6" stroke-width="2"/>
+          <path class="tick" d="M48 109l5 5 9-11" fill="none" stroke="#1f8b4c" stroke-width="3" visibility="hidden"/>
+          <text x="86" y="92" font-size="12.5" fill="#137333">metropole-officiel.gouv.fr · communiqué</text>
+          <text x="86" y="116" font-size="16" fill="#1a0dab">Tramway T10 : mise en service le 3 septembre 2026</text>
+          <text x="86" y="136" font-size="12.5" fill="#4d5156">Source officielle de la métropole · date : 3 septembre 2026. ✔ concorde</text>
+        </g>
+        <!-- source B : presse indépendante, concorde -->
+        <g class="clk xref" data-ok="1" data-fam="B" onclick="toggleRef(this)">
+          <rect class="rbg" x="24" y="156" width="912" height="78" rx="8" fill="#fbfbfb" stroke="#e6e6e6"/>
+          <rect class="box" x="44" y="184" width="22" height="22" rx="4" fill="#fff" stroke="#9aa0a6" stroke-width="2"/>
+          <path class="tick" d="M48 195l5 5 9-11" fill="none" stroke="#1f8b4c" stroke-width="3" visibility="hidden"/>
+          <text x="86" y="178" font-size="12.5" fill="#1a4fa0">le-quotidien-regional.fr · rédaction transports</text>
+          <text x="86" y="202" font-size="16" fill="#1a0dab">Le T10 entrera en service le 3 septembre 2026, confirme la métropole</text>
+          <text x="86" y="222" font-size="12.5" fill="#4d5156">Journal indépendant, enquête propre · date : 3 septembre 2026. ✔ concorde</text>
+        </g>
+        <!-- source C : copie/agrégateur de A — PAS indépendante -->
+        <g class="clk xref" data-ok="0" data-fam="A" onclick="toggleRef(this)">
+          <rect class="rbg" x="24" y="242" width="912" height="78" rx="8" fill="#fbfbfb" stroke="#e6e6e6"/>
+          <rect class="box" x="44" y="270" width="22" height="22" rx="4" fill="#fff" stroke="#9aa0a6" stroke-width="2"/>
+          <path class="tick" d="M48 281l5 5 9-11" fill="none" stroke="#1f8b4c" stroke-width="3" visibility="hidden"/>
+          <text x="86" y="264" font-size="12.5" fill="#8a6d00">infos-en-vrac.net · agrégateur</text>
+          <text x="86" y="288" font-size="16" fill="#1a0dab">Tramway T10 : mise en service le 3 septembre 2026</text>
+          <text x="86" y="308" font-size="12.5" fill="#4d5156">⚠ Copie mot pour mot du communiqué officiel (même source). Ce n'est PAS un recoupement.</text>
+        </g>
+        <!-- source D : contradictoire / non fiable -->
+        <g class="clk xref" data-ok="0" data-fam="D" onclick="toggleRef(this)">
+          <rect class="rbg" x="24" y="328" width="912" height="78" rx="8" fill="#fbfbfb" stroke="#e6e6e6"/>
+          <rect class="box" x="44" y="356" width="22" height="22" rx="4" fill="#fff" stroke="#9aa0a6" stroke-width="2"/>
+          <path class="tick" d="M48 367l5 5 9-11" fill="none" stroke="#1f8b4c" stroke-width="3" visibility="hidden"/>
+          <text x="86" y="350" font-size="12.5" fill="#5f6368">rumeurs-transports.xyz · forum anonyme</text>
+          <text x="86" y="374" font-size="16" fill="#1a0dab">« Le T10 ouvrirait plutôt en octobre 2026 » (ouï-dire)</text>
+          <text x="86" y="394" font-size="12.5" fill="#4d5156">⚠ Date différente, source anonyme non vérifiée. ✘ ne concorde pas.</text>
+        </g>
+        <text x="40" y="440" font-size="12.5" fill="#70757a">Indépendantes = qui n'ont pas la même origine (l'une ne recopie pas l'autre).</text>
+      </svg>
+    </div>
+    <div class="hint">💡 Une seule source ne suffit pas. Deux sources qui se copient (même origine) non plus. Il faut deux sources d'origines différentes qui aboutissent à la même information.</div>
+    <div class="vbar"><button class="btn" onclick="validate(3)">Valider l'étape</button><div class="fb" id="fb3"></div><button class="btn green next" id="nx3" onclick="finish()">Terminer le module</button></div>
+  </section>
+
+  <div class="win-done" id="wdone">
+    <div style="font-size:42px">🏆</div><div class="big">Information maîtrisée !</div>
+    <p>Tu sais désormais construire une requête efficace, évaluer la fiabilité des sources et recouper une information avant de la croire.</p>
+    <div class="badge">✅ Module 2 validé — CRCN Domaine 1</div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+function $(id){return document.getElementById(id);}
+var tT;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tT);tT=setTimeout(function(){t.classList.remove('show');},2400);}
+var passed={1:false,2:false,3:false};
+var LABS={1:'Construire une requête',2:'Évaluer les sources',3:'Recouper l\'information'};
+var a1={pick:null};
+
+/* É1 — choix de la requête */
+function pickQ(el){var g=el.parentNode;g.querySelectorAll('.opt').forEach(function(o){o.classList.remove('good','bad');});
+  el.classList.add(el.dataset.g==='1'?'good':'bad');a1.pick=el.dataset.g;
+  var q=el.querySelector('code')?el.querySelector('code').textContent:el.childNodes[0].textContent;
+  var bar=$('qbar');bar.textContent=q.length>62?q.slice(0,60)+'…':q;bar.setAttribute('fill','#202124');}
+
+/* É2 — cocher les sources fiables */
+function toggleSrc(g){var on=g.dataset.on==='1';g.dataset.on=on?'0':'1';
+  g.querySelector('.tick').setAttribute('visibility',on?'hidden':'visible');
+  g.querySelector('.box').setAttribute('stroke',on?'#9aa0a6':'#1f8b4c');
+  g.querySelector('.sbg').setAttribute('fill',on?'#fbfbfb':'#eef8f1');
+  g.querySelector('.sbg').setAttribute('stroke',on?'#e6e6e6':'#bfe3cb');}
+
+/* É3 — recouper deux sources indépendantes */
+function toggleRef(g){var on=g.dataset.on==='1';g.dataset.on=on?'0':'1';
+  g.querySelector('.tick').setAttribute('visibility',on?'hidden':'visible');
+  g.querySelector('.box').setAttribute('stroke',on?'#9aa0a6':'#1f8b4c');
+  g.querySelector('.rbg').setAttribute('fill',on?'#fbfbfb':'#eef8f1');
+  g.querySelector('.rbg').setAttribute('stroke',on?'#e6e6e6':'#bfe3cb');}
+
+function validate(n){var fb=$('fb'+n),ok=false,msg='';
+  if(n===1){
+    if(a1.pick==='1')ok=true;
+    else if(a1.pick==='0')msg='Cette requête n\'est pas assez efficace : évite la phrase en langage naturel et les mots parasites. Choisis des mots-clés précis avec des opérateurs ("…", site:).';
+    else msg='Choisis d\'abord une requête.';
+  }
+  else if(n===2){
+    var srcs=document.querySelectorAll('.src');var missFiable=0,gardeDouteux=0;
+    srcs.forEach(function(s){var on=s.dataset.on==='1';if(s.dataset.r==='1'&&!on)missFiable++;if(s.dataset.r==='0'&&on)gardeDouteux++;});
+    if(missFiable===0&&gardeDouteux===0)ok=true;
+    else if(gardeDouteux>0&&missFiable>0)msg='Tu as coché '+gardeDouteux+' source(s) douteuse(s) et oublié '+missFiable+' source(s) fiable(s). Garde uniquement les sources avec auteur/organisme identifié, date récente et site officiel reconnu.';
+    else if(gardeDouteux>0)msg='Tu as coché '+gardeDouteux+' source(s) douteuse(s) (sponsorisé, sensationnaliste, .xyz inconnu, blog anonyme). Décoche-les.';
+    else msg='Il manque '+missFiable+' source(s) fiable(s) à cocher (sante.gouv.fr et l\'OMS).';
+  }
+  else if(n===3){
+    var refs=document.querySelectorAll('.xref');var sel=[];refs.forEach(function(r){if(r.dataset.on==='1')sel.push(r);});
+    var goodSel=sel.filter(function(r){return r.dataset.ok==='1';}).length;
+    var badSel=sel.filter(function(r){return r.dataset.ok==='0';}).length;
+    var fams={};sel.forEach(function(r){fams[r.dataset.fam]=true;});var nbFam=Object.keys(fams).length;
+    if(sel.length===2&&goodSel===2&&badSel===0&&nbFam===2)ok=true;
+    else if(badSel>0)msg='Une des sources cochées ne convient pas : c\'est soit une simple copie du communiqué officiel (même origine, pas un recoupement), soit une rumeur anonyme qui ne concorde pas.';
+    else if(sel.length<2)msg='Une seule source ne suffit pas : coche DEUX sources indépendantes qui concordent.';
+    else if(sel.length>2)msg='Coche exactement DEUX sources : les deux d\'origines différentes qui annoncent la même date.';
+    else msg='Choisis deux sources d\'origines DIFFÉRENTES (pas une source et sa copie) qui donnent la même date.';
+  }
+  if(ok){fb.className='fb ok';fb.innerHTML='✅ Étape réussie.';passed[n]=true;$('nx'+n).style.display='inline-block';$('s'+n).className='seg done';}
+  else{fb.className='fb no';fb.innerHTML='❌ '+msg;}
+  $('sc').textContent='Réussies : '+Object.values(passed).filter(Boolean).length+' / 3';}
+
+function go(n){document.querySelectorAll('.at').forEach(function(s){s.style.display='none';});
+  document.querySelector('.at[data-n="'+n+'"]').style.display='block';
+  for(var i=1;i<=3;i++){$('s'+i).className='seg'+(passed[i]?' done':(i===n?' cur':''));}
+  $('lab').textContent='Étape '+n+' / 3 — '+LABS[n];window.scrollTo(0,0);}
+
+function finish(){if(!Object.values(passed).every(Boolean)){toast('Termine les 3 étapes');return;}
+  document.querySelectorAll('.at').forEach(function(s){s.style.display='none';});
+  document.querySelector('.bar').style.display='none';document.querySelector('.meta').style.display='none';
+  $('wdone').classList.add('show');window.scrollTo(0,0);
+  try{window.parent.postMessage('show_complete','*');window.parent.postMessage('show_complete','*');}catch(e){}}
+
+try{window.parent.postMessage('hide_complete','*');window.postMessage('hide_complete','*');}catch(e){}
+</script>
+</body></html>
