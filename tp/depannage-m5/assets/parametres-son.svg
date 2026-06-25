@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="'Segoe UI Variable','Segoe UI',system-ui,sans-serif">
+  <defs><filter id="sh" x="-5%" y="-5%" width="110%" height="115%"><feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#000" flood-opacity="0.18"/></filter></defs>
+  <rect x="0" y="0" width="960" height="600" fill="#eef0f3"/>
+  <rect x="14" y="14" width="932" height="572" rx="10" fill="#f3f3f3" stroke="#dcdcdc" filter="url(#sh)"/>
+  <!-- title bar -->
+  <text x="30" y="38" font-size="13" fill="#1b1b1b">Paramètres</text>
+  <text x="864" y="38" font-size="15" fill="#5f5f5f">&#8211;</text><text x="894" y="38" font-size="13" fill="#5f5f5f">&#9633;</text><text x="924" y="38" font-size="14" fill="#5f5f5f">&#10005;</text>
+  <!-- left nav -->
+  <rect x="14" y="52" width="244" height="534" fill="#f3f3f3"/>
+  <circle cx="44" cy="84" r="16" fill="#7b1fa2"/><text x="44" y="89" font-size="13" fill="#fff" text-anchor="middle">T</text>
+  <text x="70" y="80" font-size="13" fill="#1b1b1b">Utilisateur</text><text x="70" y="95" font-size="10.5" fill="#5f5f5f">moi@formip.com</text>
+  <rect x="30" y="118" width="200" height="30" rx="6" fill="#ececec"/><text x="48" y="138" font-size="12" fill="#5f5f5f">Rechercher un paramètre</text>
+  <!-- nav items -->
+  <rect x="22" y="162" width="228" height="36" rx="6" fill="#e4ecf7"/><rect x="22" y="168" width="3" height="24" rx="1.5" fill="#005fb8"/>
+  <text x="44" y="185" font-size="13" fill="#005fb8" font-weight="bold">Système</text>
+  <g font-size="13" fill="#3b3b3b"><text x="44" y="227">Bluetooth et appareils</text><text x="44" y="267">Réseau et Internet</text><text x="44" y="307">Personnalisation</text><text x="44" y="347">Applications</text><text x="44" y="387">Comptes</text><text x="44" y="427">Heure et langue</text></g>
+  <!-- main -->
+  <text x="290" y="86" font-size="22" fill="#1b1b1b">Son</text>
+  <text x="290" y="118" font-size="13" fill="#5f5f5f">Sortie</text>
+  <!-- volume card -->
+  <rect x="290" y="132" width="630" height="60" rx="8" fill="#fbfbfb" stroke="#e6e6e6"/>
+  <text x="312" y="158" font-size="13" fill="#1b1b1b">Volume</text>
+  <line x1="430" y1="162" x2="860" y2="162" stroke="#cfd4da" stroke-width="4" stroke-linecap="round"/>
+  <line x1="430" y1="162" x2="700" y2="162" stroke="#005fb8" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="700" cy="162" r="8" fill="#005fb8"/><text x="892" y="167" font-size="12" fill="#1b1b1b" text-anchor="end">62</text>
+  <!-- choose output -->
+  <text x="290" y="222" font-size="13" fill="#1b1b1b">Choisir l'emplacement de lecture du son</text>
+  <!-- device options (radios) -->
+  <rect x="290" y="236" width="630" height="46" rx="8" fill="#fbfbfb" stroke="#e6e6e6"/>
+  <circle cx="316" cy="259" r="9" fill="none" stroke="#9aa0a6" stroke-width="2"/>
+  <text x="338" y="264" font-size="13" fill="#1b1b1b">Haut-parleurs (Realtek Audio)</text><text x="892" y="264" font-size="11" fill="#a33" text-anchor="end">aucun son</text>
+  <rect x="290" y="286" width="630" height="46" rx="8" fill="#e9f1fc" stroke="#9bc2ef"/>
+  <circle cx="316" cy="309" r="9" fill="none" stroke="#005fb8" stroke-width="2"/><circle cx="316" cy="309" r="4.5" fill="#005fb8"/>
+  <text x="338" y="314" font-size="13" fill="#1b1b1b" font-weight="bold">Casque USB</text><text x="892" y="314" font-size="11" fill="#1e6b34" text-anchor="end">connecté</text>
+  <rect x="290" y="336" width="630" height="46" rx="8" fill="#fbfbfb" stroke="#e6e6e6"/>
+  <circle cx="316" cy="359" r="9" fill="none" stroke="#9aa0a6" stroke-width="2"/>
+  <text x="338" y="364" font-size="13" fill="#1b1b1b">Écran HDMI</text>
+  <!-- test button -->
+  <rect x="290" y="400" width="140" height="34" rx="6" fill="#fbfbfb" stroke="#cfcfcf"/><text x="360" y="422" font-size="12.5" fill="#1b1b1b" text-anchor="middle">Tester le son</text>
+</svg>

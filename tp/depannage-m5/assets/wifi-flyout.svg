@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 560" font-family="'Segoe UI Variable','Segoe UI',system-ui,sans-serif">
+  <defs><filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#000" flood-opacity="0.28"/></filter></defs>
+  <rect x="0" y="0" width="440" height="560" fill="#20364d"/>
+  <!-- taskbar -->
+  <rect x="0" y="520" width="440" height="40" fill="#1f2533"/>
+  <g fill="#cfd6e4"><rect x="372" y="533" width="14" height="14" rx="1" fill="none" stroke="#cfd6e4" stroke-width="1.4"/></g>
+  <text x="404" y="535" font-size="11" fill="#cfd6e4" text-anchor="middle">14:21</text>
+  <text x="404" y="548" font-size="9" fill="#aab2c2" text-anchor="middle">04/09</text>
+  <!-- panel -->
+  <rect x="96" y="26" width="320" height="476" rx="12" fill="#f3f3f3" stroke="#d0d0d0" filter="url(#sh)"/>
+  <text x="120" y="58" font-size="16" fill="#1b1b1b">Wi-Fi</text>
+  <!-- header toggle row -->
+  <rect x="120" y="74" width="272" height="44" rx="8" fill="#eef1f5"/>
+  <path d="M132 100a14 14 0 0 1 20 0" fill="none" stroke="#005fb8" stroke-width="2"/><path d="M137 104a7 7 0 0 1 10 0" fill="none" stroke="#005fb8" stroke-width="2"/><circle cx="142" cy="108" r="1.6" fill="#005fb8"/>
+  <text x="162" y="101" font-size="13" fill="#1b1b1b">Wi-Fi</text>
+  <text x="162" y="113" font-size="10" fill="#5f5f5f">Activé</text>
+  <rect x="352" y="90" width="34" height="18" rx="9" fill="#005fb8"/><circle cx="377" cy="99" r="7" fill="#fff"/>
+  <!-- networks list -->
+  <!-- selected: Formip-Pro -->
+  <rect x="120" y="126" width="272" height="92" rx="8" fill="#dbeafe"/>
+  <path d="M134 150a14 14 0 0 1 20 0" fill="none" stroke="#1b1b1b" stroke-width="2"/><path d="M139 154a7 7 0 0 1 10 0" fill="none" stroke="#1b1b1b" stroke-width="2"/><circle cx="144" cy="158" r="1.6" fill="#1b1b1b"/>
+  <text x="166" y="150" font-size="13" fill="#1b1b1b" font-weight="bold">Formip-Pro</text>
+  <text x="166" y="164" font-size="10.5" fill="#444">Sécurisé</text>
+  <rect x="300" y="180" width="78" height="26" rx="5" fill="#005fb8"/><text x="339" y="197" font-size="11.5" fill="#fff" text-anchor="middle">Se connecter</text>
+  <rect x="134" y="184" width="14" height="14" rx="3" fill="#fff" stroke="#9aa0a6"/><text x="156" y="195" font-size="10.5" fill="#444">Se connecter automatiquement</text>
+  <!-- other networks -->
+  <g>
+    <path d="M134 246a14 14 0 0 1 20 0" fill="none" stroke="#3b3b3b" stroke-width="2"/><path d="M139 250a7 7 0 0 1 10 0" fill="none" stroke="#3b3b3b" stroke-width="2"/>
+    <text x="166" y="250" font-size="13" fill="#1b1b1b">Bbox-A3F2</text><text x="166" y="263" font-size="10" fill="#5f5f5f">Sécurisé</text>
+    <line x1="120" y1="278" x2="392" y2="278" stroke="#e3e3e3"/>
+    <path d="M134 296a14 14 0 0 1 20 0" fill="none" stroke="#3b3b3b" stroke-width="2"/><path d="M139 300a7 7 0 0 1 10 0" fill="none" stroke="#3b3b3b" stroke-width="2"/>
+    <text x="166" y="300" font-size="13" fill="#1b1b1b">FreeWifi_secure</text><text x="166" y="313" font-size="10" fill="#5f5f5f">Sécurisé</text>
+    <line x1="120" y1="328" x2="392" y2="328" stroke="#e3e3e3"/>
+    <path d="M134 346a14 14 0 0 1 20 0" fill="none" stroke="#3b3b3b" stroke-width="2"/><path d="M139 350a7 7 0 0 1 10 0" fill="none" stroke="#3b3b3b" stroke-width="2"/>
+    <text x="166" y="350" font-size="13" fill="#1b1b1b">Livebox-9C</text><text x="166" y="363" font-size="10" fill="#5f5f5f">Sécurisé</text>
+  </g>
+  <line x1="120" y1="392" x2="392" y2="392" stroke="#e3e3e3"/>
+  <!-- quick toggles -->
+  <rect x="120" y="408" width="84" height="56" rx="8" fill="#005fb8"/><path d="M138 444a14 14 0 0 1 20 0" fill="none" stroke="#fff" stroke-width="2"/><path d="M143 448a7 7 0 0 1 10 0" fill="none" stroke="#fff" stroke-width="2"/><text x="162" y="458" font-size="10.5" fill="#fff" text-anchor="middle">Wi-Fi</text>
+  <rect x="214" y="408" width="84" height="56" rx="8" fill="#e7eaef"/><text x="256" y="441" font-size="14" fill="#3b3b3b" text-anchor="middle">❋</text><text x="256" y="458" font-size="10.5" fill="#3b3b3b" text-anchor="middle">Bluetooth</text>
+  <rect x="308" y="408" width="84" height="56" rx="8" fill="#e7eaef"/><text x="350" y="441" font-size="13" fill="#3b3b3b" text-anchor="middle">✈</text><text x="350" y="458" font-size="10.5" fill="#3b3b3b" text-anchor="middle">Mode Avion</text>
+  <text x="120" y="488" font-size="11" fill="#005fb8">Paramètres réseau et Internet</text>
+</svg>

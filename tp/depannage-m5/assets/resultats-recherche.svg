@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="Arial,Helvetica,system-ui,sans-serif">
+  <rect x="0" y="0" width="960" height="600" fill="#ffffff"/>
+  <text x="40" y="44" font-size="20" fill="#4a4a4a">Recherche</text>
+  <rect x="180" y="24" width="640" height="42" rx="21" fill="#fff" stroke="#dfe1e5"/>
+  <text x="204" y="50" font-size="14.5" fill="#202124">erreur 0x80070057 installation imprimante Windows 11</text>
+  <circle cx="792" cy="45" r="8" fill="none" stroke="#4285f4" stroke-width="2"/><line x1="798" y1="51" x2="804" y2="57" stroke="#4285f4" stroke-width="2"/>
+  <line x1="0" y1="84" x2="960" y2="84" stroke="#ebebeb"/>
+  <g font-size="13" fill="#5f6368"><text x="40" y="106">Tous</text><text x="100" y="106">Actualités</text><text x="180" y="106">Images</text><text x="255" y="106">Vidéos</text></g>
+  <rect x="40" y="100" width="34" height="3" fill="#1a73e8"/>
+  <text x="40" y="132" font-size="12.5" fill="#70757a">Environ 248 000 résultats (0,42 seconde)</text>
+
+  <!-- result 1 : officiel -->
+  <text x="40" y="166" font-size="12.5" fill="#202124">support.editeur-officiel.fr</text>
+  <rect x="250" y="156" width="130" height="16" rx="8" fill="#e6f4ea"/><text x="258" y="168" font-size="10.5" fill="#137333">Documentation officielle</text>
+  <text x="40" y="190" font-size="18" fill="#1a0dab">Corriger l'erreur 0x80070057 lors de l'installation d'une imprimante</text>
+  <text x="40" y="212" font-size="13" fill="#4d5156">Procédure officielle : exécuter l'utilitaire de résolution des problèmes</text>
+  <text x="40" y="230" font-size="13" fill="#4d5156">d'imprimante, mettre à jour le pilote et redémarrer le spouleur d'impression.</text>
+
+  <!-- result 2 : forum -->
+  <text x="40" y="270" font-size="12.5" fill="#202124">forum-communaute-windows.fr › impression</text>
+  <rect x="320" y="260" width="120" height="16" rx="8" fill="#eaf0fb"/><text x="328" y="272" font-size="10.5" fill="#1a4fa0">Forum communautaire</text>
+  <text x="40" y="294" font-size="18" fill="#1a0dab">[Résolu] Erreur 0x80070057 imprimante sous Windows 11</text>
+  <text x="40" y="316" font-size="13" fill="#4d5156">5 réponses · « Chez moi, supprimer puis réinstaller le pilote a réglé le souci.</text>
+  <text x="40" y="334" font-size="13" fill="#4d5156">Pensez à vérifier les mises à jour Windows. » (réponse vérifiée par la communauté)</text>
+
+  <!-- result 3 : blog -->
+  <text x="40" y="374" font-size="12.5" fill="#202124">blog-astuces-tech.fr</text>
+  <text x="40" y="398" font-size="18" fill="#1a0dab">Windows 11 : que faire face à l'erreur 0x80070057 ?</text>
+  <text x="40" y="420" font-size="13" fill="#4d5156">Tutoriel pas à pas avec captures d'écran pour diagnostiquer et corriger.</text>
+
+  <!-- result 4 : piège -->
+  <text x="40" y="460" font-size="12.5" fill="#202124">telechargement-gratuit-rapide.xyz</text>
+  <text x="40" y="484" font-size="18" fill="#1a0dab">Télécharger FixAll.exe — réparez TOUTES les erreurs en 1 clic !</text>
+  <text x="40" y="506" font-size="13" fill="#4d5156">⚠ « Logiciel miracle » d'origine inconnue, publicités agressives, .exe non signé.</text>
+</svg>

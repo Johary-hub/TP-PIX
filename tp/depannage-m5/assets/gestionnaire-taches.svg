@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="'Segoe UI Variable','Segoe UI',system-ui,sans-serif">
+  <defs>
+    <filter id="sh" x="-5%" y="-5%" width="110%" height="115%"><feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#000" flood-opacity="0.18"/></filter>
+  </defs>
+  <rect x="0" y="0" width="960" height="600" fill="#eef0f3"/>
+  <!-- window -->
+  <rect x="14" y="14" width="932" height="572" rx="10" fill="#f3f3f3" stroke="#dcdcdc" filter="url(#sh)"/>
+  <!-- title bar -->
+  <rect x="22" y="22" width="20" height="20" rx="3" fill="#3a6ea5"/>
+  <rect x="25" y="27" width="14" height="2.4" fill="#fff"/><rect x="25" y="31" width="14" height="2.4" fill="#fff"/><rect x="25" y="35" width="9" height="2.4" fill="#fff"/>
+  <text x="50" y="38" font-size="13" fill="#1b1b1b">Gestionnaire des tâches</text>
+  <text x="864" y="38" font-size="15" fill="#5f5f5f">&#8211;</text>
+  <text x="894" y="38" font-size="13" fill="#5f5f5f">&#9633;</text>
+  <text x="924" y="38" font-size="14" fill="#5f5f5f">&#10005;</text>
+  <!-- left nav rail -->
+  <rect x="14" y="52" width="56" height="534" fill="#f3f3f3"/>
+  <rect x="22" y="64" width="22" height="2.6" fill="#444"/><rect x="22" y="69" width="22" height="2.6" fill="#444"/><rect x="22" y="74" width="22" height="2.6" fill="#444"/>
+  <!-- Processus (selected) -->
+  <rect x="18" y="104" width="48" height="40" rx="6" fill="#eaeaea"/><rect x="18" y="110" width="3" height="28" rx="1.5" fill="#005fb8"/>
+  <rect x="32" y="116" width="16" height="16" rx="2" fill="none" stroke="#005fb8" stroke-width="2"/><rect x="35" y="119" width="10" height="3" fill="#005fb8"/>
+  <!-- other nav icons -->
+  <g stroke="#5f5f5f" stroke-width="2" fill="none">
+    <polyline points="30,168 36,160 42,170 48,158" /> 
+    <rect x="32" y="206" width="16" height="14" rx="2"/>
+    <circle cx="40" cy="262" r="8"/>
+    <rect x="32" y="304" width="16" height="16" rx="2"/><line x1="32" y1="310" x2="48" y2="310"/>
+    <circle cx="40" cy="358" r="5"/><path d="M32 372a8 8 0 0 1 16 0"/>
+    <circle cx="40" cy="412" r="8"/><line x1="40" y1="408" x2="40" y2="416"/>
+  </g>
+  <!-- content header -->
+  <text x="84" y="84" font-size="20" fill="#1b1b1b">Processus</text>
+  <!-- buttons -->
+  <rect x="610" y="64" width="216" height="30" rx="6" fill="#fbfbfb" stroke="#e2e2e2"/>
+  <text x="624" y="84" font-size="12.5" fill="#1b1b1b">&#43;  Exécuter une nouvelle tâche</text>
+  <rect x="838" y="64" width="100" height="30" rx="6" fill="#005fb8"/>
+  <text x="888" y="84" font-size="12.5" fill="#fff" text-anchor="middle">Fin de tâche</text>
+  <!-- column headers -->
+  <line x1="78" y1="106" x2="938" y2="106" stroke="#e6e6e6"/>
+  <text x="100" y="128" font-size="12" fill="#5f5f5f">Nom</text>
+  <text x="438" y="128" font-size="12" fill="#5f5f5f">État</text>
+  <rect x="556" y="110" width="120" height="32" rx="4" fill="#e7f3ea"/>
+  <text x="566" y="125" font-size="13" fill="#1e6b34" font-weight="bold">13%</text><text x="566" y="137" font-size="10" fill="#1e6b34">Processeur</text>
+  <rect x="684" y="110" width="120" height="32" rx="4" fill="#fceede"/>
+  <text x="694" y="125" font-size="13" fill="#8a4b00" font-weight="bold">54%</text><text x="694" y="137" font-size="10" fill="#8a4b00">Mémoire</text>
+  <rect x="812" y="110" width="120" height="32" rx="4" fill="#eaf1fb"/>
+  <text x="822" y="125" font-size="13" fill="#185fa5" font-weight="bold">2%</text><text x="822" y="137" font-size="10" fill="#185fa5">Disque</text>
+  <line x1="78" y1="146" x2="938" y2="146" stroke="#e6e6e6"/>
+  <!-- rows -->
+  <!-- row1 selected: Tableur Pro - Ne répond pas -->
+  <rect x="78" y="148" width="860" height="40" fill="#eaf3fb"/><rect x="78" y="148" width="3" height="40" fill="#005fb8"/>
+  <rect x="98" y="160" width="18" height="18" rx="4" fill="#1f8b4c"/><text x="107" y="173" font-size="11" fill="#fff" text-anchor="middle">T</text>
+  <text x="126" y="173" font-size="13" fill="#1b1b1b">Tableur Pro</text>
+  <text x="438" y="173" font-size="12.5" fill="#c42b1c">Ne répond pas</text>
+  <text x="616" y="173" font-size="12.5" fill="#1b1b1b" text-anchor="middle">0%</text>
+  <text x="744" y="173" font-size="12.5" fill="#1b1b1b" text-anchor="middle">320 Mo</text>
+  <text x="872" y="173" font-size="12.5" fill="#1b1b1b" text-anchor="middle">0 Mo/s</text>
+  <!-- row2 -->
+  <rect x="556" y="190" width="120" height="36" fill="#f2faf4"/>
+  <rect x="98" y="200" width="18" height="18" rx="4" fill="#2a6fdb"/><text x="107" y="213" font-size="11" fill="#fff" text-anchor="middle">N</text>
+  <text x="126" y="213" font-size="13" fill="#1b1b1b">Navigateur web</text>
+  <text x="616" y="213" font-size="12.5" fill="#1b1b1b" text-anchor="middle">4,2%</text>
+  <text x="744" y="213" font-size="12.5" fill="#1b1b1b" text-anchor="middle">820 Mo</text>
+  <text x="872" y="213" font-size="12.5" fill="#1b1b1b" text-anchor="middle">0,1 Mo/s</text>
+  <line x1="78" y1="190" x2="938" y2="190" stroke="#f0f0f0"/>
+  <!-- row3 -->
+  <rect x="98" y="238" width="18" height="18" rx="4" fill="#e8b400"/><text x="107" y="251" font-size="11" fill="#fff" text-anchor="middle">E</text>
+  <text x="126" y="251" font-size="13" fill="#1b1b1b">Explorateur de fichiers</text>
+  <text x="616" y="251" font-size="12.5" fill="#1b1b1b" text-anchor="middle">1,1%</text>
+  <text x="744" y="251" font-size="12.5" fill="#1b1b1b" text-anchor="middle">110 Mo</text>
+  <text x="872" y="251" font-size="12.5" fill="#1b1b1b" text-anchor="middle">0 Mo/s</text>
+  <line x1="78" y1="228" x2="938" y2="228" stroke="#f0f0f0"/>
+  <!-- row4 -->
+  <rect x="684" y="266" width="120" height="36" fill="#fdf3e6"/>
+  <rect x="98" y="276" width="18" height="18" rx="4" fill="#c4332b"/><text x="107" y="289" font-size="11" fill="#fff" text-anchor="middle">P</text>
+  <text x="126" y="289" font-size="13" fill="#1b1b1b">Lecteur PDF</text>
+  <text x="616" y="289" font-size="12.5" fill="#1b1b1b" text-anchor="middle">0,3%</text>
+  <text x="744" y="289" font-size="12.5" fill="#1b1b1b" text-anchor="middle">95 Mo</text>
+  <text x="872" y="289" font-size="12.5" fill="#1b1b1b" text-anchor="middle">0 Mo/s</text>
+  <line x1="78" y1="266" x2="938" y2="266" stroke="#f0f0f0"/>
+  <!-- row5 -->
+  <rect x="98" y="314" width="18" height="18" rx="4" fill="#6b6f76"/><circle cx="107" cy="323" r="4" fill="none" stroke="#fff" stroke-width="1.6"/>
+  <text x="126" y="327" font-size="13" fill="#1b1b1b">Service système Windows</text>
+  <text x="616" y="327" font-size="12.5" fill="#1b1b1b" text-anchor="middle">0%</text>
+  <text x="744" y="327" font-size="12.5" fill="#1b1b1b" text-anchor="middle">40 Mo</text>
+  <text x="872" y="327" font-size="12.5" fill="#1b1b1b" text-anchor="middle">0 Mo/s</text>
+  <line x1="78" y1="304" x2="938" y2="304" stroke="#f0f0f0"/>
+  <line x1="78" y1="342" x2="938" y2="342" stroke="#f0f0f0"/>
+</svg>
