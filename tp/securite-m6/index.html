@@ -1,0 +1,497 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulateur — Centre de sécurité (Module 6)</title>
+<style>
+:root{--ink:#1B2A4A;--amber:#E07A3F;--green:#3F9C5A;--red:#D9534F;--paper:#FAF6EE;--line:#E0D8C8;--blue:#005fb8}
+*{box-sizing:border-box}body{margin:0;font-family:'Spline Sans','Segoe UI',system-ui,sans-serif;color:var(--ink);background:#eef1f6;line-height:1.5}
+.wrap{max-width:880px;margin:0 auto;padding:16px}
+.hero{background:linear-gradient(135deg,#1B2A4A,#2c4470);color:var(--paper);border-radius:14px;padding:18px 22px;margin-bottom:12px}
+.hero h1{margin:0 0 4px;font-size:1.45em}.hero p{margin:0;opacity:.92;font-size:.92em}
+.pill{display:inline-block;background:var(--amber);color:#fff;font-size:.7em;font-weight:700;padding:3px 10px;border-radius:12px;margin-bottom:8px;letter-spacing:.04em}
+.mission{background:#fff;border:2px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:12px}
+.mission h3{margin:0 0 6px;font-size:1em;color:var(--ink)}
+.mission ol{margin:6px 0 0;padding-left:20px;font-size:.9em;color:#4a5568}
+.mission ol li{margin:2px 0}
+.meta{display:flex;justify-content:space-between;font-size:.85em;color:#6F685C;margin:6px 0}
+.bar{display:flex;gap:6px;margin-bottom:12px}.bar .seg{flex:1;height:8px;border-radius:5px;background:var(--line)}
+.bar .seg.cur{background:var(--amber)}.bar .seg.done{background:var(--green)}
+.card{background:#fff;border:2px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:12px}
+.card h2{margin:0 0 4px;font-size:1.15em;border-left:5px solid var(--amber);padding-left:10px}
+.obj{font-size:.82em;color:#6F685C;margin:2px 0 8px;padding-left:15px}
+.scn{background:#FFF4E8;border-left:4px solid var(--amber);border-radius:8px;padding:9px 12px;margin:10px 0;font-size:.92em}
+.hint{font-size:.8em;color:#6F685C;margin:4px 2px 0}
+.svgwrap{background:#dfe3ea;border-radius:10px;padding:10px;margin:10px 0}
+.svgwrap svg{display:block;width:100%;height:auto;max-width:100%;border-radius:6px}
+.svgwrap.portrait{display:flex;justify-content:center}
+.svgwrap.portrait svg{max-width:420px}
+.clk{cursor:pointer}
+svg .clk:hover{filter:brightness(.97)}
+/* ---- mockup HTML (non-SVG) ---- */
+.mock{background:#fff;border:1px solid #d5dae3;border-radius:10px;margin:10px 0;overflow:hidden}
+.mockbar{background:#f3f4f7;border-bottom:1px solid #e3e6ec;padding:8px 14px;font-size:.85em;color:#4a5568;display:flex;align-items:center;gap:8px}
+.mockbar .dots{display:flex;gap:5px}.mockbar .dots i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.mockbody{padding:16px 18px}
+/* mot de passe */
+.pwfield{display:flex;align-items:center;border:2px solid #cfd6e0;border-radius:8px;padding:0 6px 0 12px;background:#fff;max-width:420px}
+.pwfield input{flex:1;border:none;outline:none;font-size:1em;padding:10px 4px;background:transparent;color:var(--ink);font-family:inherit}
+.pwfield button{border:none;background:transparent;cursor:pointer;font-size:.85em;color:var(--blue);padding:6px 8px;font-family:inherit}
+.gauge{height:10px;border-radius:6px;background:#e7eaef;margin:12px 0 4px;max-width:420px;overflow:hidden}
+.gauge>span{display:block;height:100%;width:0;border-radius:6px;transition:.25s width,.25s background}
+.glabel{font-size:.85em;font-weight:700;margin-bottom:8px}
+.crit{list-style:none;padding:0;margin:8px 0;font-size:.86em}
+.crit li{padding:3px 0;color:#8a93a2}.crit li b{font-weight:400}
+.crit li.ok{color:var(--green)}.crit li.ok::before{content:"☑ "}
+.crit li:not(.ok)::before{content:"☐ "}
+/* toggles génériques */
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid #e3e6ec;border-radius:9px;margin:8px 0;background:#fafbfc}
+.row .lab b{display:block;font-size:.95em}.row .lab span{font-size:.8em;color:#6b7384}
+.sw{position:relative;width:46px;height:26px;border-radius:13px;background:#c4ccd6;cursor:pointer;flex:0 0 auto;transition:.2s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.sw.on{background:var(--green)}.sw.on::after{left:23px}
+.choice{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.chip{flex:1 1 180px;border:2px solid #cfd6e0;border-radius:9px;padding:10px 13px;cursor:pointer;font-size:.9em;background:#fff;user-select:none}
+.chip:hover{border-color:var(--ink)}
+.chip.sel{border-color:var(--blue);background:#eaf1fc}
+.chip .tag{display:inline-block;font-size:.72em;font-weight:700;padding:1px 7px;border-radius:9px;margin-left:4px}
+.tag.reco{background:#e7f3ea;color:#1e6b34}.tag.alt{background:#fdf0e6;color:#8a4b00}
+/* tri bon/mauvais */
+.reflex{border:1px solid #e3e6ec;border-radius:9px;padding:11px 13px;margin:8px 0;background:#fafbfc}
+.reflex .txt{font-size:.92em;margin-bottom:8px}
+.tri{display:flex;gap:8px}
+.tri button{flex:1;border:2px solid #cfd6e0;background:#fff;border-radius:8px;padding:7px;font-size:.85em;cursor:pointer;font-family:inherit;color:var(--ink)}
+.tri button.pick-good{border-color:var(--green);background:#eaf6ee}
+.tri button.pick-bad{border-color:var(--red);background:#fdecec}
+/* mails */
+.inbox{display:flex;flex-wrap:wrap;gap:12px}
+.maillist{flex:1 1 280px;border:1px solid #e3e6ec;border-radius:9px;overflow:hidden}
+.mailitem{padding:10px 12px;border-bottom:1px solid #eef0f3;cursor:pointer;font-size:.88em}
+.mailitem:last-child{border-bottom:none}
+.mailitem:hover{background:#f6f8fb}
+.mailitem.active{background:#eaf1fc}
+.mailitem .from{font-weight:700}.mailitem .subj{color:#4a5568}
+.mailitem.handled{opacity:.55}
+.mailview{flex:1 1 320px;border:1px solid #e3e6ec;border-radius:9px;padding:14px;font-size:.88em;min-height:200px}
+.mailview .mh{border-bottom:1px solid #eef0f3;padding-bottom:8px;margin-bottom:8px}
+.mailview .mh b{font-size:1em}
+.mlink{color:var(--blue);text-decoration:underline;cursor:pointer;position:relative}
+.urlbox{display:none;margin:8px 0;padding:6px 9px;background:#fff7e6;border:1px solid #f0d9a8;border-radius:6px;font-size:.82em;font-family:monospace;word-break:break-all}
+.urlbox.show{display:block}
+.signals{margin:10px 0}
+.signals label{display:flex;gap:7px;align-items:flex-start;font-size:.84em;padding:4px 0;cursor:pointer}
+.signals input{margin-top:3px}
+.mailactions{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.mailactions button{border:2px solid #cfd6e0;background:#fff;border-radius:8px;padding:6px 11px;font-size:.83em;cursor:pointer;font-family:inherit;color:var(--ink)}
+.mailactions button.sel{border-color:var(--blue);background:#eaf1fc;font-weight:600}
+.mstatus{font-size:.82em;margin-top:8px;color:#6b7384}
+/* permissions / visibilité */
+.visrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.visrow button{flex:1 1 100px;border:2px solid #cfd6e0;background:#fff;border-radius:8px;padding:8px;font-size:.86em;cursor:pointer;font-family:inherit;color:var(--ink)}
+.visrow button.sel{border-color:var(--blue);background:#eaf1fc;font-weight:600}
+.rgpd{font-size:.82em;color:#6b7384;background:#f3f5f8;border-radius:8px;padding:9px 12px;margin-top:10px}
+/* gestes */
+.gestes label{display:flex;gap:9px;align-items:flex-start;font-size:.9em;padding:8px 10px;border:1px solid #e3e6ec;border-radius:9px;margin:7px 0;background:#fafbfc;cursor:pointer}
+.gestes input{margin-top:3px}
+.btn{background:var(--amber);color:#fff;border:none;border-radius:9px;padding:10px 18px;font-size:.93em;font-weight:600;cursor:pointer;font-family:inherit}
+.btn.green{background:var(--green)}
+.vbar{margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fb{font-size:.92em;padding:8px 12px;border-radius:7px;display:none;flex:1 1 100%}
+.fb.no{display:block;background:#FDECEC;border-left:4px solid var(--red)}
+.fb.ok{display:block;background:#EAF6EE;border-left:4px solid var(--green)}
+.fb ul{margin:6px 0 0;padding-left:18px}
+.next{display:none}
+.win-done{display:none;text-align:center;padding:40px 20px;background:linear-gradient(135deg,#1B2A4A,#2c4470);color:var(--paper);border-radius:14px}
+.win-done.show{display:block}.win-done .big{font-size:1.5em;margin:8px 0}
+.badge{display:inline-block;background:var(--green);color:#fff;font-weight:700;padding:6px 16px;border-radius:20px;margin-top:6px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:#323232;color:#fff;padding:11px 18px;border-radius:8px;font-size:.9em;opacity:0;transition:.35s;z-index:99}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="hero"><span class="pill">PARCOURS PIX · MODULE 6</span><h1>🛡️ Centre de sécurité</h1>
+    <p>6 ateliers, un par compétence du Domaine 4 (Protection et sécurité). Renforce tes comptes, démasque les pièges et protège ta vie privée sur des interfaces réalistes.</p></div>
+
+  <div class="mission">
+    <h3>🎯 Ta mission</h3>
+    <ol>
+      <li><b>Atelier 1 — Mot de passe robuste (6.1)</b> : crée un mot de passe / une phrase de passe solide (≥ 12 caractères, varié, non interdit).</li>
+      <li><b>Atelier 2 — Double authentification (6.2)</b> : active la 2FA et choisis la méthode la plus sûre.</li>
+      <li><b>Atelier 3 — Repérer un phishing (6.3)</b> : ouvre les mails, repère les signaux suspects et traite chaque message.</li>
+      <li><b>Atelier 4 — Wi-Fi public, HTTPS & VPN (6.4)</b> : trie les bons et les mauvais réflexes dans un café.</li>
+      <li><b>Atelier 5 — Vie privée & RGPD (6.6)</b> : règle les permissions au minimum nécessaire.</li>
+      <li><b>Atelier 6 (bonus) — Sobriété numérique (6.7)</b> : choisis un geste utile.</li>
+    </ol>
+  </div>
+
+  <div class="meta"><span id="lab">Atelier 1 / 6 — Mot de passe</span><span id="sc">Réussis : 0 / 6</span></div>
+  <div class="bar"><div class="seg cur" id="s1"></div><div class="seg" id="s2"></div><div class="seg" id="s3"></div><div class="seg" id="s4"></div><div class="seg" id="s5"></div><div class="seg" id="s6"></div></div>
+
+  <!-- ===== ATELIER 1 : MOT DE PASSE (6.1) ===== -->
+  <section class="card at" data-n="1">
+    <h2>🔑 Atelier 1 — Mot de passe robuste (6.1)</h2>
+    <div class="obj">🎯 Objectif : composer un mot de passe (ou une phrase de passe) long, varié et unique.</div>
+    <div class="scn"><b>Situation :</b> tu crées un nouveau compte pour <b>Léa</b>. Saisis un mot de passe : la jauge de force réagit en direct. Évite les mots de passe courants et le prénom.</div>
+    <div class="mock">
+      <div class="mockbar"><span class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></span>&nbsp;Créer un mot de passe</div>
+      <div class="mockbody">
+        <label style="font-size:.88em;font-weight:600;display:block;margin-bottom:6px">Nouveau mot de passe</label>
+        <div class="pwfield">
+          <input id="pw" type="password" placeholder="Saisis ton mot de passe…" oninput="onPw()" autocomplete="new-password">
+          <button type="button" id="pwtog" onclick="togglePw()">Afficher</button>
+        </div>
+        <div class="gauge"><span id="gbar"></span></div>
+        <div class="glabel" id="glab" style="color:#8a93a2">Force : —</div>
+        <ul class="crit" id="crit">
+          <li id="c-len"><b>Au moins 12 caractères</b></li>
+          <li id="c-var"><b>Variété (minuscules, MAJUSCULES, chiffres ou symboles)</b></li>
+          <li id="c-ban"><b>Pas un mot de passe courant ni le prénom « Léa »</b></li>
+        </ul>
+        <div class="rgpd">💡 Astuce : une <b>phrase de passe</b> (plusieurs mots, ex. <i>cheval-Bleu-42-tartine</i>) est facile à retenir et très difficile à casser. Un mot de passe <b>unique par compte</b> + un <b>gestionnaire de mots de passe</b> évitent de tout réutiliser.</div>
+      </div>
+    </div>
+    <div class="hint">💡 Vise « Fort » (barre verte). La validation refuse les mots de passe trop courts ou trop courants.</div>
+    <div class="vbar"><button class="btn" onclick="validate(1)">Valider l'atelier</button><div class="fb" id="fb1"></div><button class="btn green next" id="nx1" onclick="go(2)">Atelier validé → Suivant</button></div>
+  </section>
+
+  <!-- ===== ATELIER 2 : 2FA (6.2) ===== -->
+  <section class="card at" data-n="2" style="display:none">
+    <h2>📲 Atelier 2 — Double authentification 2FA (6.2)</h2>
+    <div class="obj">🎯 Objectif : ajouter un second facteur et choisir la méthode la plus sûre.</div>
+    <div class="scn"><b>Situation :</b> dans « Sécurité du compte », active la double authentification puis choisis la méthode. L'<b>application d'authentification</b> est plus sûre que le SMS.</div>
+    <div class="mock">
+      <div class="mockbar"><span class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></span>&nbsp;Sécurité du compte</div>
+      <div class="mockbody">
+        <div class="row">
+          <div class="lab"><b>Activer la double authentification (2FA)</b><span>Un second facteur en plus du mot de passe</span></div>
+          <div class="sw" id="sw2fa" onclick="toggle2fa()"></div>
+        </div>
+        <div id="methods" style="opacity:.45;pointer-events:none">
+          <div style="font-size:.86em;font-weight:600;margin:12px 0 4px">Méthode de vérification</div>
+          <div class="choice">
+            <div class="chip" data-m="app" onclick="pickMethod(this)">📱 Application d'authentification <span class="tag reco">recommandée</span><div style="font-size:.78em;color:#6b7384;margin-top:4px">Codes générés hors-ligne sur ton téléphone.</div></div>
+            <div class="chip" data-m="sms" onclick="pickMethod(this)">💬 SMS <span class="tag alt">moins sûr</span><div style="font-size:.78em;color:#6b7384;margin-top:4px">Code envoyé par texto (interceptable, SIM swapping).</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hint">💡 Active d'abord l'interrupteur, puis sélectionne une méthode. L'application est conseillée.</div>
+    <div class="vbar"><button class="btn" onclick="validate(2)">Valider l'atelier</button><div class="fb" id="fb2"></div><button class="btn green next" id="nx2" onclick="go(3)">Atelier validé → Suivant</button></div>
+  </section>
+
+  <!-- ===== ATELIER 3 : PHISHING (6.3) ===== -->
+  <section class="card at" data-n="3" style="display:none">
+    <h2>🎣 Atelier 3 — Repérer un phishing (6.3)</h2>
+    <div class="obj">🎯 Objectif : ouvrir chaque mail, démasquer le faux message et le traiter correctement.</div>
+    <div class="scn"><b>Situation :</b> 3 messages dans ta boîte. Ouvre-les, <b>survole les liens</b> pour voir la vraie adresse, coche les signaux suspects, puis choisis une action pour chacun.</div>
+    <div class="mock">
+      <div class="mockbar"><span class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></span>&nbsp;Boîte de réception — 3 messages</div>
+      <div class="mockbody">
+        <div class="inbox">
+          <div class="maillist" id="maillist">
+            <div class="mailitem" data-id="phish" onclick="openMail(this)"><div class="from">Banque Securite &lt;service@secure-banq-alerte.com&gt;</div><div class="subj">⚠ Action requise : compte bloqué</div></div>
+            <div class="mailitem" data-id="legit" onclick="openMail(this)"><div class="from">Camille Durand &lt;camille.durand@formip.com&gt;</div><div class="subj">Compte-rendu de réunion</div></div>
+            <div class="mailitem" data-id="spam" onclick="openMail(this)"><div class="from">SuperPromos &lt;promo@megadeals-news.biz&gt;</div><div class="subj">🎁 -80% aujourd'hui seulement !</div></div>
+          </div>
+          <div class="mailview" id="mailview"><!-- rempli par JS --></div>
+        </div>
+        <div class="mstatus" id="mstatus">Phishing : non traité · Légitime : non classé</div>
+      </div>
+    </div>
+    <div class="hint">💡 Le faux mail « banque » doit être <b>Signalé</b> ou <b>Supprimé</b> avec au moins 2 signaux cochés ; le mail de ta collègue doit être classé <b>Légitime</b>.</div>
+    <div class="vbar"><button class="btn" onclick="validate(3)">Valider l'atelier</button><div class="fb" id="fb3"></div><button class="btn green next" id="nx3" onclick="go(4)">Atelier validé → Suivant</button></div>
+  </section>
+
+  <!-- ===== ATELIER 4 : WIFI PUBLIC / HTTPS / VPN (6.4) ===== -->
+  <section class="card at" data-n="4" style="display:none">
+    <h2>☕ Atelier 4 — Wi-Fi public, HTTPS & VPN (6.4)</h2>
+    <div class="obj">🎯 Objectif : adopter les bons réflexes sur un réseau Wi-Fi public ouvert.</div>
+    <div class="scn"><b>Situation :</b> tu es au café sur le Wi-Fi gratuit « Café-Gratuit ». Pour chaque réflexe, indique s'il est <b>BON</b> ou <b>MAUVAIS</b>.</div>
+    <div class="mock"><div class="mockbody" id="reflexes"><!-- rempli par JS --></div></div>
+    <div class="hint">💡 Sur un Wi-Fi ouvert : cadenas HTTPS, VPN actif, pas d'opérations sensibles. On ne baisse jamais sa protection.</div>
+    <div class="vbar"><button class="btn" onclick="validate(4)">Valider l'atelier</button><div class="fb" id="fb4"></div><button class="btn green next" id="nx4" onclick="go(5)">Atelier validé → Suivant</button></div>
+  </section>
+
+  <!-- ===== ATELIER 5 : VIE PRIVÉE / RGPD (6.6) ===== -->
+  <section class="card at" data-n="5" style="display:none">
+    <h2>🔒 Atelier 5 — Vie privée & RGPD (6.6)</h2>
+    <div class="obj">🎯 Objectif : limiter les permissions au strict nécessaire (minimisation des données).</div>
+    <div class="scn"><b>Situation :</b> l'appli « Lampe-Torche » réclame des accès. Pour une simple lampe, <b>aucune permission sensible</b> n'est justifiée. Désactive l'inutile et règle la visibilité du profil.</div>
+    <div class="mock">
+      <div class="mockbar"><span class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></span>&nbsp;Confidentialité — Lampe-Torche</div>
+      <div class="mockbody">
+        <div style="font-size:.86em;font-weight:600;margin-bottom:6px">Permissions de l'application</div>
+        <div class="row"><div class="lab"><b>🎤 Micro</b><span>Non nécessaire pour une lampe</span></div><div class="sw on" id="p-micro" onclick="togglePerm('micro')"></div></div>
+        <div class="row"><div class="lab"><b>📍 Localisation</b><span>Non nécessaire pour une lampe</span></div><div class="sw on" id="p-loc" onclick="togglePerm('loc')"></div></div>
+        <div class="row"><div class="lab"><b>👥 Contacts</b><span>Non nécessaire pour une lampe</span></div><div class="sw on" id="p-contacts" onclick="togglePerm('contacts')"></div></div>
+        <div class="row"><div class="lab"><b>📷 Caméra</b><span>Non nécessaire pour une lampe</span></div><div class="sw on" id="p-cam" onclick="togglePerm('cam')"></div></div>
+        <div style="font-size:.86em;font-weight:600;margin:14px 0 6px">Visibilité du profil</div>
+        <div class="visrow">
+          <button data-v="public" onclick="pickVis(this)">🌍 Public</button>
+          <button data-v="amis" onclick="pickVis(this)">👥 Amis</button>
+          <button data-v="prive" onclick="pickVis(this)">🔒 Privé</button>
+        </div>
+        <div class="rgpd">⚖️ <b>RGPD</b> : tu disposes d'un <b>droit d'accès</b> à tes données et d'un <b>droit à la suppression (droit à l'oubli)</b>. Tu peux demander à tout moment ce qu'une appli stocke et exiger son effacement.</div>
+      </div>
+    </div>
+    <div class="hint">💡 Coupe toutes les permissions sensibles (micro, localisation, contacts, caméra) : aucune n'est justifiée pour une lampe. Ne laisse pas le profil en « Public ».</div>
+    <div class="vbar"><button class="btn" onclick="validate(5)">Valider l'atelier</button><div class="fb" id="fb5"></div><button class="btn green next" id="nx5" onclick="go(6)">Atelier validé → Suivant</button></div>
+  </section>
+
+  <!-- ===== ATELIER 6 (BONUS) : SOBRIÉTÉ (6.7) ===== -->
+  <section class="card at" data-n="6" style="display:none">
+    <h2>🌱 Atelier 6 (bonus) — Sobriété numérique (6.7)</h2>
+    <div class="obj">🎯 Objectif : adopter au moins un geste qui réduit ton empreinte numérique.</div>
+    <div class="scn"><b>Situation :</b> tu veux réduire ton impact. Coche le ou les gestes utiles parmi les propositions.</div>
+    <div class="mock"><div class="mockbody">
+      <div class="gestes" id="gestes"><!-- rempli par JS --></div>
+    </div></div>
+    <div class="hint">💡 Au moins un bon geste coché valide l'atelier (et le module).</div>
+    <div class="vbar"><button class="btn" onclick="validate(6)">Valider l'atelier</button><div class="fb" id="fb6"></div><button class="btn green next" id="nx6" onclick="finish()">Terminer le module</button></div>
+  </section>
+
+  <div class="win-done" id="wdone">
+    <div style="font-size:42px">🏆</div><div class="big">Centre de sécurité maîtrisé !</div>
+    <p>Tu as renforcé tes mots de passe, activé la 2FA, démasqué un phishing, sécurisé le Wi-Fi public, protégé ta vie privée et adopté un geste de sobriété.</p>
+    <div class="badge">✅ Module 6 validé — CRCN Domaine 4</div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+function $(id){return document.getElementById(id);}
+var tT;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tT);tT=setTimeout(function(){t.classList.remove('show');},2400);}
+var passed={1:false,2:false,3:false,4:false,5:false,6:false};
+var LABS={1:'Mot de passe',2:'Double authentification',3:'Phishing',4:'Wi-Fi public',5:'Vie privée & RGPD',6:'Sobriété numérique'};
+var TOTAL=6;
+
+/* ===== ATELIER 1 : mot de passe ===== */
+var BANNED=['azerty123','motdepasse','123456','password','lea','léa','123456789','qwerty','000000','abc123'];
+function togglePw(){var i=$('pw');if(i.type==='password'){i.type='text';$('pwtog').textContent='Masquer';}else{i.type='password';$('pwtog').textContent='Afficher';}}
+function pwScore(v){
+  var len=v.length>=12, vlen=v.length>=8;
+  var classes=0;
+  if(/[a-z]/.test(v))classes++;
+  if(/[A-Z]/.test(v))classes++;
+  if(/[0-9]/.test(v))classes++;
+  if(/[^A-Za-z0-9]/.test(v))classes++;
+  var banned=BANNED.indexOf(v.toLowerCase())!==-1 || /l[eé]a/i.test(v);
+  return {len:len,vlen:vlen,classes:classes,banned:banned};
+}
+function onPw(){
+  var v=$('pw').value, s=pwScore(v);
+  var varieOk=s.classes>=2;
+  var banOk=v.length>0 && !s.banned;
+  $('c-len').className=s.len?'ok':'';
+  $('c-var').className=varieOk?'ok':'';
+  $('c-ban').className=banOk?'ok':'';
+  /* niveau de force : 3 paliers Faible / Moyen / Fort (rouge / orange / vert) */
+  var lvl;
+  if(s.banned){lvl=1;}
+  else if(s.len&&s.classes>=2){lvl=3;}        /* atteint les critères de validation → Fort (vert) */
+  else if(s.vlen&&s.classes>=2){lvl=2;}        /* presque : assez varié mais pas encore 12 car. */
+  else{lvl=1;}
+  var bar=$('gbar'),lab=$('glab'),w,col,txt;
+  if(v.length===0){w='0%';col='#e7eaef';txt='Force : —';lab.style.color='#8a93a2';}
+  else if(lvl===1){w='30%';col='#D9534F';txt='Force : Faible';lab.style.color='#D9534F';}
+  else if(lvl===2){w='62%';col='#E07A3F';txt='Force : Moyen';lab.style.color='#E07A3F';}
+  else{w='100%';col='#3F9C5A';txt='Force : Fort';lab.style.color='#3F9C5A';}
+  bar.style.width=w;bar.style.background=col;lab.textContent=txt;
+}
+
+/* ===== ATELIER 2 : 2FA ===== */
+var a2={on:false,method:null};
+function toggle2fa(){a2.on=!a2.on;var sw=$('sw2fa');sw.classList.toggle('on',a2.on);
+  var m=$('methods');if(a2.on){m.style.opacity='1';m.style.pointerEvents='auto';toast('Double authentification activée');}
+  else{m.style.opacity='.45';m.style.pointerEvents='none';a2.method=null;document.querySelectorAll('#methods .chip').forEach(function(c){c.classList.remove('sel');});}}
+function pickMethod(el){if(!a2.on)return;a2.method=el.dataset.m;document.querySelectorAll('#methods .chip').forEach(function(c){c.classList.remove('sel');});el.classList.add('sel');}
+/* mélange l'ordre des méthodes pour ne pas laisser la recommandée toujours en 1re position */
+function shuffleChildren(parent){var nodes=Array.prototype.slice.call(parent.children);for(var i=nodes.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));parent.insertBefore(nodes[j],nodes[i].nextSibling);}}
+
+/* ===== ATELIER 3 : phishing ===== */
+var MAILS={
+  phish:{from:'Banque Securite &lt;service@secure-banq-alerte.com&gt;',subj:'⚠ Action requise : votre compte est bloqué',
+    body:'<p>Cher client, nous avons détecté une connexion suspecte. Votre compte sera <b>définitivement bloqué sous 24h</b> si vous ne confirmez pas vos identifiants immédiatement.</p>'+
+      '<p>Cliquez ici pour vérifier : <span class="mlink" onmouseover="showUrl(\'u-phish\')" onmouseout="hideUrl(\'u-phish\')">https://mabanque-securite.fr/connexion</span></p>'+
+      '<div class="urlbox" id="u-phish">Lien réel : http://secure-banq-alerte.com/login?id=verif-92x &nbsp;(≠ site officiel de la banque)</div>'+
+      '<p>Merci de communiquer votre numéro de carte et votre code pour réactiver le service.</p>',
+    signals:['expediteur','urgence','lien','identifiants'],handled:null,checked:[]},
+  legit:{from:'Camille Durand &lt;camille.durand@formip.com&gt;',subj:'Compte-rendu de réunion',
+    body:'<p>Bonjour,</p><p>Voici le compte-rendu de notre réunion d\'équipe de ce matin. Le document est sur l\'espace partagé habituel.</p>'+
+      '<p>Lien interne : <span class="mlink" onmouseover="showUrl(\'u-legit\')" onmouseout="hideUrl(\'u-legit\')">https://drive.formip.com/equipe/cr-reunion</span></p>'+
+      '<div class="urlbox" id="u-legit">Lien réel : https://drive.formip.com/equipe/cr-reunion &nbsp;(domaine interne attendu)</div>'+
+      '<p>Bonne journée,<br>Camille</p>',
+    signals:[],handled:null,checked:[]},
+  spam:{from:'SuperPromos &lt;promo@megadeals-news.biz&gt;',subj:'🎁 -80% aujourd\'hui seulement !',
+    body:'<p>VENTE FLASH !!! Profitez de <b>-80%</b> sur tout le site. Offre réservée aux 100 premiers !</p>'+
+      '<p>Se désabonner : <span class="mlink" onmouseover="showUrl(\'u-spam\')" onmouseout="hideUrl(\'u-spam\')">https://megadeals-news.biz/promo</span></p>'+
+      '<div class="urlbox" id="u-spam">Lien réel : https://megadeals-news.biz/promo &nbsp;(publicité de masse)</div>'+
+      '<p>Newsletter promotionnelle.</p>',
+    signals:[],handled:null,checked:[]}
+};
+var SIGLABELS=[
+  {k:'expediteur',t:'Adresse de l\'expéditeur trompeuse (≠ domaine officiel de la banque)'},
+  {k:'urgence',t:'Pression / urgence (« bloqué sous 24h »)'},
+  {k:'lien',t:'Lien trompeur : l\'URL réelle au survol ne correspond pas'},
+  {k:'identifiants',t:'Demande d\'identifiants / numéro de carte par mail'},
+  {k:'piece',t:'Pièce jointe inattendue à ouvrir'}
+];
+var curMail='phish';
+function openMail(el){document.querySelectorAll('#maillist .mailitem').forEach(function(m){m.classList.remove('active');});el.classList.add('active');curMail=el.dataset.id;renderMail();}
+function renderMail(){
+  var m=MAILS[curMail],v=$('mailview');
+  var sig='<div class="signals"><div style="font-weight:600;margin-bottom:4px;font-size:.85em">Signaux suspects repérés :</div>';
+  SIGLABELS.forEach(function(s){
+    var on=m.checked.indexOf(s.k)!==-1;
+    sig+='<label><input type="checkbox" '+(on?'checked':'')+' onchange="toggleSignal(\''+s.k+'\')"> '+s.t+'</label>';
+  });
+  sig+='</div>';
+  var acts='<div class="mailactions">'+
+    '<button class="'+(m.handled==='signaler'?'sel':'')+'" onclick="actMail(\'signaler\')">🚩 Signaler</button>'+
+    '<button class="'+(m.handled==='supprimer'?'sel':'')+'" onclick="actMail(\'supprimer\')">🗑 Supprimer</button>'+
+    '<button class="'+(m.handled==='legitime'?'sel':'')+'" onclick="actMail(\'legitime\')">✅ Légitime</button></div>';
+  v.innerHTML='<div class="mh"><b>'+m.subj+'</b><div style="font-size:.84em;color:#6b7384;margin-top:3px">De : '+m.from+'</div></div>'+m.body+sig+acts;
+}
+function showUrl(id){var e=$(id);if(e)e.classList.add('show');}
+function hideUrl(id){var e=$(id);if(e)e.classList.remove('show');}
+function toggleSignal(k){var m=MAILS[curMail],i=m.checked.indexOf(k);if(i===-1)m.checked.push(k);else m.checked.splice(i,1);updMStatus();}
+function actMail(a){MAILS[curMail].handled=a;
+  document.querySelectorAll('#maillist .mailitem').forEach(function(it){if(it.dataset.id===curMail)it.classList.add('handled');});
+  renderMail();
+  var lbl={signaler:'signalé',supprimer:'supprimé',legitime:'classé légitime'}[a];
+  toast('Message '+lbl);updMStatus();}
+function updMStatus(){
+  var p=MAILS.phish, l=MAILS.legit;
+  var pTxt=p.handled?(p.handled==='legitime'?'classé légitime ✗':(p.handled==='signaler'?'signalé':'supprimé')):'non traité';
+  var goodSig=p.checked.filter(function(k){return p.signals.indexOf(k)!==-1;}).length;
+  var lTxt=l.handled?(l.handled==='legitime'?'classé légitime':l.handled):'non classé';
+  $('mstatus').textContent='Phishing : '+pTxt+' ('+goodSig+' signal'+(goodSig>1?'s':'')+' correct'+(goodSig>1?'s':'')+') · Collègue : '+lTxt;
+}
+
+/* ===== ATELIER 4 : réflexes Wi-Fi ===== */
+var REFLEXES=[
+  {t:'Vérifier le cadenas / HTTPS avant de saisir un mot de passe',good:true},
+  {t:'Faire ses comptes bancaires sur le Wi-Fi ouvert sans VPN',good:false},
+  {t:'Activer un VPN pour chiffrer ma connexion',good:true},
+  {t:'Désactiver le pare-feu pour aller plus vite',good:false},
+  {t:'Éviter les opérations sensibles sur ce réseau public',good:true},
+  {t:'Ignorer l\'avertissement « certificat non valide » du navigateur',good:false}
+];
+var a4={ans:{}};
+function renderReflexes(){
+  var c=$('reflexes'),h='';
+  REFLEXES.forEach(function(r,i){
+    h+='<div class="reflex" id="rf'+i+'"><div class="txt">'+(i+1)+'. '+r.t+'</div><div class="tri">'+
+      '<button id="rf'+i+'g" onclick="triPick('+i+',\'good\')">👍 BON réflexe</button>'+
+      '<button id="rf'+i+'b" onclick="triPick('+i+',\'bad\')">👎 MAUVAIS réflexe</button></div></div>';
+  });
+  c.innerHTML=h;
+}
+function triPick(i,val){a4.ans[i]=val;
+  var g=$('rf'+i+'g'),b=$('rf'+i+'b');
+  g.className=val==='good'?'pick-good':'';
+  b.className=val==='bad'?'pick-bad':'';
+}
+
+/* ===== ATELIER 5 : permissions / visibilité ===== */
+var a5={micro:true,loc:true,contacts:true,cam:true,vis:null};
+function togglePerm(k){a5[k]=!a5[k];var map={micro:'p-micro',loc:'p-loc',contacts:'p-contacts',cam:'p-cam'};$(map[k]).classList.toggle('on',a5[k]);}
+function pickVis(el){a5.vis=el.dataset.v;document.querySelectorAll('.visrow button').forEach(function(b){b.classList.remove('sel');});el.classList.add('sel');}
+
+/* ===== ATELIER 6 : sobriété ===== */
+var GESTES=[
+  {t:'Garder tous mes mails et fichiers « au cas où » pendant des années',good:false},
+  {t:'Me désabonner des newsletters que je ne lis jamais',good:true},
+  {t:'Supprimer les vieux mails et fichiers inutiles',good:true},
+  {t:'Laisser mes appareils allumés en permanence',good:false},
+  {t:'Baisser la qualité du streaming vidéo quand la HD n\'est pas utile',good:true},
+  {t:'Éteindre les appareils que je n\'utilise pas',good:true}
+];
+var a6={checked:{}};
+function renderGestes(){
+  var c=$('gestes'),h='';
+  GESTES.forEach(function(g,i){
+    h+='<label><input type="checkbox" onchange="a6.checked['+i+']=this.checked"> '+g.t+'</label>';
+  });
+  c.innerHTML=h;
+}
+
+/* ===== VALIDATION ===== */
+function fbList(items){return '<ul>'+items.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>';}
+function validate(n){var fb=$('fb'+n),ok=false,msg='',note='';
+  if(n===1){
+    var v=$('pw').value,s=pwScore(v),miss=[];
+    if(!s.len)miss.push('Trop court : il faut au moins 12 caractères.');
+    if(s.classes<2)miss.push('Ajoute de la variété (minuscules + MAJUSCULES + chiffres ou symboles).');
+    if(s.banned)miss.push('Ce mot de passe est trop courant ou contient le prénom « Léa » : choisis-en un unique.');
+    if(miss.length===0)ok=true;else msg='Mot de passe trop faible :'+fbList(miss);
+  }
+  else if(n===2){
+    if(!a2.on){msg='Active d\'abord la double authentification (l\'interrupteur).';}
+    else if(!a2.method){msg='Choisis une méthode de vérification.';}
+    else{ok=true;if(a2.method==='sms')note=' Note : le SMS protège déjà mieux qu\'un simple mot de passe, mais l\'application d\'authentification reste plus sûre (à l\'abri de l\'interception SMS / SIM swapping).';}
+  }
+  else if(n===3){
+    var p=MAILS.phish,l=MAILS.legit,sp=MAILS.spam,miss3=[];
+    var phishOk=(p.handled==='signaler'||p.handled==='supprimer');
+    var goodSig=p.checked.filter(function(k){return p.signals.indexOf(k)!==-1;}).length;
+    var wrongSig=p.checked.filter(function(k){return p.signals.indexOf(k)===-1;}).length;
+    if(!phishOk)miss3.push('Le faux mail « banque » doit être Signalé (ou Supprimé).');
+    if(goodSig<2)miss3.push('Coche au moins 2 signaux suspects réels dans ce mail (expéditeur, urgence, lien trompeur, demande d\'identifiants).');
+    if(wrongSig>0)miss3.push('Tu as coché un signal qui n\'en est pas un dans ce mail.');
+    if(l.handled!=='legitime')miss3.push('Le mail de ta collègue (formip.com) doit être classé Légitime.');
+    if(miss3.length===0){ok=true;if(sp.handled!=='supprimer'&&sp.handled!=='signaler')note=' (Le mail promotionnel peut aussi être supprimé ou laissé : ce n\'est pas un piège dangereux.)';}
+    else msg='À corriger :'+fbList(miss3);
+  }
+  else if(n===4){
+    var done=Object.keys(a4.ans).length===REFLEXES.length;
+    if(!done){msg='Classe les '+REFLEXES.length+' réflexes (BON ou MAUVAIS).';}
+    else{
+      var wrong=[];
+      REFLEXES.forEach(function(r,i){var want=r.good?'good':'bad';if(a4.ans[i]!==want)wrong.push((i+1)+'. '+r.t);});
+      if(wrong.length===0)ok=true;else msg='Réflexes mal classés :'+fbList(wrong);
+    }
+  }
+  else if(n===5){
+    var miss5=[];
+    if(a5.micro)miss5.push('Coupe le Micro (inutile pour une lampe).');
+    if(a5.loc)miss5.push('Coupe la Localisation (inutile pour une lampe).');
+    if(a5.contacts)miss5.push('Coupe l\'accès aux Contacts (inutile pour une lampe).');
+    if(a5.cam)miss5.push('Coupe la Caméra : aucune permission sensible n\'est justifiée pour une simple lampe-torche.');
+    if(a5.vis===null)miss5.push('Choisis une visibilité de profil.');
+    else if(a5.vis==='public')miss5.push('Ne laisse pas le profil en « Public » : préfère « Amis » ou « Privé ».');
+    if(miss5.length===0)ok=true;
+    else msg='Minimise les permissions :'+fbList(miss5);
+  }
+  else if(n===6){
+    var good6=0,bad6=0;
+    GESTES.forEach(function(g,i){if(a6.checked[i]){if(g.good)good6++;else bad6++;}});
+    if(good6>=1&&bad6===0)ok=true;
+    else if(bad6>0)msg='Un geste coché n\'est pas écologique (garder des fichiers inutiles / laisser tout allumé). Décoche-le.';
+    else msg='Coche au moins un geste utile (désabonnement, ménage des fichiers, qualité de streaming, extinction des appareils).';
+  }
+  if(ok){fb.className='fb ok';fb.innerHTML='✅ Atelier réussi.'+note;passed[n]=true;$('nx'+n).style.display='inline-block';$('s'+n).className='seg done';}
+  else{fb.className='fb no';fb.innerHTML='❌ '+msg;}
+  $('sc').textContent='Réussis : '+Object.values(passed).filter(Boolean).length+' / '+TOTAL;
+}
+
+function go(n){document.querySelectorAll('.at').forEach(function(s){s.style.display='none';});
+  document.querySelector('.at[data-n="'+n+'"]').style.display='block';
+  for(var i=1;i<=TOTAL;i++){$('s'+i).className='seg'+(passed[i]?' done':(i===n?' cur':''));}
+  $('lab').textContent='Atelier '+n+' / '+TOTAL+' — '+LABS[n];window.scrollTo(0,0);}
+
+function finish(){if(!Object.values(passed).every(Boolean)){toast('Termine les '+TOTAL+' ateliers');return;}
+  document.querySelectorAll('.at').forEach(function(s){s.style.display='none';});
+  document.querySelector('.bar').style.display='none';document.querySelector('.meta').style.display='none';
+  document.querySelector('.mission').style.display='none';
+  $('wdone').classList.add('show');window.scrollTo(0,0);
+  try{window.parent.postMessage('show_complete','*');window.parent.postMessage('show_complete','*');}catch(e){}}
+
+/* init */
+/* mélange l'ordre de la boîte de réception (la cible phishing ne doit pas être systématiquement 1re) */
+var mlEl=$('maillist');shuffleChildren(mlEl);
+var firstMail=mlEl.querySelector('.mailitem');if(firstMail){firstMail.classList.add('active');curMail=firstMail.dataset.id;}
+/* mélange l'ordre des méthodes 2FA (la recommandée ne doit pas être systématiquement 1re) */
+shuffleChildren(document.querySelector('#methods .choice'));
+renderMail();renderReflexes();renderGestes();
+try{window.parent.postMessage('hide_complete','*');window.postMessage('hide_complete','*');}catch(e){}
+</script>
+</body></html>
