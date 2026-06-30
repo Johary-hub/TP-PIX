@@ -1,0 +1,272 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pix Lab — Module 2</title>
+<style>
+:root{--ink:#1B2A4A;--amber:#E07A3F;--green:#3F9C5A;--red:#D9534F;--paper:#FAF6EE;--line:#E0D8C8;}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Spline Sans','Segoe UI',system-ui,sans-serif;color:var(--ink);background:#fff;line-height:1.55}
+.wrap{max-width:820px;margin:0 auto;padding:18px}
+.hero{background:linear-gradient(135deg,#1B2A4A,#2c4470);color:var(--paper);border-radius:14px;padding:22px 24px;margin-bottom:14px}
+.hero h1{margin:0 0 6px;font-size:1.5em}
+.hero p{margin:0;opacity:.92;font-size:.95em}
+.pill{display:inline-block;background:var(--amber);color:#fff;font-size:.72em;font-weight:700;padding:3px 10px;border-radius:12px;margin-bottom:10px;letter-spacing:.04em}
+.bar{display:flex;gap:6px;margin:14px 0}
+.bar .seg{flex:1;height:8px;border-radius:5px;background:var(--line)}
+.bar .seg.done{background:var(--green)}
+.bar .seg.cur{background:var(--amber)}
+.meta{display:flex;justify-content:space-between;align-items:center;font-size:.85em;color:#6F685C;margin-bottom:6px}
+.card{border:2px solid var(--line);border-radius:12px;padding:18px 20px;margin:12px 0;background:#fff}
+.card h2{margin:0 0 4px;font-size:1.2em;border-left:5px solid var(--amber);padding-left:10px}
+.goal{background:#EAF0F8;border-left:4px solid var(--ink);padding:10px 13px;border-radius:8px;margin:10px 0;font-size:.93em}
+input[type=text]{width:100%;padding:11px 13px;border:2px solid var(--line);border-radius:9px;font-size:1em;font-family:'JetBrains Mono',monospace}
+.btn{background:var(--amber);color:#fff;border:none;border-radius:9px;padding:11px 20px;font-size:1em;font-weight:600;cursor:pointer;font-family:inherit}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line)}
+.btn.next{background:var(--green)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.res{margin-top:12px}
+.res .item{border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin:7px 0;font-size:.9em}
+.res .item.off{border-color:var(--green);background:#EAF6EE}
+.res .item.junk{border-color:var(--red);background:#FDECEC}
+.res a{color:#1B2A4A;font-weight:600}
+.fb{margin-top:10px;padding:10px 13px;border-radius:8px;font-size:.92em;display:none}
+.fb.ok{display:block;background:#EAF6EE;border-left:4px solid var(--green)}
+.fb.no{display:block;background:#FDECEC;border-left:4px solid var(--red)}
+.fb.tip{display:block;background:#FFF4E8;border-left:4px solid var(--amber)}
+.src{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0}
+.src .t{font-weight:700;margin-bottom:3px}
+.src .d{font-size:.88em;color:#5a5042;margin-bottom:8px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:2px solid var(--line);background:#fff;border-radius:20px;padding:6px 14px;cursor:pointer;font-size:.85em;font-weight:600}
+.chip.sel{border-color:var(--ink);background:#EAF0F8}
+.chip.good{border-color:var(--green);background:#EAF6EE}
+.chip.bad{border-color:var(--red);background:#FDECEC}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.9em}
+td,th{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:middle}
+th{background:var(--ink);color:var(--paper);font-weight:500}
+select{padding:7px 9px;border:2px solid var(--line);border-radius:7px;font-family:inherit;font-size:.92em;width:100%}
+.checkline{display:flex;gap:9px;align-items:flex-start;margin-top:12px;background:#FDECEC;border-left:4px solid var(--red);padding:10px 13px;border-radius:8px;font-size:.9em}
+.checkline input{margin-top:3px;transform:scale(1.25)}
+.win{text-align:center;padding:26px;border-radius:14px;background:linear-gradient(135deg,#1B2A4A,#2c4470);color:var(--paper);display:none}
+.win.show{display:block}
+.win .big{font-size:2em;margin:6px 0}
+.badge{display:inline-block;background:var(--green);color:#fff;font-weight:700;padding:6px 16px;border-radius:20px;margin-top:8px}
+.hide{display:none}
+.muted{color:#6F685C;font-size:.85em}
+</style></head>
+<body><div class="wrap">
+<div class="hero"><span class="pill">PARCOURS PIX · SIMULATEUR</span>
+<h1>🧪 Pix Lab — Module 2 : Mène l'enquête</h1>
+<p>4 ateliers, de vrais gestes (simulés). Tu ne valides pas en lisant : tu valides en <b>faisant</b>. Réussis les 4 pour valider ta compétence — sans quitter la plateforme.</p></div>
+
+<div class="meta"><span id="stepLabel">Atelier 1 / 4</span><span id="scoreLabel">Ateliers réussis : 0 / 4</span></div>
+<div class="bar"><div class="seg cur" id="s1"></div><div class="seg" id="s2"></div><div class="seg" id="s3"></div><div class="seg" id="s4"></div></div>
+
+<!-- ATELIER 1 : MOTEUR DE RECHERCHE -->
+<div class="card station" data-n="1">
+<h2>🔎 Atelier 1 — Le moteur de recherche</h2>
+<div class="goal"><b>Mission :</b> trouve un <b>rapport officiel au format PDF</b>, récent, sur « le télétravail et la productivité ». Compose une <b>requête avancée</b> (au moins 2 techniques) dans la barre ci-dessous, puis lance la recherche.</div>
+<input type="text" id="q1" placeholder="ex. &quot;...&quot; filetype:pdf site:..." autocomplete="off">
+<div class="row"><button class="btn" onclick="search1()">Rechercher</button>
+<span class="muted">Techniques utiles : guillemets « … », <code>filetype:pdf</code>, <code>site:gouv.fr</code>, exclusion <code>-mot</code></span></div>
+<div class="res" id="res1"></div>
+<div class="fb" id="fb1"></div>
+<div class="row hide" id="nx1"><button class="btn next" onclick="go(2)">Atelier validé → Suivant</button></div>
+</div>
+
+<!-- ATELIER 2 : EVALUER LES SOURCES -->
+<div class="card station hide" data-n="2">
+<h2>⚖️ Atelier 2 — Juger la fiabilité</h2>
+<div class="goal"><b>Mission :</b> question posée — « <b>le télétravail améliore-t-il la productivité ?</b> » (question empirique : il faut une <b>preuve</b>, pas une opinion). <b>Ouvre chaque source</b>, applique la grille de fiabilité, puis décide : <b>Retenir</b> · <b>Avec recul</b> (biais) · <b>Écarter</b>.</div>
+<div id="srcbox"></div>
+<div class="row"><button class="btn" onclick="check2()">Valider mes décisions</button></div>
+<div class="fb" id="fb2"></div>
+<div class="row hide" id="nx2"><button class="btn next" onclick="go(3)">Atelier validé → Suivant</button></div>
+</div>
+
+<!-- ATELIER 3 : ORGANISER LE DRIVE -->
+<div class="card station hide" data-n="3">
+<h2>🗂️ Atelier 3 — Range ton espace cloud</h2>
+<div class="goal"><b>Mission :</b> classe chaque fichier dans le bon dossier, puis choisis le <b>nom de fichier</b> le plus robuste.</div>
+<table><thead><tr><th style="width:48%">Fichier</th><th>Dossier de destination</th></tr></thead><tbody id="filerows"></tbody></table>
+<div style="margin-top:14px"><b>Renommage.</b> Quel nom respecte une convention solide pour l'étude de la DARES ?</div>
+<div class="chips" id="nameChips" style="margin-top:8px"></div>
+<div class="row"><button class="btn" onclick="check3()">Valider le rangement</button></div>
+<div class="fb" id="fb3"></div>
+<div class="row hide" id="nx3"><button class="btn next" onclick="go(4)">Atelier validé → Suivant</button></div>
+</div>
+
+<!-- ATELIER 4 : PARTAGE + RGPD -->
+<div class="card station hide" data-n="4">
+<h2>🔐 Atelier 4 — Partager sans exposer</h2>
+<div class="goal"><b>Mission :</b> donne à chaque personne le niveau d'accès <b>minimal nécessaire</b>. Et attention : ton tableau contient une colonne « noms + e-mails de salariés ».</div>
+<table><thead><tr><th style="width:40%">Destinataire / besoin</th><th>Accès accordé</th></tr></thead><tbody id="sharerows"></tbody></table>
+<label class="checkline"><input type="checkbox" id="rgpd"><span><b>RGPD :</b> j'anonymise (ou je retire) la colonne « noms + e-mails » avant tout partage, car ces données personnelles ne sont pas nécessaires à la mission.</span></label>
+<div class="row"><button class="btn" onclick="check4()">Partager</button></div>
+<div class="fb" id="fb4"></div>
+<div class="row hide" id="nx4"><button class="btn next" onclick="finish()">Terminer & valider ma compétence</button></div>
+</div>
+
+<!-- ECRAN FINAL -->
+<div class="win" id="win">
+<div>🎉</div><div class="big">Compétence validée !</div>
+<p>Tu as mené une recherche avancée, jugé tes sources, organisé tes données et partagé en protégeant les données personnelles — entièrement dans la plateforme.</p>
+<div class="badge">✅ CRCN Domaine 1 — Information &amp; données</div>
+<p class="muted" style="margin-top:14px">Cette leçon est marquée comme terminée.</p>
+</div>
+
+<script>
+var passed={1:false,2:false,3:false,4:false};
+function updateBar(cur){
+  for(var i=1;i<=4;i++){var s=document.getElementById('s'+i);s.className='seg'+(passed[i]?' done':(i===cur?' cur':''));}
+  document.getElementById('stepLabel').textContent='Atelier '+cur+' / 4';
+  var n=Object.values(passed).filter(Boolean).length;
+  document.getElementById('scoreLabel').textContent='Ateliers réussis : '+n+' / 4';
+}
+function go(n){
+  document.querySelectorAll('.station').forEach(function(c){c.classList.add('hide');});
+  document.querySelector('.station[data-n="'+n+'"]').classList.remove('hide');
+  updateBar(n);window.scrollTo(0,0);
+}
+function mark(n){passed[n]=true;document.getElementById('nx'+n).classList.remove('hide');updateBar(n);}
+
+/* ---- Atelier 1 : recherche ---- */
+function search1(){
+  var raw=document.getElementById('q1').value, q=raw.toLowerCase();
+  var quotes=/"[^"]+"/.test(raw)||/«[^»]+»/.test(raw);
+  var pdf=/filetype:pdf/.test(q);
+  var site=/site:\s*[a-z0-9.\-]*gouv/.test(q);
+  var excl=/(^|\s)-\w+/.test(raw);
+  var tech=[quotes,pdf,site,excl].filter(Boolean).length;
+  var res=document.getElementById('res1'), fb=document.getElementById('fb1');
+  var html='';
+  if(pdf&&site){
+    html+='<div class="item off">📄 <a href="https://dares.travail-emploi.gouv.fr/publication/teletravail-durant-la-crise-quelles-pratiques-quels-impacts-sur-le-travail-et-sur-la-sante" target="_blank" rel="noopener"><b>DARES — Télétravail durant la crise : pratiques &amp; impacts</b></a> · dares.travail-emploi.gouv.fr</div>';
+    html+='<div class="item off">📄 <a href="https://www.insee.fr/fr/statistiques/8990749" target="_blank" rel="noopener"><b>INSEE Analyses 120 — Le télétravail a accru la productivité</b></a> · insee.fr</div>';
+  }else if(pdf){
+    html+='<div class="item off">📄 <a href="https://www.insee.fr/fr/statistiques/8990156" target="_blank" rel="noopener">INSEE — Télétravail et productivité : analyse causale</a> · insee.fr</div>';
+    html+='<div class="item junk">🧲 « Le télétravail booste la productivité de 300% ! » — blog sponsorisé (exemple à éviter)</div>';
+  }else{
+    html+='<div class="item junk">🧲 Annonces immobilières « bureaux télétravail »</div>';
+    html+='<div class="item junk">🧲 Blog buzz sans auteur — publicités</div>';
+    html+='<div class="item">Page commerciale d\'un éditeur de logiciel</div>';
+  }
+  res.innerHTML=html;
+  var used=[]; if(quotes)used.push('expression exacte'); if(pdf)used.push('filetype:pdf'); if(site)used.push('site:gouv'); if(excl)used.push('exclusion -mot');
+  if(tech>=2 && (pdf||site)){
+    fb.className='fb ok';
+    fb.innerHTML='✅ Requête avancée valide ('+used.join(' + ')+'). Tu fais remonter de <b>vraies sources officielles</b> (DARES, INSEE) — clique pour ouvrir le rapport dans un nouvel onglet. <b>Atelier réussi.</b>';
+    mark(1);
+  }else if(tech>=1){
+    fb.className='fb tip';
+    fb.innerHTML='🟠 Tu as utilisé : '+used.join(', ')+'. Ajoute au moins une 2<sup>e</sup> technique (idéalement <code>filetype:pdf</code> + <code>site:gouv.fr</code>) pour cibler des rapports officiels.';
+  }else{
+    fb.className='fb no';
+    fb.innerHTML='❌ Recherche trop large : tu obtiens surtout des publicités. Reformule avec des <b>opérateurs</b> (guillemets, <code>filetype:pdf</code>, <code>site:gouv.fr</code>).';
+  }
+}
+
+/* ---- Atelier 2 : sources ---- */
+var SOURCES=[
+ {id:'s1',t:'S1 — Étude DARES (ministère du Travail)',d:'Étude officielle : données chiffrées, méthodologie expliquée, domaine .gouv.fr. Source primaire.',good:'retenir',link:'https://dares.travail-emploi.gouv.fr/publication/teletravail-durant-la-crise-quelles-pratiques-quels-impacts-sur-le-travail-et-sur-la-sante'},
+ {id:'s2',t:'S2 — Blog d\'astuces « productivité en télétravail »',d:'Conseils généralistes qui avancent un gain de productivité sans étude solide ni source primaire. Utile pour des astuces, pas comme preuve.',good:'ecarter',link:'https://www.tech-trends.fr/7-astuces-pour-augmenter-sa-productivite-au-travail-ou-en-teletravail/'},
+ {id:'s3',t:'S3 — Éditeur de logiciels (RingCentral)',d:'Page d\'un fournisseur qui vend des outils et met en avant des gains de productivité pour convaincre d\'acheter. Réelle mais commercialement orientée.',good:'recul',link:'https://www.ringcentral.com/fr/fr/blog/logiciel-de-visioconference/'}
+];
+var choice2={};
+function renderSources(){
+  var box=document.getElementById('srcbox'),h='';
+  SOURCES.forEach(function(s){
+    h+='<div class="src"><div class="t">'+s.t+'</div><div class="d">'+s.d+'</div><div style="margin:6px 0 10px"><a href="'+s.link+'" target="_blank" rel="noopener">🔗 Ouvrir la source ↗</a></div><div class="chips">'
+      +'<span class="chip" onclick="pick2(\''+s.id+'\',\'retenir\',this)">Retenir</span>'
+      +'<span class="chip" onclick="pick2(\''+s.id+'\',\'recul\',this)">Avec recul</span>'
+      +'<span class="chip" onclick="pick2(\''+s.id+'\',\'ecarter\',this)">Écarter</span></div></div>';
+  });
+  box.innerHTML=h;
+}
+function pick2(id,val,el){choice2[id]=val;var p=el.parentNode;p.querySelectorAll('.chip').forEach(function(c){c.classList.remove('sel');});el.classList.add('sel');}
+function check2(){
+  var fb=document.getElementById('fb2');
+  if(Object.keys(choice2).length<3){fb.className='fb tip';fb.innerHTML='🟠 Classe les <b>3</b> sources avant de valider.';return;}
+  var ok=SOURCES.every(function(s){return choice2[s.id]===s.good;});
+  if(ok){fb.className='fb ok';fb.innerHTML='✅ Jugement juste : on <b>retient</b> l\'étude officielle (données), on <b>écarte</b> le blog d\'astuces (≠ preuve), on prend la page d\'un vendeur <b>avec recul</b> (biais commercial). <b>Atelier réussi.</b>';mark(2);}
+  else{fb.className='fb no';fb.innerHTML='❌ Pas encore. Pour une question empirique : une <b>étude officielle sourcée</b> se retient ; un <b>blog d\'astuces</b> sans étude s\'écarte ; une page qui <b>cherche à vendre</b> se traite avec recul.';}
+}
+
+/* ---- Atelier 3 : drive ---- */
+var FILES=[
+ {id:'f1',name:'DARES_etude_teletravail.pdf',good:'retenues'},
+ {id:'f2',name:'blog_buzz_300pourcent.html',good:'ecartees'},
+ {id:'f3',name:'editeur_logiciel_promo.pdf',good:'ecartees'},
+ {id:'f4',name:'mon_tableau_comparatif.xlsx',good:'synthese'}
+];
+var FOLDERS=[['','— choisir —'],['retenues','01_Sources-retenues'],['ecartees','02_Sources-ecartees'],['synthese','03_Synthese']];
+var NAMES=[
+ {t:'2026-06-18_veille-teletravail_DARES_v1.pdf',good:true},
+ {t:'Document final FINAL (2).pdf',good:false},
+ {t:'étude télétravail.pdf',good:false},
+ {t:'truc.pdf',good:false}
+];
+var nameChoice=null;
+function renderFiles(){
+  var tb=document.getElementById('filerows'),h='';
+  FILES.forEach(function(f){
+    var opts=FOLDERS.map(function(o){return '<option value="'+o[0]+'">'+o[1]+'</option>';}).join('');
+    h+='<tr><td>📄 '+f.name+'</td><td><select id="sel_'+f.id+'">'+opts+'</select></td></tr>';
+  });
+  tb.innerHTML=h;
+  var nc=document.getElementById('nameChips'),hh='';
+  NAMES.forEach(function(n,i){hh+='<span class="chip" onclick="pickName('+i+',this)">'+n.t+'</span>';});
+  nc.innerHTML=hh;
+}
+function pickName(i,el){nameChoice=i;el.parentNode.querySelectorAll('.chip').forEach(function(c){c.classList.remove('sel');});el.classList.add('sel');}
+function check3(){
+  var fb=document.getElementById('fb3');
+  var allset=FILES.every(function(f){return document.getElementById('sel_'+f.id).value!=='';});
+  if(!allset||nameChoice===null){fb.className='fb tip';fb.innerHTML='🟠 Classe les 4 fichiers <b>et</b> choisis un nom de fichier.';return;}
+  var foldersOk=FILES.every(function(f){return document.getElementById('sel_'+f.id).value===f.good;});
+  var nameOk=NAMES[nameChoice].good;
+  if(foldersOk&&nameOk){fb.className='fb ok';fb.innerHTML='✅ Rangement logique + nom triable (date ISO, sujet, source, version). Tu retrouveras ces fichiers dans 6 mois. <b>Atelier réussi.</b>';mark(3);}
+  else{fb.className='fb no';fb.innerHTML='❌ À revoir. Les sources écartées se gardent dans leur dossier (traçabilité), le tableau va dans « Synthèse », et un bon nom commence par la <b>date AAAA-MM-JJ</b>, sans espaces ni accents.';}
+}
+
+/* ---- Atelier 4 : partage ---- */
+var SHARE=[
+ {id:'r1',who:'Ta responsable — doit annoter avant diffusion',good:'commentaire'},
+ {id:'r2',who:'Collègue d\'un autre service — doit juste consulter',good:'lecture'},
+ {id:'r3',who:'Prestataire externe — accès ponctuel à 1 document',good:'expirable'}
+];
+var ACCESS=[['','— choisir —'],['lecture','Lecture seule'],['commentaire','Commentaire'],['edition','Édition'],['expirable','Lien expirable']];
+function renderShare(){
+  var tb=document.getElementById('sharerows'),h='';
+  SHARE.forEach(function(r){
+    var opts=ACCESS.map(function(o){return '<option value="'+o[0]+'">'+o[1]+'</option>';}).join('');
+    h+='<tr><td>'+r.who+'</td><td><select id="sh_'+r.id+'">'+opts+'</select></td></tr>';
+  });
+  tb.innerHTML=h;
+}
+function check4(){
+  var fb=document.getElementById('fb4');
+  var allset=SHARE.every(function(r){return document.getElementById('sh_'+r.id).value!=='';});
+  if(!allset){fb.className='fb tip';fb.innerHTML='🟠 Choisis un niveau d\'accès pour chaque destinataire.';return;}
+  var accessOk=SHARE.every(function(r){return document.getElementById('sh_'+r.id).value===r.good;});
+  var rgpd=document.getElementById('rgpd').checked;
+  if(accessOk&&rgpd){fb.className='fb ok';fb.innerHTML='✅ Accès minimal pour chacun + données personnelles protégées. C\'est un partage professionnel et conforme. <b>Atelier réussi.</b>';mark(4);}
+  else if(!rgpd){fb.className='fb no';fb.innerHTML='❌ Stop : tu partages des <b>noms + e-mails</b> sans précaution. Coche la mesure RGPD (anonymiser/retirer) avant de partager.';}
+  else{fb.className='fb no';fb.innerHTML='❌ Revois les accès : « annoter » = <b>Commentaire</b>, « juste consulter » = <b>Lecture seule</b>, « ponctuel » = <b>Lien expirable</b>. Donne toujours le <b>minimum</b> nécessaire.';}
+}
+
+/* ---- Fin ---- */
+function finish(){
+  if(!Object.values(passed).every(Boolean))return;
+  document.querySelectorAll('.station').forEach(function(c){c.classList.add('hide');});
+  document.querySelector('.meta').classList.add('hide');
+  document.querySelector('.bar').classList.add('hide');
+  document.getElementById('win').classList.add('show');
+  try{window.parent.postMessage('show_complete','*');window.postMessage('show_complete','*');}catch(e){}
+  window.scrollTo(0,0);
+}
+renderSources();renderFiles();renderShare();updateBar(1);
+/* anti-skip : tant que non terminé, on masque le bouton "complete" Thinkific */
+try{window.parent.postMessage('hide_complete','*');}catch(e){}
+</script>
+</div></body></html>
